@@ -8,16 +8,16 @@ public class ChangePlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<Player>(out var player))
-        {
-            if (player == player1)
-            {
-                playerController.SetTarget(player2);
-            }
-            else
-            {
-                playerController.SetTarget(player1);
-            }
-        }
+        // if (other.TryGetComponent<Player>(out var player))
+        // {
+        //     if (player == player1)
+        //     {
+        //         playerController.SetTarget(player2);
+        //     }
+        //     else
+        //     {
+        //         playerController.SetTarget(player1);
+        //     }
+        // }
     }
 }
