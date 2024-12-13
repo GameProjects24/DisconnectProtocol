@@ -9,7 +9,7 @@ namespace DisconnectProtocol
     {
         public Transform target;
         public float speed = 10f;
-        public float distanceVision = 20f;
+        public float distanceVision = 15f;
         public float angleVision = 45f;
         private NavMeshAgent m_self;
         private Idle m_idle;

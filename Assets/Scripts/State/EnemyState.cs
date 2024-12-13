@@ -30,9 +30,9 @@ namespace DisconnectProtocol {
     public class HoldDistance: EnemyState {
         Transform player;
         float speed = 10f;
-        float distance = 10f;
+        float distance = 7f;
         float angleVision = 30f;
-        float distVision = 10f;
+        float distVision = 15f;
 
         bool isPlayerSeen() {
             var dir = player.position - body.transform.position;
@@ -63,9 +63,12 @@ namespace DisconnectProtocol {
                 return;
             }
             var dir = player.position - body.transform.position;
-            var point = (distance - dir.magnitude)*dir.normalized + body.transform.forward;
-            body.ResetPath();
+            var point = (distance - dir.magnitude)*dir.normalized;
             body.SetDestination(player.position);
+            if (dir.magnitude < distance) {
+                body.isStopped = true;
+                body.ResetPath();
+            }
         }
 
         public override void Exit() {
