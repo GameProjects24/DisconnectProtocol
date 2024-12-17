@@ -16,9 +16,9 @@ MonoBehaviour:
   weaponName: 
   weaponIcon: {fileID: 0}
   damage: 10
-  fireRate: 0.5
+  fireRate: 0.1
   range: 50
-  magazineSize: 30
+  magazineSize: 25
   maxAmmo: 120
   reloadTime: 2
   recoilKickback: {x: 0, y: 0.1, z: -0.1}
@@ -27,5 +27,5 @@ MonoBehaviour:
   fireSound: {fileID: 0}
   reloadSound: {fileID: 0}
   projectilePrefab: {fileID: 3390464235817122846, guid: 9faf6e99fa9d34644873a434450ac2b4, type: 3}
-  projectileSpeed: 20
+  projectileSpeed: 75
   isAutomatic: 1
