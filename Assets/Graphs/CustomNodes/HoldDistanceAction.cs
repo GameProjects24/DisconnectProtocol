@@ -22,9 +22,7 @@ public partial class HoldDistanceAction : Action
     protected override Status OnUpdate()
     {
         Self.Value.SetDestination(Target.Value.position);
-        Debug.Log($"{Self.Value.remainingDistance}");
         if (Self.Value.remainingDistance <= Distance) {
-            Debug.Log("kyku");
             return Status.Success;
         }
         return Status.Running;
