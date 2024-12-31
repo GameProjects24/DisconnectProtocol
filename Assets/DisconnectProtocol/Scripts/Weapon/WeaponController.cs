@@ -41,7 +41,12 @@ public class WeaponController : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            _currentWeapon?.Shoot();
+            _currentWeapon?.StartFiring();
+        }
+
+        if (Input.GetButtonUp("Fire1"))
+        {
+            _currentWeapon?.StopFiring();
         }
 
         if (Input.GetKeyDown(KeyCode.R))

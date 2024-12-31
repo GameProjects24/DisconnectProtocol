@@ -10,12 +10,32 @@ public class Weapon : MonoBehaviour
     private int totalAmmo;
     private bool isReloading;
     private float lastFireTime;
+    private bool isFiring; // Для автоматического огня
 
     private void Start()
     {
         currentAmmo = weaponData.magazineSize;
         totalAmmo = weaponData.maxAmmo;
         isReloading = false;
+        isFiring = false;
+    }
+
+    private void Update()
+    {
+        if (isFiring && CanShoot())
+        {
+            Shoot();
+        }
+    }
+
+    public void StartFiring()
+    {
+        isFiring = true;
+    }
+
+    public void StopFiring()
+    {
+        isFiring = false;
     }
 
     public void Shoot()

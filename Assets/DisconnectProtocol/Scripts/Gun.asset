@@ -18,7 +18,7 @@ MonoBehaviour:
   damage: 10
   fireRate: 0.1
   range: 50
-  magazineSize: 25
+  magazineSize: 100
   maxAmmo: 120
   reloadTime: 2
   recoilKickback: {x: 0, y: 0.1, z: -0.1}
