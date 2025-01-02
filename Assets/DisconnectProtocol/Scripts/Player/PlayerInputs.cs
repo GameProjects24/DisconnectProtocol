@@ -10,6 +10,7 @@ public class PlayerInputs : MonoBehaviour
 	public Vector2 look;
 	public bool jump;
 	public bool sprint;
+	public bool reload;
 
 	[Header("Movement Settings")]
 	public bool analogMovement;
@@ -41,6 +42,11 @@ public class PlayerInputs : MonoBehaviour
 	{
 		SprintInput(value.isPressed);
 	}
+
+	public void OnReload(InputValue value)
+	{
+		ReloadInput(value.isPressed);
+	}
 #endif
 
 
@@ -62,6 +68,11 @@ public class PlayerInputs : MonoBehaviour
 	public void SprintInput(bool newSprintState)
 	{
 		sprint = newSprintState;
+	}
+
+	public void ReloadInput(bool newReloadState)
+	{
+		reload = newReloadState;
 	}
 
 	private void OnApplicationFocus(bool hasFocus)

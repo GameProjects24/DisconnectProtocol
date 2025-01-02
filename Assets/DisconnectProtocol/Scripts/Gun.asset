@@ -20,12 +20,12 @@ MonoBehaviour:
   range: 50
   magazineSize: 100
   maxAmmo: 120
-  reloadTime: 2
   recoilKickback: {x: 0, y: 0.1, z: -0.1}
   recoilRecoveryTime: 0.2
   muzzleFlashEffect: {fileID: 0}
-  fireSound: {fileID: 0}
-  reloadSound: {fileID: 0}
+  fireSound: {fileID: 8300000, guid: 91fc1f54d6f2dbb48b0943abd0dbbbdd, type: 3}
+  reloadSound: {fileID: 8300000, guid: df61ac1907a34be4aa14e13cc936af8a, type: 3}
+  reloadAnim: {fileID: 7400000, guid: 07d25d79b0f2fab4c9855f7c81058d2b, type: 2}
   projectilePrefab: {fileID: 3390464235817122846, guid: 9faf6e99fa9d34644873a434450ac2b4, type: 3}
   projectileSpeed: 75
   isAutomatic: 1
