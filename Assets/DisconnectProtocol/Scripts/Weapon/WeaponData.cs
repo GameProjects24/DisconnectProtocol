@@ -17,7 +17,13 @@ public class WeaponData : ScriptableObject
     [Header("Ammo Settings")]
     public int magazineSize = 30; // Количество патронов в магазине
     public int maxAmmo = 120; // Максимальный запас патронов
-    public float reloadTime = 2f;
+    public float reloadTime
+    {
+        get
+        {
+            return reloadAnim != null ? reloadAnim.length : 2f; // Длительность анимации или значение по умолчанию
+        }
+    }
 
     [Header("Recoil")]
     public Vector3 recoilKickback = new Vector3(0f, 0.1f, -0.1f);
@@ -27,6 +33,7 @@ public class WeaponData : ScriptableObject
     public GameObject muzzleFlashEffect;
     public AudioClip fireSound;
     public AudioClip reloadSound;
+    public AnimationClip reloadAnim;
 
     [Header("Projectile Settings")]
     public GameObject projectilePrefab;
