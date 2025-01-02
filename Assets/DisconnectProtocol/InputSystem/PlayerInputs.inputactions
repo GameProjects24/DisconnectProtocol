@@ -49,15 +49,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "d0d47871-115d-488a-afb6-e83d364f90ba",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -157,17 +148,6 @@
                     "processors": "",
                     "groups": ";KeyboardMouse",
                     "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "657255e8-84aa-4fdf-b105-16dc38e352c9",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardMouse",
-                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

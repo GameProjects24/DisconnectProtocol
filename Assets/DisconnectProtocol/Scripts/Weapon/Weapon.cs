@@ -6,36 +6,23 @@ public class Weapon : MonoBehaviour
 {
     public WeaponData weaponData;
 
-    private int _currentAmmo;
-    private int _totalAmmo;
-    private bool _isReloading;
-    private float _lastFireTime;
-    private bool _isFiring;
-    private Animator _animator;
-    private AudioSource _fireAudioSource;
-
+    private int currentAmmo;
+    private int totalAmmo;
+    private bool isReloading;
+    private float lastFireTime;
+    private bool isFiring; // Для автоматического огня
 
     private void Start()
     {
-        _currentAmmo = weaponData.magazineSize;
-        _totalAmmo = weaponData.maxAmmo;
-        _isReloading = false;
-        _isFiring = false;
-        _animator = GetComponent<Animator>();
-
-        // Добавляем AudioSource для воспроизведения звука стрельбы
-        _fireAudioSource = GetComponent<AudioSource>();
-        _fireAudioSource.clip = weaponData.fireSound;
-        _fireAudioSource.loop = true;
-        if (_fireAudioSource.isPlaying)
-        {
-            _fireAudioSource.Stop();
-        }
+        currentAmmo = weaponData.magazineSize;
+        totalAmmo = weaponData.maxAmmo;
+        isReloading = false;
+        isFiring = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (_isFiring && CanShoot())
+        if (isFiring && CanShoot())
         {
             Shoot();
         }
@@ -43,29 +30,20 @@ public class Weapon : MonoBehaviour
 
     public void StartFiring()
     {
-        _isFiring = true;
+        isFiring = true;
     }
 
     public void StopFiring()
     {
-        if (_fireAudioSource.isPlaying)
-        {
-            _fireAudioSource.Stop();
-        }
-        _isFiring = false;
+        isFiring = false;
     }
 
     public void Shoot()
     {
-        if (!_fireAudioSource.isPlaying)
-        {
-            _fireAudioSource.Play();
-        }
-
-        if (_isReloading || Time.time - _lastFireTime < weaponData.fireRate || _currentAmmo <= 0)
+        if (isReloading || Time.time - lastFireTime < weaponData.fireRate || currentAmmo <= 0)
             return;
 
-        _lastFireTime = Time.time;
+        lastFireTime = Time.time;
 
         if (weaponData.projectilePrefab != null)
         {
@@ -78,9 +56,9 @@ public class Weapon : MonoBehaviour
             // FireHitscan();
         }
 
-        _currentAmmo--;
+        currentAmmo--;
         PlayMuzzleEffect();
-        //PlayFireSound();
+        PlayFireSound();
     }
 
     private void FireProjectile()
@@ -109,7 +87,7 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        if (_isReloading || _currentAmmo == weaponData.magazineSize || _totalAmmo <= 0)
+        if (isReloading || currentAmmo == weaponData.magazineSize || totalAmmo <= 0)
             return;
 
         StartCoroutine(ReloadCoroutine());
@@ -117,20 +95,16 @@ public class Weapon : MonoBehaviour
 
     private IEnumerator ReloadCoroutine()
     {
-        _isReloading = true;
+        isReloading = true;
         PlayReloadSound();
-        if (_animator)
-        {
-            _animator.Play("SimpleReloadAnim");
-        }
         yield return new WaitForSeconds(weaponData.reloadTime);
 
-        int ammoNeeded = weaponData.magazineSize - _currentAmmo;
-        int ammoToReload = Mathf.Min(ammoNeeded, _totalAmmo);
-        _currentAmmo += ammoToReload;
-        _totalAmmo -= ammoToReload;
+        int ammoNeeded = weaponData.magazineSize - currentAmmo;
+        int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
+        currentAmmo += ammoToReload;
+        totalAmmo -= ammoToReload;
 
-        _isReloading = false;
+        isReloading = false;
     }
 
     private void PlayMuzzleEffect()
@@ -141,13 +115,13 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    // private void PlayFireSound()
-    // {
-    //     if (weaponData.fireSound != null)
-    //     {
-    //         AudioSource.PlayClipAtPoint(weaponData.fireSound, transform.position);
-    //     }
-    // }
+    private void PlayFireSound()
+    {
+        if (weaponData.fireSound != null)
+        {
+            AudioSource.PlayClipAtPoint(weaponData.fireSound, transform.position);
+        }
+    }
 
     private void PlayReloadSound()
     {
@@ -159,10 +133,10 @@ public class Weapon : MonoBehaviour
 
     public bool CanShoot()
     {
-        return !_isReloading && _currentAmmo > 0 && Time.time - _lastFireTime >= weaponData.fireRate;
+        return !isReloading && currentAmmo > 0 && Time.time - lastFireTime >= weaponData.fireRate;
     }
 
-    public int GetCurrentAmmo() => _currentAmmo;
+    public int GetCurrentAmmo() => currentAmmo;
 
-    public int GetTotalAmmo() => _totalAmmo;
+    public int GetTotalAmmo() => totalAmmo;
 }
