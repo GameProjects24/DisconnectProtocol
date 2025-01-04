@@ -187,8 +187,8 @@ GameObject:
   - component: {fileID: 1978471637655604388}
   - component: {fileID: 4040219882344481318}
   - component: {fileID: 8616685848737228376}
-  - component: {fileID: 5382601143041164762}
   - component: {fileID: 5153589614250085459}
+  - component: {fileID: 7218024036856001915}
   m_Layer: 8
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -271,6 +271,7 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  reload: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -372,25 +373,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &5382601143041164762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8616685848737228372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a195ff8f925f58b478c2afb3507dfade, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveSpeed: 4
-  SprintSpeed: 8
-  RotationSpeed: 1
-  SpeedChangeRate: 10
-  CinemachineCameraTarget: {fileID: 4135013735270702863}
-  TopClamp: 80
-  BottomClamp: -80
 --- !u!114 &5153589614250085459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +387,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _data:
   - {fileID: 11400000, guid: cc3efeea0004efe42b87b37c9af21172, type: 2}
+--- !u!114 &7218024036856001915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7753e24d046e38d4b8eb59f9b5727509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 4
+  SprintSpeed: 6
+  RotationSpeed: 1
+  SpeedChangeRate: 10
+  CinemachineCameraTarget: {fileID: 0}
+  TopClamp: 90
+  BottomClamp: -90
 --- !u!1001 &4146090592388792035
 PrefabInstance:
   m_ObjectHideFlags: 0
