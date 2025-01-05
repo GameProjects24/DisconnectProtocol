@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2854144494151793202}
   - component: {fileID: 1457691042819186509}
   - component: {fileID: 5172406553367296762}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4842,7 +4842,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3900919482369856760}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

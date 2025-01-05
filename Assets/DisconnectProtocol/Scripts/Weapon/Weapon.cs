@@ -39,6 +39,10 @@ public class Weapon : MonoBehaviour
         {
             Shoot();
         }
+        if (_currentAmmo == 0)
+        {
+            StopFiring();
+        }
     }
 
     public void StartFiring()
@@ -62,7 +66,7 @@ public class Weapon : MonoBehaviour
             _fireAudioSource.Play();
         }
 
-        if (_isReloading || Time.time - _lastFireTime < weaponData.fireRate || _currentAmmo <= 0)
+        if (_isReloading || Time.time - _lastFireTime < weaponData.fireRate || _currentAmmo == 0)
             return;
 
         _lastFireTime = Time.time;
