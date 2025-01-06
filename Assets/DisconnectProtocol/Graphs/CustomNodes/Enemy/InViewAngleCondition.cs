@@ -25,6 +25,10 @@ public partial class InViewAngleCondition : Condition
 				var angle = Vector3.Angle(Self.Value.forward, dir);
 				return ConditionUtils.Evaluate(angle, Operator, Threshold);
 			}
+		} else {
+			var dir = Target.Value.position - Self.Value.position;
+			var angle = Vector3.Angle(Self.Value.forward, dir);
+			return ConditionUtils.Evaluate(angle, Operator, Threshold);
 		}
 
 		return false;
