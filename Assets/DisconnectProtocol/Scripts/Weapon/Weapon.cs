@@ -1,26 +1,35 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public WeaponData weaponData;
+    public WeaponData weaponData; // Скриптовый объект с данными оружия
 
-    private int _currentAmmo;
-    private int _totalAmmo;
-    private bool _isReloading;
-    private float _lastFireTime;
-    private bool _isFiring;
+    private int currentAmmo; // Текущий боезапас в магазине
+    private int totalAmmo;   // Общий запас боеприпасов
+    private float fireCooldown; // Время до следующего выстрела
+
+    private WeaponFSM weaponFSM; // Ссылка на конечный автомат состояний
+
     private Animator _animator;
     private AudioSource _fireAudioSource;
 
+    // для прицеливания (ToDo)
+    private Vector3 _defaultPosition; // Позиция оружия без прицела
+    private Quaternion _defaultRotation; // Ротация оружия без прицеливания
+    [SerializeField] private float _aimSpeed = 10f; // Скорость перемещения при прицеливании
 
-    private void Start()
+    void Awake()
     {
-        _currentAmmo = weaponData.magazineSize;
-        _totalAmmo = weaponData.maxAmmo;
-        _isReloading = false;
-        _isFiring = false;
+        // Инициализация FSM
+        weaponFSM = new WeaponFSM(this);
+    }
+
+    void Start()
+    {
+        currentAmmo = weaponData.magazineSize;
+        totalAmmo = weaponData.maxAmmo;
+        fireCooldown = 0f;
+
         _animator = GetComponent<Animator>();
 
         // Добавляем AudioSource для воспроизведения звука стрельбы
@@ -31,23 +40,27 @@ public class Weapon : MonoBehaviour
         {
             _fireAudioSource.Stop();
         }
+
+        weaponFSM.ActivateState(WeaponStateEnum.Idle);
     }
 
-    private void FixedUpdate()
+    void Update()
     {
-        if (_isFiring && CanShoot())
-        {
-            Shoot();
-        }
-        if (_currentAmmo == 0)
-        {
-            StopFiring();
-        }
+        fireCooldown -= Time.deltaTime;
+        weaponFSM.Update(); // Обновление текущего состояния FSM
+    }
+
+    public bool CanFire()
+    {
+        return currentAmmo > 0 && fireCooldown <= 0f;
     }
 
     public void StartFiring()
     {
-        _isFiring = true;
+        if (!_fireAudioSource.isPlaying)
+        {
+            _fireAudioSource.Play();
+        }
     }
 
     public void StopFiring()
@@ -56,36 +69,65 @@ public class Weapon : MonoBehaviour
         {
             _fireAudioSource.Stop();
         }
-        _isFiring = false;
     }
 
     public void Shoot()
     {
-        if (!_fireAudioSource.isPlaying)
+        if (CanFire())
         {
-            _fireAudioSource.Play();
-        }
+            if (weaponData.projectilePrefab != null)
+            {
+                FireProjectile();
+            }
+            else
+            {
+                //FireHitscan();
+            }
 
-        if (_isReloading || Time.time - _lastFireTime < weaponData.fireRate || _currentAmmo == 0)
-            return;
+            currentAmmo--;
+            PlayMuzzleEffect();
+            PlayFireSound();
 
-        _lastFireTime = Time.time;
+            currentAmmo--;
+            fireCooldown = weaponData.fireRate;
 
-        if (weaponData.projectilePrefab != null)
-        {
-            FireProjectile();
+            Debug.Log($"{weaponData.weaponName} fired! Ammo left: {currentAmmo}");
         }
         else
         {
-            Debug.LogWarning("Projectile not found!");
-            return;
-            // FireHitscan();
+            Debug.Log("Cannot fire: Out of ammo or on cooldown.");
         }
-
-        _currentAmmo--;
-        PlayMuzzleEffect();
-        //PlayFireSound();
     }
+
+    public void ReloadComplete()
+    {
+        int ammoNeeded = weaponData.magazineSize - currentAmmo;
+        int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
+
+        currentAmmo += ammoToReload;
+        totalAmmo -= ammoToReload;
+
+        Debug.Log($"{weaponData.weaponName} reloaded! Ammo: {currentAmmo}/{totalAmmo}");
+    }
+
+    public void StartReload()
+    {
+        if (currentAmmo < weaponData.magazineSize && totalAmmo > 0)
+        {
+            Debug.Log("Reloading...");
+            weaponFSM.ActivateState(WeaponStateEnum.Reload);
+        }
+        else
+        {
+            Debug.Log("No need to reload.");
+        }
+    }
+
+    public bool HasAmmo()
+    {
+        return currentAmmo > 0;
+    }
+
 
     private void FireProjectile()
     {
@@ -102,7 +144,6 @@ public class Weapon : MonoBehaviour
     //     RaycastHit hit;
     //     if (Physics.Raycast(transform.position, transform.forward, out hit, weaponData.range))
     //     {
-    //         // Example: Apply damage to the target if it has a health component
     //         var target = hit.collider.GetComponent<Target>();
     //         if (target != null)
     //         {
@@ -110,32 +151,6 @@ public class Weapon : MonoBehaviour
     //         }
     //     }
     // }
-
-    public void Reload()
-    {
-        if (_isReloading || _currentAmmo == weaponData.magazineSize || _totalAmmo <= 0)
-            return;
-
-        StartCoroutine(ReloadCoroutine());
-    }
-
-    private IEnumerator ReloadCoroutine()
-    {
-        _isReloading = true;
-        PlayReloadSound();
-        if (_animator)
-        {
-            _animator.Play("SimpleReloadAnim");
-        }
-        yield return new WaitForSeconds(weaponData.reloadTime);
-
-        int ammoNeeded = weaponData.magazineSize - _currentAmmo;
-        int ammoToReload = Mathf.Min(ammoNeeded, _totalAmmo);
-        _currentAmmo += ammoToReload;
-        _totalAmmo -= ammoToReload;
-
-        _isReloading = false;
-    }
 
     private void PlayMuzzleEffect()
     {
@@ -145,13 +160,13 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    // private void PlayFireSound()
-    // {
-    //     if (weaponData.fireSound != null)
-    //     {
-    //         AudioSource.PlayClipAtPoint(weaponData.fireSound, transform.position);
-    //     }
-    // }
+    private void PlayFireSound()
+    {
+        if (weaponData.fireSound != null)
+        {
+            AudioSource.PlayClipAtPoint(weaponData.fireSound, transform.position);
+        }
+    }
 
     private void PlayReloadSound()
     {
@@ -161,12 +176,19 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public bool CanShoot()
+    public void StartFire()
     {
-        return !_isReloading && _currentAmmo > 0 && Time.time - _lastFireTime >= weaponData.fireRate;
+        weaponFSM.StartFire();
     }
 
-    public int GetCurrentAmmo() => _currentAmmo;
+    public void StopFire()
+    {
+        weaponFSM.StopFire();
+    }
 
-    public int GetTotalAmmo() => _totalAmmo;
+    public void Reload()
+    {
+        weaponFSM.Reload();
+    }
+
 }

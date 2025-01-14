@@ -183,4 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30af0960169c5c141a0daa796846af6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sparksPrefab: {fileID: 8980872027712066622, guid: 503fc2aee6168ff419ce441b79a4e431, type: 3}
+  lifetime: 5
+  hitEffect: {fileID: 3092188531806233231, guid: b66d6f62282d9db4bb0a2f22715cd49c, type: 3}
+  hitEffectDuration: 2

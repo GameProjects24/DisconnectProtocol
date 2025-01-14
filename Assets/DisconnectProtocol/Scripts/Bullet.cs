@@ -3,11 +3,27 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private GameObject _sparksPrefab;
-    private void OnCollisionEnter(Collision other) {
-        //Vector3 carVelocity = GetComponent<Rigidbody>().;
-        //Vector3 sparkDirection = carVelocity.normalized;
-        Instantiate(_sparksPrefab, transform.position,  Quaternion.LookRotation(transform.forward));
+    public float lifetime = 5f;
+    public ParticleSystem hitEffect;
+    public float hitEffectDuration = 2f; // Длительность отображения искр
+
+    private void Start()
+    {
+        Destroy(gameObject, lifetime);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Создаём искры в точке попадания
+        if (hitEffect != null)
+        {
+            // Создание системы частиц
+            ParticleSystem effect = Instantiate(hitEffect, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
+            
+            // Удаляем частицы после завершения их проигрывания
+            Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        }
+
+        // Удаляем пулю после столкновения
         Destroy(gameObject);
     }
 }

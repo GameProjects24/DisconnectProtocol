@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun
   m_EditorClassIdentifier: 
   prefab: {fileID: 4660112240588564902, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
-  weaponName: 
+  weaponName: Gun
   weaponIcon: {fileID: 0}
   damage: 10
   fireRate: 0.15
