@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1654ec2413acdbd4481c58b3371dbec3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 142438
+  packageName: Robot Soldier
+  packageVersion: 1.0
+  assetPath: Assets/Robot_Soldier/Materials/Robot_Soldier_Blue.mat
+  uploadId: 301415

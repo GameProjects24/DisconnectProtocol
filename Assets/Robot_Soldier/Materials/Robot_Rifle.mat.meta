@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 58c2cf994000c2e459d502d5b1700f29
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 142438
+  packageName: Robot Soldier
+  packageVersion: 1.0
+  assetPath: Assets/Robot_Soldier/Materials/Robot_Rifle.mat
+  uploadId: 301415

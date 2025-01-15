@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 34ad339615304b44c91562cbd11001f2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 142438
+  packageName: Robot Soldier
+  packageVersion: 1.0
+  assetPath: Assets/Robot_Soldier/Prefabs/Floor.prefab
+  uploadId: 301415
