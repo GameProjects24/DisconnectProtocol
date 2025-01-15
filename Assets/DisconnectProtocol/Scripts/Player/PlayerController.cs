@@ -89,10 +89,6 @@ public class PlayerController : MonoBehaviour
         {
             _weaponController.StartFire();
         }
-        else
-        {
-            _weaponController.StopFire();
-        }
 
         if (_input.reload)
         {
@@ -101,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
         if (_input.nextWeapon)
         {
-            _weaponController.NextWeapon();
+            //_weaponController.NextWeapon();
             _input.nextWeapon = false; // Сброс флага после переключения
         }
 	}

@@ -1,66 +1,72 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class WeaponController : MonoBehaviour
 {
-    [Header("Weapon Data")]
-    [SerializeField] private List<WeaponData> weaponDataList; // Список данных для создания оружия
-
-    private List<Weapon> weapons = new List<Weapon>(); // Список оружия
-    private Weapon currentWeapon; // Текущее активное оружие
-
-    private int currentWeaponIndex = -1; // Индекс текущего оружия (-1, если оружие не выбрано)
+    public List<WeaponData> weaponDataList; // Список данных оружия
+    private List<Weapon> weapons = new List<Weapon>(); // Список созданных оружий
+    private Weapon currentWeapon; // Текущее оружие
 
     private void Awake()
     {
-        // Инициализация списка оружия
-        foreach (var weaponData in weaponDataList)
+        // Получить все уже существующие оружия
+        GetComponentsInChildren(true, weapons);
+
+        // Если оружия уже есть, установить первое как активное
+        if (weapons.Count > 0)
         {
-            var weaponPrefab = weaponData.prefab;
-            if (weaponPrefab != null)
-            {
-                var weaponInstance = Instantiate(weaponPrefab, transform);
-                var weaponComponent = weaponInstance.GetComponent<Weapon>();
-                if (weaponComponent != null)
-                {
-                    weaponComponent.weaponData = weaponData;
-                    weaponComponent.gameObject.SetActive(false); // Оружие неактивно до выбора
-                    weapons.Add(weaponComponent);
-                }
-            }
+            SetActiveWeapon(0);
+            return;
         }
 
-        // Установка первого оружия как активного
-        SetActiveWeapon(0);
+        // Создать оружие из данных, если его нет
+        foreach (var weaponData in weaponDataList)
+        {
+            CreateWeapon(weaponData);
+        }
+
+        // Установить первое оружие активным
+        if (weapons.Count > 0)
+        {
+            SetActiveWeapon(0);
+        }
+    }
+
+    private void CreateWeapon(WeaponData weaponData)
+    {
+        if (weaponData == null || weaponData.prefab == null)
+        {
+            Debug.LogWarning("Invalid weapon data or prefab.");
+            return;
+        }
+
+        // Создать оружие и присоединить его к контроллеру
+        GameObject weaponObj = Instantiate(weaponData.prefab, transform);
+        Weapon weapon = weaponObj.GetComponent<Weapon>();
+
+        if (weapon != null)
+        {
+            weapons.Add(weapon);
+            weaponObj.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Prefab does not have a Weapon component.");
+            Destroy(weaponObj);
+        }
     }
 
     public void SetActiveWeapon(int index)
     {
-        if (index >= 0 && index < weapons.Count)
+        if (index < 0 || index >= weapons.Count) return;
+
+        if (currentWeapon != null)
         {
-            // Деактивация текущего оружия
-            if (currentWeapon != null)
-            {
-                currentWeapon.gameObject.SetActive(false);
-            }
-
-            // Активация нового оружия
-            currentWeapon = weapons[index];
-            currentWeapon.gameObject.SetActive(true);
-            currentWeaponIndex = index;
-
-            Debug.Log($"Active weapon set to: {currentWeapon.weaponData.weaponName}");
+            currentWeapon.gameObject.SetActive(false);
         }
-        else
-        {
-            Debug.LogWarning($"Invalid weapon index: {index}");
-        }
-    }
 
-    public void NextWeapon()
-    {
-        int nextIndex = (currentWeaponIndex + 1) % weapons.Count;
-        SetActiveWeapon(nextIndex);
+        currentWeapon = weapons[index];
+        currentWeapon.gameObject.SetActive(true);
     }
 
     public void StartFire()
@@ -68,18 +74,8 @@ public class WeaponController : MonoBehaviour
         currentWeapon?.StartFire();
     }
 
-    public void StopFire()
-    {
-        currentWeapon?.StopFire();
-    }
-
     public void Reload()
     {
         currentWeapon?.Reload();
-    }
-
-    public Weapon GetCurrentWeapon()
-    {
-        return currentWeapon;
     }
 }

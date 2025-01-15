@@ -7,29 +7,40 @@ public interface IWeaponState
 {
     void Enter();
     void Exit();
+    void Update();
     void StartFire();
     void StopFire();
     void Reload();
-    void Update();
 }
 
 public class WeaponFSM
 {
     private IWeaponState currentState;
-    private Dictionary<WeaponStateEnum, IWeaponState> states = new Dictionary<WeaponStateEnum, IWeaponState>();
+    private readonly Dictionary<WeaponStateEnum, IWeaponState> states = new Dictionary<WeaponStateEnum, IWeaponState>();
 
     public WeaponFSM(Weapon context)
     {
+        // Инициализация всех состояний
         states.Add(WeaponStateEnum.Idle, new WeaponStateIdle(this, context));
         states.Add(WeaponStateEnum.Fire, new WeaponStateFire(this, context));
         states.Add(WeaponStateEnum.Reload, new WeaponStateReload(this, context));
-        states.Add(WeaponStateEnum.Empty, new WeaponStateEmpty(this));
+        states.Add(WeaponStateEnum.Empty, new WeaponStateEmpty(this, context));
     }
 
-    public void ActivateState(WeaponStateEnum state)
+    public void ActivateState(WeaponStateEnum newState)
     {
+        // Проверка на уже активное состояние
+        if (currentState != null && states.TryGetValue(newState, out var newStateInstance) && currentState == newStateInstance)
+        {
+            Debug.Log($"FSM > State '{newState}' is already active.");
+            return;
+        }
+
+        // Завершаем текущее состояние
         currentState?.Exit();
-        if (states.TryGetValue(state, out currentState))
+
+        // Переходим в новое состояние
+        if (states.TryGetValue(newState, out currentState))
         {
             currentState.Enter();
         }
@@ -58,128 +69,113 @@ public class WeaponFSM
 
 public abstract class WeaponStateBase : IWeaponState
 {
+    protected readonly WeaponFSM weaponFSM;
+    protected readonly Weapon context;
+
+    protected WeaponStateBase(WeaponFSM weaponFSM, Weapon context)
+    {
+        this.weaponFSM = weaponFSM;
+        this.context = context;
+    }
+
     public virtual void Enter() { }
-
-    public virtual void Exit()
-    {
-    }
-
-    public virtual void Reload()
-    {
-    }
-
+    public virtual void Exit() { }
+    public virtual void Update() { }
     public virtual void StartFire() { }
-
-    public virtual void StopFire()
-    {
-    }
-
-    public virtual void Update()
-    {
-    }
+    public virtual void StopFire() { }
+    public virtual void Reload() { }
 }
 
 public class WeaponStateIdle : WeaponStateBase
 {
-    private WeaponFSM fsm;
-    private Weapon context;
-
-    public WeaponStateIdle(WeaponFSM fsm, Weapon context)
-    {
-        this.fsm = fsm;
-        this.context = context;
-    }
+    public WeaponStateIdle(WeaponFSM weaponFSM, Weapon context) : base(weaponFSM, context) { }
 
     public override void StartFire()
     {
         if (context.CanFire())
         {
-            fsm.ActivateState(WeaponStateEnum.Fire);
+            weaponFSM.ActivateState(WeaponStateEnum.Fire);
         }
-
-        context.StartFire();
+        else
+        {
+            weaponFSM.ActivateState(WeaponStateEnum.Empty);
+        }
     }
 
     public override void Reload()
     {
-        fsm.ActivateState(WeaponStateEnum.Reload);
+        if (context.CanReload())
+        {
+            weaponFSM.ActivateState(WeaponStateEnum.Reload);
+        }
     }
 }
 
 public class WeaponStateFire : WeaponStateBase
 {
-    private WeaponFSM fsm;
-    private Weapon context;
-
-    public WeaponStateFire(WeaponFSM fsm, Weapon context)
-    {
-        this.fsm = fsm;
-        this.context = context;
-    }
+    public WeaponStateFire(WeaponFSM weaponFSM, Weapon context) : base(weaponFSM, context) { }
 
     public override void Enter()
     {
-        context.Shoot();
+        context.StartShooting();
     }
 
     public override void Update()
     {
-        if (!context.HasAmmo())
+        if (!context.CanFire())
         {
-            fsm.ActivateState(WeaponStateEnum.Empty);
-        }
-        else
-        {
-            fsm.ActivateState(WeaponStateEnum.Idle);
+            weaponFSM.ActivateState(WeaponStateEnum.Empty);
         }
     }
 
     public override void StopFire()
     {
-        fsm.ActivateState(WeaponStateEnum.Idle);
-        context.StopFire();
+        weaponFSM.ActivateState(WeaponStateEnum.Idle);
     }
 }
 
 public class WeaponStateReload : WeaponStateBase
 {
-    private WeaponFSM fsm;
-    private Weapon context;
-    private float timer;
+    private float reloadTimer;
 
-    public WeaponStateReload(WeaponFSM fsm, Weapon context)
-    {
-        this.fsm = fsm;
-        this.context = context;
-    }
+    public WeaponStateReload(WeaponFSM weaponFSM, Weapon context) : base(weaponFSM, context) { }
 
     public override void Enter()
     {
-        timer = 0f;
+        reloadTimer = 0f;
+        context.StartReloading();
     }
 
     public override void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= context.weaponData.reloadTime)
+        reloadTimer += Time.deltaTime;
+        if (reloadTimer >= context.weaponData.reloadTime)
         {
-            context.ReloadComplete();
-            fsm.ActivateState(WeaponStateEnum.Idle);
+            context.CompleteReload();
+            weaponFSM.ActivateState(WeaponStateEnum.Idle);
         }
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exiting Reload state.");
     }
 }
 
 public class WeaponStateEmpty : WeaponStateBase
 {
-    private WeaponFSM fsm;
-
-    public WeaponStateEmpty(WeaponFSM fsm)
-    {
-        this.fsm = fsm;
-    }
+    public WeaponStateEmpty(WeaponFSM weaponFSM, Weapon context) : base(weaponFSM, context) { }
 
     public override void Reload()
     {
-        fsm.ActivateState(WeaponStateEnum.Reload);
+        if (context.CanReload())
+        {
+            weaponFSM.ActivateState(WeaponStateEnum.Reload);
+        }
+    }
+
+    public override void StartFire()
+    {
+        Debug.Log("Cannot fire: no ammo.");
     }
 }

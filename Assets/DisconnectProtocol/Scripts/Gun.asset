@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponName: Gun
   weaponIcon: {fileID: 0}
   damage: 10
-  fireRate: 0.15
+  fireRate: 0.9
   range: 50
   magazineSize: 25
   maxAmmo: 120

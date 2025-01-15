@@ -48,16 +48,16 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Reload",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "d0d47871-115d-488a-afb6-e83d364f90ba",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

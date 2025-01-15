@@ -2,132 +2,105 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public WeaponData weaponData; // Скриптовый объект с данными оружия
+    [Header("Weapon Data")]
+    public WeaponData weaponData; // Данные оружия, включая информацию о патронах, уроне, скорости перезарядки и т.д.
 
-    private int currentAmmo; // Текущий боезапас в магазине
-    private int totalAmmo;   // Общий запас боеприпасов
-    private float fireCooldown; // Время до следующего выстрела
+    private WeaponFSM weaponFSM; // FSM для управления состояниями оружия
+    private int currentAmmo; // Текущее количество патронов в оружии
+    private bool isReloading; // Флаг, который указывает, что оружие в процессе перезарядки
+    private bool isFiring; // Флаг, который указывает, что оружие стреляет
+    private float fireTimer; // Таймер для автоматической стрельбы
 
-    private WeaponFSM weaponFSM; // Ссылка на конечный автомат состояний
-
-    private Animator _animator;
-    private AudioSource _fireAudioSource;
-
-    // для прицеливания (ToDo)
-    private Vector3 _defaultPosition; // Позиция оружия без прицела
-    private Quaternion _defaultRotation; // Ротация оружия без прицеливания
-    [SerializeField] private float _aimSpeed = 10f; // Скорость перемещения при прицеливании
-
-    void Awake()
+    private void Start()
     {
-        // Инициализация FSM
-        weaponFSM = new WeaponFSM(this);
+        // Инициализация оружия
+        currentAmmo = weaponData.magazineSize; // Заполнение магазина патронами
+        weaponFSM = new WeaponFSM(this); // Инициализация FSM с текущим оружием
+        weaponFSM.ActivateState(WeaponStateEnum.Idle); // Инициализация состояния "Idle"
     }
 
-    void Start()
+    private void Update()
     {
-        currentAmmo = weaponData.magazineSize;
-        totalAmmo = weaponData.maxAmmo;
-        fireCooldown = 0f;
+        weaponFSM.Update(); // Обновляем FSM (переходы между состояниями)
 
-        _animator = GetComponent<Animator>();
-
-        // Добавляем AudioSource для воспроизведения звука стрельбы
-        _fireAudioSource = GetComponent<AudioSource>();
-        _fireAudioSource.clip = weaponData.fireSound;
-        _fireAudioSource.loop = true;
-        if (_fireAudioSource.isPlaying)
+        // Если мы стреляем в автоматическом режиме (удерживаем кнопку)
+        if (isFiring && CanFire())
         {
-            _fireAudioSource.Stop();
+            fireTimer += Time.deltaTime; // Увеличиваем таймер
+
+            if (fireTimer >= weaponData.fireRate) // Проверяем, прошло ли время между выстрелами
+            {
+                fireTimer = 0f; // Сбросить таймер
+                StartShooting(); // Совершаем выстрел
+            }
         }
-
-        weaponFSM.ActivateState(WeaponStateEnum.Idle);
     }
 
-    void Update()
-    {
-        fireCooldown -= Time.deltaTime;
-        weaponFSM.Update(); // Обновление текущего состояния FSM
-    }
-
+    // Проверка, можно ли стрелять
     public bool CanFire()
     {
-        return currentAmmo > 0 && fireCooldown <= 0f;
+        return currentAmmo > 0 && !isReloading;
     }
 
-    public void StartFiring()
+    // Проверка, можно ли перезаряжать оружие
+    public bool CanReload()
     {
-        if (!_fireAudioSource.isPlaying)
-        {
-            _fireAudioSource.Play();
-        }
+        return currentAmmo < weaponData.magazineSize && !isReloading;
     }
 
-    public void StopFiring()
-    {
-        if (_fireAudioSource.isPlaying)
-        {
-            _fireAudioSource.Stop();
-        }
-    }
-
-    public void Shoot()
+    // Метод для начала стрельбы
+    public void StartShooting()
     {
         if (CanFire())
         {
-            if (weaponData.projectilePrefab != null)
-            {
-                FireProjectile();
-            }
-            else
-            {
-                //FireHitscan();
-            }
-
+            isFiring = true;
+            Debug.Log("Shooting started...");
             currentAmmo--;
-            PlayMuzzleEffect();
-            PlayFireSound();
+            // Тут можно добавить логику выстрела (эффекты, звук, пули и т.д.)
+            // Например, если используем снаряды, создаём объект пули
+            //Instantiate(weaponData.projectilePrefab, transform.position, transform.rotation);
 
-            currentAmmo--;
-            fireCooldown = weaponData.fireRate;
-
-            Debug.Log($"{weaponData.weaponName} fired! Ammo left: {currentAmmo}");
+            FireProjectile();
+            // Если патроны закончились, переходим в состояние Empty
+            if (currentAmmo <= 0)
+            {
+                weaponFSM.ActivateState(WeaponStateEnum.Empty);
+            }
         }
         else
         {
-            Debug.Log("Cannot fire: Out of ammo or on cooldown.");
+            Debug.Log("No ammo or reloading in progress.");
         }
     }
 
-    public void ReloadComplete()
+    // Метод для остановки стрельбы
+    public void StopShooting()
     {
-        int ammoNeeded = weaponData.magazineSize - currentAmmo;
-        int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
-
-        currentAmmo += ammoToReload;
-        totalAmmo -= ammoToReload;
-
-        Debug.Log($"{weaponData.weaponName} reloaded! Ammo: {currentAmmo}/{totalAmmo}");
+        isFiring = false;
+        Debug.Log("Shooting stopped...");
+        // Возможно, нужно остановить какие-то эффекты или анимации выстрела
+        weaponFSM.ActivateState(WeaponStateEnum.Idle); // Переход в состояние "Idle"
     }
 
-    public void StartReload()
+    // Метод для начала перезарядки
+    public void StartReloading()
     {
-        if (currentAmmo < weaponData.magazineSize && totalAmmo > 0)
+        if (CanReload())
         {
-            Debug.Log("Reloading...");
-            weaponFSM.ActivateState(WeaponStateEnum.Reload);
-        }
-        else
-        {
-            Debug.Log("No need to reload.");
+            isReloading = true;
+            Debug.Log("Reloading started...");
+            weaponFSM.ActivateState(WeaponStateEnum.Reload); // Переход в состояние "Reload"
         }
     }
 
-    public bool HasAmmo()
+    // Метод, вызываемый по завершении перезарядки
+    public void CompleteReload()
     {
-        return currentAmmo > 0;
+        currentAmmo = weaponData.magazineSize; // Заполняем магазин
+        isReloading = false; // Сбрасываем флаг перезарядки
+        Debug.Log("Reloading complete!");
+        weaponFSM.ActivateState(WeaponStateEnum.Idle); // Возвращаемся в состояние "Idle"
     }
-
 
     private void FireProjectile()
     {
@@ -139,56 +112,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    // private void FireHitscan()
-    // {
-    //     RaycastHit hit;
-    //     if (Physics.Raycast(transform.position, transform.forward, out hit, weaponData.range))
-    //     {
-    //         var target = hit.collider.GetComponent<Target>();
-    //         if (target != null)
-    //         {
-    //             target.TakeDamage(weaponData.damage);
-    //         }
-    //     }
-    // }
-
-    private void PlayMuzzleEffect()
-    {
-        if (weaponData.muzzleFlashEffect != null)
-        {
-            Instantiate(weaponData.muzzleFlashEffect, transform.position, transform.rotation);
-        }
-    }
-
-    private void PlayFireSound()
-    {
-        if (weaponData.fireSound != null)
-        {
-            AudioSource.PlayClipAtPoint(weaponData.fireSound, transform.position);
-        }
-    }
-
-    private void PlayReloadSound()
-    {
-        if (weaponData.reloadSound != null)
-        {
-            AudioSource.PlayClipAtPoint(weaponData.reloadSound, transform.position);
-        }
-    }
-
-    public void StartFire()
-    {
-        weaponFSM.StartFire();
-    }
-
-    public void StopFire()
-    {
-        weaponFSM.StopFire();
-    }
-
-    public void Reload()
-    {
-        weaponFSM.Reload();
-    }
-
+    // Вспомогательные методы для активации состояний из других классов
+    public void StartFire() => weaponFSM.StartFire();
+    public void Reload() => weaponFSM.Reload();
 }
