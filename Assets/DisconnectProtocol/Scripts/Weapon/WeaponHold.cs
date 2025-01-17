@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class WeaponHold : MonoBehaviour
+namespace DisconnectProtocol
 {
-    void Start()
-    {
-        
-    }
+	public class WeaponHold : MonoBehaviour
+	{
+		void Start()
+		{
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+		}
+
+		// Update is called once per frame
+		void Update()
+		{
+
+		}
+	}
 }

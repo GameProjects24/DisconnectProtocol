@@ -3,6 +3,7 @@ using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
+using DisconnectProtocol;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Reload", story: "Reload [weapon]", category: "Weapon/Actions", id: "ff46efac040a58b5e91b26ecc4dc6a09")]

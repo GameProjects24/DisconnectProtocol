@@ -3,6 +3,7 @@ using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
+using DisconnectProtocol;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "StopFiring", story: "Stop firing [weapon]", category: "Weapon/Actions", id: "ac8db65d42669dd303143cc80bcaf137")]

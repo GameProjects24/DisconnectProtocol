@@ -1,6 +1,7 @@
 using System;
 using Unity.Behavior;
 using UnityEngine;
+using DisconnectProtocol;
 
 [Serializable, Unity.Properties.GeneratePropertyBag]
 [Condition(name: "EnoughTotalAmmo", story: "[weapon] has total ammo [operator] [treshold]", category: "Weapon/Conditions", id: "8cfbad4fc254e5e4c82b82c088dcedef")]
