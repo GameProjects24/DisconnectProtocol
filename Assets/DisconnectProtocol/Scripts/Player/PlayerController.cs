@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour
 
 	private void Start()
 	{
-		
-        _weaponController = GetComponent<WeaponController>();
+
+		_weaponController = GetComponent<WeaponController>();
 		_controller = GetComponent<CharacterController>();
 		_input = GetComponent<PlayerInputs>();
 #if ENABLE_INPUT_SYSTEM
@@ -84,22 +84,27 @@ public class PlayerController : MonoBehaviour
 	{
 		Move();
 
-		// Оружейные действия
-        if (_input.fire)
-        {
-            _weaponController.StartFire();
-        }
 
-        if (_input.reload)
-        {
-            _weaponController.Reload();
-        }
+		if (_input.fire)
+		{
+			_weaponController.StartFire();
+		}
+		else
+		{
+			_weaponController.StopFire();
+		}
 
-        if (_input.nextWeapon)
-        {
-            //_weaponController.NextWeapon();
-            _input.nextWeapon = false; // Сброс флага после переключения
-        }
+
+		if (_input.reload)
+		{
+			_weaponController.Reload();
+		}
+
+		if (_input.nextWeapon)
+		{
+			//_weaponController.NextWeapon();
+			_input.nextWeapon = false; // Сброс флага после переключения
+		}
 	}
 
 	private void LateUpdate()

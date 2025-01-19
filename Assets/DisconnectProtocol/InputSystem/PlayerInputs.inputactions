@@ -43,7 +43,7 @@
                 },
                 {
                     "name": "Fire",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "60491d47-46fc-452d-a945-b59b3b8219fb",
                     "expectedControlType": "",
                     "processors": "",

@@ -3,116 +3,73 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [Header("Weapon Data")]
-    public WeaponData weaponData; // Данные оружия, включая информацию о патронах, уроне, скорости перезарядки и т.д.
+    public WeaponData weaponData;
 
-    private WeaponFSM weaponFSM; // FSM для управления состояниями оружия
-    private int currentAmmo; // Текущее количество патронов в оружии
-    private bool isReloading; // Флаг, который указывает, что оружие в процессе перезарядки
-    private bool isFiring; // Флаг, который указывает, что оружие стреляет
-    private float fireTimer; // Таймер для автоматической стрельбы
+    private WeaponFSM _weaponFSM;
+    public Transform _muzzle;
+    private int _cageBullets;
+    private int _bulletCount;
+    private bool _isReloading;
+    private bool _isFiring;
+
+    public bool CanFire()
+    {
+        return _cageBullets > 0;
+    }
+
+    public bool HasBullet()
+    {
+        return _bulletCount > 0;
+    }
+
+    private void Awake()
+    {
+        _weaponFSM = new WeaponFSM(this);
+    }
 
     private void Start()
     {
-        // Инициализация оружия
-        currentAmmo = weaponData.magazineSize; // Заполнение магазина патронами
-        weaponFSM = new WeaponFSM(this); // Инициализация FSM с текущим оружием
-        weaponFSM.ActivateState(WeaponStateEnum.Idle); // Инициализация состояния "Idle"
+        _cageBullets = weaponData.cageSize;
+        _bulletCount = _cageBullets * 2;
+
+        _weaponFSM.ActivateState(WeaponStateEnum.Idle);
+    }
+
+    public void StartFire()
+    {
+        _weaponFSM.StartFire();
+    }
+
+    public void StopFire()
+    {
+        _weaponFSM.StopFire();
+    }
+
+    public void Reload()
+    {
+        if (_cageBullets != weaponData.cageSize && HasBullet())
+        {
+            _weaponFSM.Reload();
+        }
     }
 
     private void Update()
     {
-        weaponFSM.Update(); // Обновляем FSM (переходы между состояниями)
-
-        // Если мы стреляем в автоматическом режиме (удерживаем кнопку)
-        if (isFiring && CanFire())
-        {
-            fireTimer += Time.deltaTime; // Увеличиваем таймер
-
-            if (fireTimer >= weaponData.fireRate) // Проверяем, прошло ли время между выстрелами
-            {
-                fireTimer = 0f; // Сбросить таймер
-                StartShooting(); // Совершаем выстрел
-            }
-        }
+        _weaponFSM.Update();
     }
 
-    // Проверка, можно ли стрелять
-    public bool CanFire()
+    public void Shoot()
     {
-        return currentAmmo > 0 && !isReloading;
+        --_cageBullets;
+        --_bulletCount;
+
+        Debug.Log("Weapon shoot");
+        weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward);
     }
 
-    // Проверка, можно ли перезаряжать оружие
-    public bool CanReload()
+    public void ReloadComplete()
     {
-        return currentAmmo < weaponData.magazineSize && !isReloading;
+        Debug.Log("Weapon ReloadComplete");
+        _cageBullets = Mathf.Min(weaponData.cageSize, _bulletCount);
     }
-
-    // Метод для начала стрельбы
-    public void StartShooting()
-    {
-        if (CanFire())
-        {
-            isFiring = true;
-            Debug.Log("Shooting started...");
-            currentAmmo--;
-            // Тут можно добавить логику выстрела (эффекты, звук, пули и т.д.)
-            // Например, если используем снаряды, создаём объект пули
-            //Instantiate(weaponData.projectilePrefab, transform.position, transform.rotation);
-
-            FireProjectile();
-            // Если патроны закончились, переходим в состояние Empty
-            if (currentAmmo <= 0)
-            {
-                weaponFSM.ActivateState(WeaponStateEnum.Empty);
-            }
-        }
-        else
-        {
-            Debug.Log("No ammo or reloading in progress.");
-        }
-    }
-
-    // Метод для остановки стрельбы
-    public void StopShooting()
-    {
-        isFiring = false;
-        Debug.Log("Shooting stopped...");
-        // Возможно, нужно остановить какие-то эффекты или анимации выстрела
-        weaponFSM.ActivateState(WeaponStateEnum.Idle); // Переход в состояние "Idle"
-    }
-
-    // Метод для начала перезарядки
-    public void StartReloading()
-    {
-        if (CanReload())
-        {
-            isReloading = true;
-            Debug.Log("Reloading started...");
-            weaponFSM.ActivateState(WeaponStateEnum.Reload); // Переход в состояние "Reload"
-        }
-    }
-
-    // Метод, вызываемый по завершении перезарядки
-    public void CompleteReload()
-    {
-        currentAmmo = weaponData.magazineSize; // Заполняем магазин
-        isReloading = false; // Сбрасываем флаг перезарядки
-        Debug.Log("Reloading complete!");
-        weaponFSM.ActivateState(WeaponStateEnum.Idle); // Возвращаемся в состояние "Idle"
-    }
-
-    private void FireProjectile()
-    {
-        GameObject projectile = Instantiate(weaponData.projectilePrefab, transform.position, transform.rotation);
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.AddForce(transform.forward * weaponData.projectileSpeed, ForceMode.VelocityChange);
-        }
-    }
-
-    // Вспомогательные методы для активации состояний из других классов
-    public void StartFire() => weaponFSM.StartFire();
-    public void Reload() => weaponFSM.Reload();
 }

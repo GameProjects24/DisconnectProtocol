@@ -13,9 +13,11 @@ public class WeaponData : ScriptableObject
     public float damage = 10f;
     public float fireRate = 0.5f; // Время между выстрелами
     public float range = 50f;
+    public bool isAutomatic = true; // Автоматический или одиночный режим стрельбы
+    public bool isAutoReload;
 
     [Header("Ammo Settings")]
-    public int magazineSize = 30; // Количество патронов в магазине
+    public int cageSize = 30; // Количество патронов в магазине
     public int maxAmmo = 120; // Максимальный запас патронов
     public float reloadTime
     {
@@ -38,6 +40,5 @@ public class WeaponData : ScriptableObject
     [Header("Projectile Settings")]
     public GameObject projectilePrefab;
     public float projectileSpeed = 20f;
-    
-    public bool isAutomatic = true; // Автоматический или одиночный режим стрельбы
+    public WeaponShootSO weaponShoot;
 }

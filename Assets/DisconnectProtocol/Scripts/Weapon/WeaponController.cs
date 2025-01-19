@@ -74,6 +74,11 @@ public class WeaponController : MonoBehaviour
         currentWeapon?.StartFire();
     }
 
+    public void StopFire()
+    {
+        currentWeapon?.StopFire();
+    }
+
     public void Reload()
     {
         currentWeapon?.Reload();

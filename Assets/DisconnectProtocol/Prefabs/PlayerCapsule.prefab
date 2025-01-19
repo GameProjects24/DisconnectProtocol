@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 377544709104397385}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: WeaponHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3950799913973294936}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.341, y: -0.24899995, z: 0.541}
+  m_LocalPosition: {x: 0, y: -0.26, z: 0.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4135013735270702856}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Head
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
@@ -75,8 +75,7 @@ GameObject:
   - component: {fileID: 5393215578589016641}
   - component: {fileID: 5393215578589016654}
   - component: {fileID: 5393215578589016655}
-  - component: {fileID: 5393215578589016640}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,29 +150,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5393215578589016640
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5393215578589016642}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8616685848737228372
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +165,7 @@ GameObject:
   - component: {fileID: 8616685848737228376}
   - component: {fileID: 5382601143041164762}
   - component: {fileID: 5153589614250085459}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: PlayerCapsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -271,6 +247,9 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  fire: 0
+  reload: 0
+  nextWeapon: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -403,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c011fa7ed0ce84b8b72088ac3314fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data:
+  weaponDataList:
   - {fileID: 11400000, guid: cc3efeea0004efe42b87b37c9af21172, type: 2}
 --- !u!1001 &4146090592388792035
 PrefabInstance:
@@ -415,15 +394,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 578374564689024987, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 578374564689024987, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 578374564689024987, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.34
       objectReference: {fileID: 0}
     - target: {fileID: 578374564689024987, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -457,11 +428,28 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gun
       objectReference: {fileID: 0}
+    - target: {fileID: 4660112240588564902, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263026931295665659, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7862224586532894082, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+      propertyPath: _muzzle
+      value: 
+      objectReference: {fileID: 3495189390895726252}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+--- !u!4 &3495189390895726252 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 650971729755209807, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+  m_PrefabInstance: {fileID: 4146090592388792035}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3571094982960163128 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 578374564689024987, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}

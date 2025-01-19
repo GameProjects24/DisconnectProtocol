@@ -18,7 +18,9 @@ MonoBehaviour:
   damage: 10
   fireRate: 0.1
   range: 50
-  magazineSize: 25
+  isAutomatic: 1
+  isAutoReload: 0
+  cageSize: 30
   maxAmmo: 120
   recoilKickback: {x: 0, y: 0.1, z: -0.1}
   recoilRecoveryTime: 0.2
@@ -28,4 +30,4 @@ MonoBehaviour:
   reloadAnim: {fileID: 7400000, guid: 07d25d79b0f2fab4c9855f7c81058d2b, type: 2}
   projectilePrefab: {fileID: 3390464235817122846, guid: 9faf6e99fa9d34644873a434450ac2b4, type: 3}
   projectileSpeed: 200
-  isAutomatic: 1
+  weaponShoot: {fileID: 11400000, guid: c5b05603d3c42404a97ad54d730e8c05, type: 2}
