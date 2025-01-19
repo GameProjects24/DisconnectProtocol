@@ -39749,9 +39749,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 289202116971907443, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 289202116971907443, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e33c7c63c9c90628a38fd669247e41, type: 2}
+    - target: {fileID: 289202116971907443, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
     - target: {fileID: 1051451840748562792, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: m_Name
       value: EnemyGraph
@@ -39765,37 +39773,77 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1948091006380105193, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1948091006380105193, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e33c7c63c9c90628a38fd669247e41, type: 2}
+    - target: {fileID: 1948091006380105193, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
+    - target: {fileID: 2061472751687966610, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2061472751687966610, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e33c7c63c9c90628a38fd669247e41, type: 2}
+    - target: {fileID: 2061472751687966610, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
+    - target: {fileID: 3186226414343204364, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3186226414343204364, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e33c7c63c9c90628a38fd669247e41, type: 2}
+    - target: {fileID: 3186226414343204364, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
     - target: {fileID: 4468718113619838755, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4468718113619838755, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e33c7c63c9c90628a38fd669247e41, type: 2}
     - target: {fileID: 4468718113619838755, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: d5aafb5ec9da01242b0ee1cf8e1b5945, type: 2}
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
+    - target: {fileID: 4621356448517154175, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4621356448517154175, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 58c2cf994000c2e459d502d5b1700f29, type: 2}
+    - target: {fileID: 4621356448517154175, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
+    - target: {fileID: 5070120687055124869, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5070120687055124869, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7f1313f9b85c85980aad0d7dbf96fdf1, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e33c7c63c9c90628a38fd669247e41, type: 2}
+    - target: {fileID: 5070120687055124869, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 92d6b996a4e2d79c5ad7683f215a5e61, type: 2}
     - target: {fileID: 8256927622514979705, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'managedReferences[3168036441388744776]'
       value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[DisconnectProtocol.Weapon,
