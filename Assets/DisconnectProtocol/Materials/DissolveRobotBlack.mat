@@ -128,6 +128,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amount: 0
+    - _Dissolve_Amount: 0
     - _Edge_Thickness: 0.05
     - _Glossiness: 0
     - _Metallic: 0

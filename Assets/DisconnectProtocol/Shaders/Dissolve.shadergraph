@@ -555,10 +555,10 @@
                 "m_Id": "542e7456fcb54ecb8cc2923c830e1f9d"
             },
             {
-                "m_Id": "615a344b4fe54848a7d8a7b8fa7d4e45"
+                "m_Id": "6e7879456f4348e4af8d7a9362250cf1"
             },
             {
-                "m_Id": "6e7879456f4348e4af8d7a9362250cf1"
+                "m_Id": "615a344b4fe54848a7d8a7b8fa7d4e45"
             }
         ]
     },
@@ -1610,7 +1610,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "5c784b734fcc4f2ab04bff35c5bc073f",
     "m_Id": 0,
-    "m_DisplayName": "Amount",
+    "m_DisplayName": "Dissolve Amount",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -2538,10 +2538,10 @@
     "m_Guid": {
         "m_GuidSerialized": "bbf94d37-2d14-4b80-ae4e-2fe0c1854d6c"
     },
-    "m_Name": "Amount",
+    "m_Name": "Dissolve Amount",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Amount",
-    "m_DefaultReferenceName": "_Amount",
+    "m_RefNameGeneratedByDisplayName": "Dissolve Amount",
+    "m_DefaultReferenceName": "_Dissolve_Amount",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
