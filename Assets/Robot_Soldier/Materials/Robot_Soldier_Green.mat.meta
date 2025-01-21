@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: edc28d4cd35704248a4d6909e8092b34
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 142438
+  packageName: Robot Soldier
+  packageVersion: 1.0
+  assetPath: Assets/Robot_Soldier/Materials/Robot_Soldier_Green.mat
+  uploadId: 301415

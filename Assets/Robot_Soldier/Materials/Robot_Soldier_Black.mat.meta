@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d5aafb5ec9da01242b0ee1cf8e1b5945
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 142438
+  packageName: Robot Soldier
+  packageVersion: 1.0
+  assetPath: Assets/Robot_Soldier/Materials/Robot_Soldier_Black.mat
+  uploadId: 301415

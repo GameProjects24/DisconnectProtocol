@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 08f5427fe0d15ad47a5a1bb70b6156c7
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 142438
+  packageName: Robot Soldier
+  packageVersion: 1.0
+  assetPath: Assets/Robot_Soldier/Prefabs/Robot_Soldier_Red.prefab
+  uploadId: 301415
