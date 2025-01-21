@@ -6,6 +6,10 @@ public class WeaponController : MonoBehaviour
     public List<WeaponData> weaponDataList; // Список данных оружия
     private List<Weapon> weapons = new List<Weapon>(); // Список созданных оружий
     private Weapon currentWeapon; // Текущее оружие
+    public event System.Action OnReload; // Событие для перезарядки
+    public delegate void WeaponChangedHandler(Weapon newWeapon);
+    public event WeaponChangedHandler OnChangeWeapon;
+
 
     private void Awake()
     {
@@ -67,7 +71,11 @@ public class WeaponController : MonoBehaviour
 
         currentWeapon = weapons[index];
         currentWeapon.gameObject.SetActive(true);
+
+        OnChangeWeapon?.Invoke(currentWeapon);
     }
+
+    public Weapon CurrentWeapon { get; set; }
 
     public void StartFire()
     {
@@ -82,5 +90,6 @@ public class WeaponController : MonoBehaviour
     public void Reload()
     {
         currentWeapon?.Reload();
+        OnReload?.Invoke(); // Вызываем событие
     }
 }
