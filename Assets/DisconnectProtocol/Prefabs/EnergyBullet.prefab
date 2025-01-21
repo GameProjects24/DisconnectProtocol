@@ -28,8 +28,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.15, z: 0.05}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.02, y: 0.06, z: 0.02}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1638863756835358875}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1638863756835358875}
   - component: {fileID: 5011829369756158740}
   - component: {fileID: 4133901793181752175}
-  - component: {fileID: -3216492886336157357}
+  - component: {fileID: -4800675301798344279}
   m_Layer: 0
   m_Name: EnergyBullet
   m_TagString: Untagged
@@ -171,7 +171,7 @@ CapsuleCollider:
   m_Height: 0.3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3216492886336157357
+--- !u!114 &-4800675301798344279
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,7 +180,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3390464235817122846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30af0960169c5c141a0daa796846af6f, type: 3}
+  m_Script: {fileID: 11500000, guid: 639967e52d8bb549ca51e69cc5e457c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sparksPrefab: {fileID: 8980872027712066622, guid: 503fc2aee6168ff419ce441b79a4e431, type: 3}
+  lifeTime: 0
+  hitEffect: {fileID: 3092188531806233231, guid: b66d6f62282d9db4bb0a2f22715cd49c, type: 3}

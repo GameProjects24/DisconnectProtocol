@@ -9,7 +9,7 @@ using DisconnectProtocol;
 [NodeDescription(name: "StopFiring", story: "Stop firing [weapon]", category: "Weapon/Actions", id: "ac8db65d42669dd303143cc80bcaf137")]
 public partial class StopFiringAction : Action
 {
-    [SerializeReference] public BlackboardVariable<Weapon> Weapon;
+    [SerializeReference] public BlackboardVariable<WeaponController> Weapon;
 
     protected override Status OnStart()
     {
@@ -18,7 +18,7 @@ public partial class StopFiringAction : Action
 
     protected override Status OnUpdate()
     {
-		Weapon.Value.StopFiring();
+		Weapon.Value.StopFire();
         return Status.Success;
     }
 

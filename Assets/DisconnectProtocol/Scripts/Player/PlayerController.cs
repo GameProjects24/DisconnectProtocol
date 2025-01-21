@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
 	private CharacterController _controller;
 	private PlayerInputs _input;
 	private GameObject _mainCamera;
+	private WeaponController _weaponController;
 
 	private const float _threshold = 0.01f;
 
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+
 	private void Awake()
 	{
 		// get a reference to our main camera
@@ -67,18 +69,42 @@ public class PlayerController : MonoBehaviour
 
 	private void Start()
 	{
+
+		_weaponController = GetComponent<WeaponController>();
 		_controller = GetComponent<CharacterController>();
 		_input = GetComponent<PlayerInputs>();
 #if ENABLE_INPUT_SYSTEM
 		_playerInput = GetComponent<PlayerInput>();
 #else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+		Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
 	}
 
 	private void Update()
 	{
 		Move();
+
+
+		if (_input.fire)
+		{
+			_weaponController.StartFire();
+		}
+		else
+		{
+			_weaponController.StopFire();
+		}
+
+
+		if (_input.reload)
+		{
+			_weaponController.Reload();
+		}
+
+		if (_input.nextWeapon)
+		{
+			//_weaponController.NextWeapon();
+			_input.nextWeapon = false; // Сброс флага после переключения
+		}
 	}
 
 	private void LateUpdate()

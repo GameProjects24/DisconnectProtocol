@@ -1,20 +1,39 @@
-using DisconnectProtocol;
+using UnityEditor.UI;
 using UnityEngine;
+using DisconnectProtocol;
 
-namespace DisconnectProtocol {
-	public class Bullet : MonoBehaviour, IDamager
+public class Bullet : MonoBehaviour, IDamager
+{
+    public float lifeTime;
+    public ParticleSystem hitEffect;
+	public float damage { private get; set; }
+
+    private void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Создаём искры в точке попадания
+        if (hitEffect != null)
+        {
+            ParticleSystem effect = Instantiate(hitEffect, collision.contacts[0].point, Quaternion.LookRotation(collision.contacts[0].normal));
+            
+            // Удаляем частицы после завершения их проигрывания
+            Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        }
+        // Удаляем пулю после столкновения
+        Destroy(gameObject);
+    }
+
+    public void Fire(float power)
+    {
+        var body = GetComponent<Rigidbody>();
+        body.linearVelocity = transform.forward * power;
+    }
+
+	public float Damage()
 	{
-		[SerializeField] private GameObject _sparksPrefab;
-		public float weaponDamage { private get; set; }
-		private void OnCollisionEnter(Collision other) {
-			//Vector3 carVelocity = GetComponent<Rigidbody>().;
-			//Vector3 sparkDirection = carVelocity.normalized;
-			Instantiate(_sparksPrefab, transform.position,  Quaternion.LookRotation(transform.forward));
-			Destroy(gameObject);
-		}
-
-		public float Damage() {
-			return weaponDamage;
-		}
+		return damage;
 	}
 }

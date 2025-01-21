@@ -9,7 +9,7 @@ using DisconnectProtocol;
 [NodeDescription(name: "Reload", story: "Reload [weapon]", category: "Weapon/Actions", id: "ff46efac040a58b5e91b26ecc4dc6a09")]
 public partial class ReloadAction : Action
 {
-    [SerializeReference] public BlackboardVariable<Weapon> Weapon;
+    [SerializeReference] public BlackboardVariable<WeaponController> Weapon;
 
     protected override Status OnStart()
     {

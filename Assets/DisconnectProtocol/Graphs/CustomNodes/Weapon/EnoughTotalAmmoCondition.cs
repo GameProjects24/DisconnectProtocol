@@ -7,7 +7,7 @@ using DisconnectProtocol;
 [Condition(name: "EnoughTotalAmmo", story: "[weapon] has total ammo [operator] [treshold]", category: "Weapon/Conditions", id: "8cfbad4fc254e5e4c82b82c088dcedef")]
 public partial class EnoughTotalAmmoCondition : Condition
 {
-    [SerializeReference] public BlackboardVariable<Weapon> Weapon;
+    [SerializeReference] public BlackboardVariable<WeaponController> Weapon;
     [Comparison(comparisonType: ComparisonType.All)]
     [SerializeReference] public BlackboardVariable<ConditionOperator> Operator;
     [SerializeReference] public BlackboardVariable<int> Treshold;

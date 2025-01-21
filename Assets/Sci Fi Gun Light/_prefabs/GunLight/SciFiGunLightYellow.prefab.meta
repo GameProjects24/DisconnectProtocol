@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 841f0ca7a430c324d92c5583a9df3793
+timeCreated: 1485013138
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87916
+  packageName: Sci-Fi Gun Light
+  packageVersion: 1.0
+  assetPath: Assets/Sci Fi Gun Light/_prefabs/GunLight/SciFiGunLightYellow.prefab
+  uploadId: 173825

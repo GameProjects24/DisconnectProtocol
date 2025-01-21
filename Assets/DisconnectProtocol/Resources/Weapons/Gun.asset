@@ -13,19 +13,21 @@ MonoBehaviour:
   m_Name: Gun
   m_EditorClassIdentifier: 
   prefab: {fileID: 4660112240588564902, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
-  weaponName: 
+  weaponName: Gun
   weaponIcon: {fileID: 0}
   damage: 10
-  fireRate: 0.15
+  fireRate: 0.1
   range: 50
-  magazineSize: 25
+  isAutomatic: 1
+  isAutoReload: 0
+  cageSize: 30
   maxAmmo: 120
   recoilKickback: {x: 0, y: 0.1, z: -0.1}
   recoilRecoveryTime: 0.2
   muzzleFlashEffect: {fileID: 0}
-  fireSound: {fileID: 8300000, guid: 91fc1f54d6f2dbb48b0943abd0dbbbdd, type: 3}
-  reloadSound: {fileID: 8300000, guid: df61ac1907a34be4aa14e13cc936af8a, type: 3}
+  fireSound: {fileID: 0}
+  reloadSound: {fileID: 0}
   reloadAnim: {fileID: 7400000, guid: 07d25d79b0f2fab4c9855f7c81058d2b, type: 2}
   projectilePrefab: {fileID: 3390464235817122846, guid: 9faf6e99fa9d34644873a434450ac2b4, type: 3}
-  projectileSpeed: 75
-  isAutomatic: 1
+  projectileSpeed: 200
+  weaponShoot: {fileID: 11400000, guid: c5b05603d3c42404a97ad54d730e8c05, type: 2}

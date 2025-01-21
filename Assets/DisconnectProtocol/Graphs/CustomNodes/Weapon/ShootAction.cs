@@ -9,7 +9,7 @@ using DisconnectProtocol;
 [NodeDescription(name: "Shoot", story: "Shoot [weapon]", category: "Weapon/Actions", id: "2b10202ace55d377690f4622220ad5a9")]
 public partial class ShootAction : Action
 {
-    [SerializeReference] public BlackboardVariable<Weapon> Weapon;
+    [SerializeReference] public BlackboardVariable<WeaponController> Weapon;
 
     protected override Status OnStart()
     {

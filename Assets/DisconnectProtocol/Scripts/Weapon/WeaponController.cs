@@ -1,87 +1,119 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DisconnectProtocol
+public class WeaponController : MonoBehaviour
 {
-	public class WeaponController : MonoBehaviour
+    public List<WeaponData> weaponDataList; // Список данных оружия
+    private List<Weapon> weapons = new List<Weapon>(); // Список созданных оружий
+    private Weapon currentWeapon; // Текущее оружие
+    public event System.Action OnReload; // Событие для перезарядки
+    public delegate void WeaponChangedHandler(Weapon newWeapon);
+    public event WeaponChangedHandler OnChangeWeapon;
+
+
+    private void Start()
+    {
+        // Получить все уже существующие оружия
+        GetComponentsInChildren(true, weapons);
+
+        // Если оружия уже есть, установить первое как активное
+        if (weapons.Count > 0)
+        {
+            SetActiveWeapon(0);
+            return;
+        }
+
+        // Создать оружие из данных, если его нет
+        foreach (var weaponData in weaponDataList)
+        {
+            CreateWeapon(weaponData);
+        }
+
+        // Установить первое оружие активным
+        if (weapons.Count > 0)
+        {
+            SetActiveWeapon(0);
+        }
+    }
+
+    private void CreateWeapon(WeaponData weaponData)
+    {
+        if (weaponData == null || weaponData.prefab == null)
+        {
+            Debug.LogWarning("Invalid weapon data or prefab.");
+            return;
+        }
+
+        // Создать оружие и присоединить его к контроллеру
+        GameObject weaponObj = Instantiate(weaponData.prefab, transform);
+        Weapon weapon = weaponObj.GetComponent<Weapon>();
+
+        if (weapon != null)
+        {
+            weapons.Add(weapon);
+            weaponObj.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Prefab does not have a Weapon component.");
+            Destroy(weaponObj);
+        }
+    }
+
+    public void SetActiveWeapon(int index)
+    {
+        if (index < 0 || index >= weapons.Count) return;
+
+        if (currentWeapon != null)
+        {
+            currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
+            currentWeapon.gameObject.SetActive(false);
+        }
+
+        currentWeapon = weapons[index];
+        currentWeapon.gameObject.SetActive(true);
+        
+        currentWeapon.OnReloadWeapon += HandleReloadWeapon;
+        OnChangeWeapon?.Invoke(currentWeapon);
+    }
+
+	public bool CanFire()
 	{
-		private readonly List<Weapon> _weapons = new List<Weapon>();
-		public List<WeaponData> _data; // Список данных оружия (ScriptableObject)
-		private Weapon _currentWeapon;
-
-		private void Awake()
-		{
-			// Находим все оружия, уже находящиеся в объекте (например, предзагруженные в сцену)
-			GetComponentsInChildren(true, _weapons);
-			_weapons.ForEach(x => x.gameObject.SetActive(false));
-
-			SetActiveWeapon(0);
-		}
-
-		private void Start()
-		{
-			// Инстанцируем оружия из списка данных и добавляем их в список _weapons
-			foreach (var data in _data)
-			{
-				var go = Instantiate(data.prefab, transform);
-				go.SetActive(false);
-				if (go.TryGetComponent<Weapon>(out var weapon))
-				{
-					_weapons.Add(weapon);
-				}
-			}
-
-			SetActiveWeapon(0);
-		}
-
-		private void Update()
-		{
-			HandleInput();
-		}
-
-		private void HandleInput()
-		{
-			if (Input.GetButtonDown("Fire1"))
-			{
-				_currentWeapon?.StartFiring();
-			}
-
-			if (Input.GetButtonUp("Fire1"))
-			{
-				_currentWeapon?.StopFiring();
-			}
-
-			if (Input.GetKeyDown(KeyCode.R))
-			{
-				_currentWeapon?.Reload();
-			}
-
-			if (Input.GetKeyDown(KeyCode.Q))
-			{
-				CycleWeapon();
-			}
-		}
-
-		private void SetActiveWeapon(int weaponIndex)
-		{
-			if (weaponIndex < 0 || weaponIndex >= _weapons.Count)
-				return;
-
-			// Деактивируем текущее оружие
-			if (_currentWeapon != null)
-			{
-				_currentWeapon.gameObject.SetActive(false);
-			}
-
-			// Активируем новое оружие
-			_currentWeapon = _weapons[weaponIndex];
-			_currentWeapon.gameObject.SetActive(true);
-		}
-
-		private void CycleWeapon()
-		{
-			int nextWeaponIndex = (_weapons.IndexOf(_currentWeapon) + 1) % _weapons.Count;
-			SetActiveWeapon(nextWeaponIndex);
-		}
+		return currentWeapon != null ? currentWeapon.CanFire() : false;
 	}
+
+	public int GetCurrentAmmo()
+	{
+		return currentWeapon != null ? currentWeapon.GetCurrentAmmo() : 0;
+	}
+
+	public int GetTotalAmmo()
+	{
+		return currentWeapon != null ? currentWeapon.GetTotalAmmo() : 0;
+	}
+
+    public void StartFire()
+    {
+        currentWeapon?.StartFire();
+    }
+
+    public void StopFire()
+    {
+        currentWeapon?.StopFire();
+    }
+
+	public void Shoot()
+	{
+		currentWeapon?.Shoot();
+	}
+
+    public void Reload()
+    {
+        currentWeapon?.Reload();
+    }
+
+    private void HandleReloadWeapon()
+    {
+        OnReload?.Invoke(); // Вызываем событие
+    }
 }

@@ -2,180 +2,83 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace DisconnectProtocol
+public class Weapon : MonoBehaviour
 {
-	public class Weapon : MonoBehaviour
-	{
-		public WeaponData weaponData;
+    [Header("Weapon Data")]
+    public WeaponData weaponData;
 
-		private int _currentAmmo;
-		private int _totalAmmo;
-		private bool _isReloading;
-		private float _lastFireTime;
-		private bool _isFiring;
-		private Animator _animator;
-		private AudioSource _fireAudioSource;
+    private WeaponFSM _weaponFSM;
+    public Transform _muzzle;
+    private int _cageBullets;
+    private int _bulletCount;
+    private bool _isReloading;
+    private bool _isFiring;
+    
+    public event System.Action OnReloadWeapon; // Событие для перезарядки
 
+    public bool CanFire()
+    {
+        return _cageBullets > 0;
+    }
 
-		private void Start()
-		{
-			_currentAmmo = weaponData.magazineSize;
-			_totalAmmo = weaponData.maxAmmo;
-			_isReloading = false;
-			_isFiring = false;
-			_animator = GetComponent<Animator>();
+    public bool HasBullet()
+    {
+        return _bulletCount > 0;
+    }
 
-			// Добавляем AudioSource для воспроизведения звука стрельбы
-			_fireAudioSource = GetComponent<AudioSource>();
-			_fireAudioSource.clip = weaponData.fireSound;
-			_fireAudioSource.loop = true;
-			if (_fireAudioSource.isPlaying)
-			{
-				_fireAudioSource.Stop();
-			}
-		}
+    private void Awake()
+    {
+        _weaponFSM = new WeaponFSM(this);
+    }
 
-		private void FixedUpdate()
-		{
-			if (_isFiring && CanShoot())
-			{
-				Shoot();
-			}
-			if (_currentAmmo == 0)
-			{
-				StopFiring();
-			}
-		}
+    private void Start()
+    {
+        _cageBullets = weaponData.cageSize;
+        _bulletCount = _cageBullets * 2;
 
-		public void StartFiring()
-		{
-			_isFiring = true;
-		}
+        _weaponFSM.ActivateState(WeaponStateEnum.Idle);
+    }
 
-		public void StopFiring()
-		{
-			if (_fireAudioSource.isPlaying)
-			{
-				_fireAudioSource.Stop();
-			}
-			_isFiring = false;
-		}
+    public void StartFire()
+    {
+        _weaponFSM.StartFire();
+    }
 
-		public void Shoot()
-		{
-			if (!_fireAudioSource.isPlaying)
-			{
-				_fireAudioSource.Play();
-			}
+    public void StopFire()
+    {
+        _weaponFSM.StopFire();
+    }
 
-			if (_isReloading || Time.time - _lastFireTime < weaponData.fireRate || _currentAmmo == 0)
-				return;
+    public void Reload()
+    {
+        if (_cageBullets != weaponData.cageSize && HasBullet())
+        {
+            _weaponFSM.Reload();
+            OnReloadWeapon?.Invoke(); // Вызываем событие
+        }
+    }
 
-			_lastFireTime = Time.time;
+    private void Update()
+    {
+        _weaponFSM.Update();
+    }
 
-			if (weaponData.projectilePrefab != null)
-			{
-				FireProjectile();
-			}
-			else
-			{
-				Debug.LogWarning("Projectile not found!");
-				return;
-				// FireHitscan();
-			}
+    public void Shoot()
+    {
+        --_cageBullets;
+        --_bulletCount;
 
-			_currentAmmo--;
-			PlayMuzzleEffect();
-			//PlayFireSound();
-		}
+        Debug.Log("Weapon shoot");
+        weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
+    }
 
-		private void FireProjectile()
-		{
-			GameObject projectile = Instantiate(weaponData.projectilePrefab, transform.position, transform.rotation);
-			Rigidbody rb = projectile.GetComponent<Rigidbody>();
-			if (rb != null)
-			{
-				rb.AddForce(transform.forward * weaponData.projectileSpeed, ForceMode.VelocityChange);
-			}
+    public void ReloadComplete()
+    {
+        Debug.Log("Weapon ReloadComplete");
+        _cageBullets = Mathf.Min(weaponData.cageSize, _bulletCount);
+    }
 
-			Bullet bullet;
-			if (!projectile.TryGetComponent<Bullet>(out bullet)) {
-				bullet = projectile.AddComponent<Bullet>();
-			}
-			bullet.weaponDamage = weaponData.damage;
-	}
+    public int GetCurrentAmmo() => _cageBullets;
 
-		// private void FireHitscan()
-		// {
-		//     RaycastHit hit;
-		//     if (Physics.Raycast(transform.position, transform.forward, out hit, weaponData.range))
-		//     {
-		//         // Example: Apply damage to the target if it has a health component
-		//         var target = hit.collider.GetComponent<Target>();
-		//         if (target != null)
-		//         {
-		//             target.TakeDamage(weaponData.damage);
-		//         }
-		//     }
-		// }
-
-		public void Reload()
-		{
-			if (_isReloading || _currentAmmo == weaponData.magazineSize || _totalAmmo <= 0)
-				return;
-
-			StartCoroutine(ReloadCoroutine());
-		}
-
-		private IEnumerator ReloadCoroutine()
-		{
-			_isReloading = true;
-			PlayReloadSound();
-			if (_animator)
-			{
-				_animator.Play("SimpleReloadAnim");
-			}
-			yield return new WaitForSeconds(weaponData.reloadTime);
-
-			int ammoNeeded = weaponData.magazineSize - _currentAmmo;
-			int ammoToReload = Mathf.Min(ammoNeeded, _totalAmmo);
-			_currentAmmo += ammoToReload;
-			_totalAmmo -= ammoToReload;
-
-			_isReloading = false;
-		}
-
-		private void PlayMuzzleEffect()
-		{
-			if (weaponData.muzzleFlashEffect != null)
-			{
-				Instantiate(weaponData.muzzleFlashEffect, transform.position, transform.rotation);
-			}
-		}
-
-		// private void PlayFireSound()
-		// {
-		//     if (weaponData.fireSound != null)
-		//     {
-		//         AudioSource.PlayClipAtPoint(weaponData.fireSound, transform.position);
-		//     }
-		// }
-
-		private void PlayReloadSound()
-		{
-			if (weaponData.reloadSound != null)
-			{
-				AudioSource.PlayClipAtPoint(weaponData.reloadSound, transform.position);
-			}
-		}
-
-		public bool CanShoot()
-		{
-			return !_isReloading && _currentAmmo > 0 && Time.time - _lastFireTime >= weaponData.fireRate;
-		}
-
-		public int GetCurrentAmmo() => _currentAmmo;
-
-		public int GetTotalAmmo() => _totalAmmo;
-	}
+    public int GetTotalAmmo() => _bulletCount;
 }
