@@ -54,7 +54,7 @@ public class PlayerWeaponAnimationController : MonoBehaviour
     private void PlayAnimation(string animation)
     {
         //if(_currentAnimation == animation) return;
-
+    
         _animator.Play(animation);
         _currentAnimation = animation;
     }

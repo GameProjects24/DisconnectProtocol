@@ -11,7 +11,7 @@ public class WeaponController : MonoBehaviour
     public event WeaponChangedHandler OnChangeWeapon;
 
 
-    private void Awake()
+    private void Start()
     {
         // Получить все уже существующие оружия
         GetComponentsInChildren(true, weapons);
@@ -74,8 +74,6 @@ public class WeaponController : MonoBehaviour
 
         OnChangeWeapon?.Invoke(currentWeapon);
     }
-
-    public Weapon CurrentWeapon { get; set; }
 
     public void StartFire()
     {
