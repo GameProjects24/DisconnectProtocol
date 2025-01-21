@@ -11,6 +11,8 @@ public class Weapon : MonoBehaviour
     private int _bulletCount;
     private bool _isReloading;
     private bool _isFiring;
+    
+    public event System.Action OnReloadWeapon; // Событие для перезарядки
 
     public bool CanFire()
     {
@@ -50,6 +52,7 @@ public class Weapon : MonoBehaviour
         if (_cageBullets != weaponData.cageSize && HasBullet())
         {
             _weaponFSM.Reload();
+            OnReloadWeapon?.Invoke(); // Вызываем событие
         }
     }
 

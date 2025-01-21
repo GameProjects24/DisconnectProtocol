@@ -66,12 +66,14 @@ public class WeaponController : MonoBehaviour
 
         if (currentWeapon != null)
         {
+            currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
             currentWeapon.gameObject.SetActive(false);
         }
 
         currentWeapon = weapons[index];
         currentWeapon.gameObject.SetActive(true);
-
+        
+        currentWeapon.OnReloadWeapon += HandleReloadWeapon;
         OnChangeWeapon?.Invoke(currentWeapon);
     }
 
@@ -88,6 +90,10 @@ public class WeaponController : MonoBehaviour
     public void Reload()
     {
         currentWeapon?.Reload();
+    }
+
+    private void HandleReloadWeapon()
+    {
         OnReload?.Invoke(); // Вызываем событие
     }
 }
