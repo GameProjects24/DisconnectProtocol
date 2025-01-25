@@ -3,7 +3,7 @@ using Unity.Behavior;
 using UnityEngine;
 
 [Serializable, Unity.Properties.GeneratePropertyBag]
-[Condition(name: "In view angle", story: "angle between [self] and [target] [operator] [threshold]", category: "Conditions", id: "1579321f13324c849574f5bff137ccae")]
+[Condition(name: "In view angle", story: "angle between [self] and [target] [operator] [threshold]", category: "DisconnectProtocol/Conditions", id: "1579321f13324c849574f5bff137ccae")]
 public partial class InViewAngleCondition : Condition
 {
 	[SerializeReference] public BlackboardVariable<Transform> Self;

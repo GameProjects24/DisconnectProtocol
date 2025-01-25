@@ -37848,10 +37848,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGraph
       objectReference: {fileID: 0}
-    - target: {fileID: 8256927622514979705, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
-      propertyPath: managedReferences[4806854259142033672].m_Value
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8782742969094610840, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.799162

@@ -7,7 +7,7 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "Hide", story: "[Self] hides from [Target] behind objects with tag [tag]", category: "Action/Navigation", id: "bd8e54596aaa3ce2c75cd91e7761c61a")]
+[NodeDescription(name: "Hide", story: "[Self] hides from [Target] behind objects with tag [tag]", category: "DisconnectProtocol/Actions", id: "bd8e54596aaa3ce2c75cd91e7761c61a")]
 public partial class HideAction : Action
 {
     [SerializeReference] public BlackboardVariable<NavMeshAgent> Self;

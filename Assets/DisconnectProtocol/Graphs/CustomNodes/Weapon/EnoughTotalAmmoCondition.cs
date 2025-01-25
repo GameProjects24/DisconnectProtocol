@@ -4,7 +4,7 @@ using UnityEngine;
 using DisconnectProtocol;
 
 [Serializable, Unity.Properties.GeneratePropertyBag]
-[Condition(name: "EnoughTotalAmmo", story: "[weapon] has total ammo [operator] [treshold]", category: "Weapon/Conditions", id: "8cfbad4fc254e5e4c82b82c088dcedef")]
+[Condition(name: "EnoughTotalAmmo", story: "[weapon] has total ammo [operator] [treshold]", category: "DisconnectProtocol/Conditions", id: "8cfbad4fc254e5e4c82b82c088dcedef")]
 public partial class EnoughTotalAmmoCondition : Condition
 {
     [SerializeReference] public BlackboardVariable<WeaponController> Weapon;

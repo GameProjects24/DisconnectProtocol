@@ -6,7 +6,7 @@ using Unity.Properties;
 using DisconnectProtocol;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "StopFiring", story: "Stop firing [weapon]", category: "Weapon/Actions", id: "ac8db65d42669dd303143cc80bcaf137")]
+[NodeDescription(name: "StopFiring", story: "Stop firing [weapon]", category: "DisconnectProtocol/Actions", id: "ac8db65d42669dd303143cc80bcaf137")]
 public partial class StopFiringAction : Action
 {
     [SerializeReference] public BlackboardVariable<WeaponController> Weapon;
