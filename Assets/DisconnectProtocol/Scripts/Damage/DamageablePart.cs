@@ -8,6 +8,12 @@ namespace DisconnectProtocol
 		public Damageable body;
         public float damageRate = 1f;
 
+		private void Start() {
+			if (body == null) {
+				body = gameObject.GetComponentInParent<Damageable>();
+			}
+		}
+
 		private void OnCollisionEnter(Collision other) {
 			if (other.gameObject.TryGetComponent<IDamager>(out var d)) {
 				body.TakeDamage(d.Damage());

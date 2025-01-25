@@ -25,6 +25,9 @@ namespace DisconnectProtocol
 		}
 
 		private void OnEnable() {
+			if (body == null) {
+				body = gameObject.GetComponentInParent<Damageable>();
+			}
 			body.OnDieIEnum += Dissolve;
 		}
 

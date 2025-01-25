@@ -8,7 +8,7 @@ namespace DisconnectProtocol
 	{
 		public Damageable body;
 		public Texture[] hpImages;
-		public RawImage rawImage;
+		public RawImage image;
 
 		private float m_hpiRate;
 		private int m_imageIdx;
@@ -18,7 +18,14 @@ namespace DisconnectProtocol
 		}
 
 		private void OnEnable() {
-			rawImage.gameObject.SetActive(true);
+			if (body == null) {
+				body = gameObject.GetComponentInParent<Damageable>();
+			}
+			if (image == null) {
+				image = gameObject.GetComponentInParent<RawImage>();
+			}
+
+			image.gameObject.SetActive(true);
 			ChangeHpImage(hpImages.Length - 1);
 			body.OnDamage += TakeDamage;
 			body.OnDie += RemoveImage;
@@ -30,7 +37,7 @@ namespace DisconnectProtocol
 		}
 
 		private void RemoveImage() {
-			rawImage.gameObject.SetActive(false);
+			image.gameObject.SetActive(false);
 		}
 
 		public void TakeDamage() {
@@ -42,7 +49,7 @@ namespace DisconnectProtocol
 
 		private void ChangeHpImage(int idx) {
 			m_imageIdx = idx;
-			rawImage.texture = hpImages[idx];
+			image.texture = hpImages[idx];
 		}
 	}
 }
