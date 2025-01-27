@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -11,10 +10,15 @@ public class Weapon : MonoBehaviour
     public Transform _muzzle;
     private int _cageBullets;
     private int _bulletCount;
-    private bool _isReloading;
-    private bool _isFiring;
+    private bool isReloading;
+
+    // Публичное только для чтения свойство
+    public bool IsReloading
+    {
+        get { return isReloading; }
+    }
     
-    public event System.Action OnReloadWeapon; // Событие для перезарядки
+    public event Action OnReloadWeapon; // Событие для перезарядки
 
     public bool CanFire()
     {
@@ -49,15 +53,6 @@ public class Weapon : MonoBehaviour
         _weaponFSM.StopFire();
     }
 
-    public void Reload()
-    {
-        if (_cageBullets != weaponData.cageSize && HasBullet())
-        {
-            _weaponFSM.Reload();
-            OnReloadWeapon?.Invoke(); // Вызываем событие
-        }
-    }
-
     private void Update()
     {
         _weaponFSM.Update();
@@ -72,8 +67,19 @@ public class Weapon : MonoBehaviour
         weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
     }
 
+    public void Reload()
+    {
+        if (_cageBullets != weaponData.cageSize && HasBullet())
+        {
+            isReloading = true;
+            _weaponFSM.Reload();
+            OnReloadWeapon?.Invoke(); // Вызываем событие
+        }
+    }
+
     public void ReloadComplete()
     {
+        isReloading = false;
         Debug.Log("Weapon ReloadComplete");
         _cageBullets = Mathf.Min(weaponData.cageSize, _bulletCount);
     }

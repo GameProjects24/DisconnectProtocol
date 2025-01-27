@@ -18,6 +18,20 @@ public class PlayerController : MonoBehaviour
 	public float RotationSpeed = 1.0f;
 	[Tooltip("Acceleration and deceleration")]
 	public float SpeedChangeRate = 10.0f;
+	public event System.Action<bool> OnAim;
+
+	[Space(10)]
+	[Tooltip("The height the player can jump")]
+	public float JumpHeight = 1.2f;
+	[Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
+	public float Gravity = -15.0f;
+
+	[Space(10)]
+	[Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+	public float JumpTimeout = 0.1f;
+	[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+	public float FallTimeout = 0.15f;
+	public bool isGrounded = true;
 
 	[Header("Cinemachine")]
 	[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -33,6 +47,14 @@ public class PlayerController : MonoBehaviour
 	// player
 	private float _speed;
 	private float _rotationVelocity;
+	private float _verticalVelocity;
+	private float _terminalVelocity = 53.0f;
+	private Vector3 _currentMoveDirection;
+
+
+	// timeout deltatime
+	private float _jumpTimeoutDelta;
+	private float _fallTimeoutDelta;
 
 
 #if ENABLE_INPUT_SYSTEM
@@ -83,7 +105,7 @@ public class PlayerController : MonoBehaviour
 	private void Update()
 	{
 		Move();
-
+		JumpAndGravity();
 
 		if (_input.fire)
 		{
@@ -104,6 +126,15 @@ public class PlayerController : MonoBehaviour
 		{
 			//_weaponController.NextWeapon();
 			_input.nextWeapon = false; // Сброс флага после переключения
+		}
+
+		if (_input.aim && !_weaponController.IsCurWeaponReloading())
+		{
+			OnAim?.Invoke(true);
+		}
+		else
+		{
+			OnAim?.Invoke(false);
 		}
 	}
 
@@ -138,6 +169,12 @@ public class PlayerController : MonoBehaviour
 	{
 		// set target speed based on move speed, sprint speed and if sprint is pressed
 		float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+
+		// если игрок не на земле, используем только горизонтальную скорость из предыдущего движения
+		if (!isGrounded)
+		{
+			targetSpeed = _currentMoveDirection.magnitude * targetSpeed; // сохраняем текущую скорость
+		}
 
 		// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -177,9 +214,67 @@ public class PlayerController : MonoBehaviour
 			inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 		}
 
+		// сохраняем горизонтальное направление при прыжке или падении (эффект импульса)
+		if (isGrounded)
+		{
+			_currentMoveDirection = inputDirection;
+		}
+
 		// move the player
-		_controller.SimpleMove(inputDirection.normalized * _speed);
+		_controller.Move(_currentMoveDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+
+
 	}
+
+	private void JumpAndGravity()
+	{
+		isGrounded = _controller.isGrounded;
+		if (isGrounded)
+		{
+			// reset the fall timeout timer
+			_fallTimeoutDelta = FallTimeout;
+
+			// stop our velocity dropping infinitely when grounded
+			if (_verticalVelocity < 0.0f)
+			{
+				_verticalVelocity = -2f;
+			}
+
+			// Jump
+			if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+			{
+				// the square root of H * -2 * G = how much velocity needed to reach desired height
+				_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+			}
+
+			// jump timeout
+			if (_jumpTimeoutDelta >= 0.0f)
+			{
+				_jumpTimeoutDelta -= Time.deltaTime;
+			}
+		}
+		else
+		{
+			// reset the jump timeout timer
+			_jumpTimeoutDelta = JumpTimeout;
+
+			// fall timeout
+			if (_fallTimeoutDelta >= 0.0f)
+			{
+				_fallTimeoutDelta -= Time.deltaTime;
+			}
+
+			// if we are not grounded, do not jump
+			_input.jump = false;
+		}
+
+		// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
+		if (_verticalVelocity < _terminalVelocity)
+		{
+			_verticalVelocity += Gravity * Time.deltaTime;
+		}
+	}
+
 
 	private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
 	{

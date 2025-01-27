@@ -92,6 +92,11 @@ public class WeaponController : MonoBehaviour
 		return currentWeapon != null ? currentWeapon.GetTotalAmmo() : 0;
 	}
 
+    public bool IsCurWeaponReloading()
+    {
+        return currentWeapon.IsReloading;
+    }
+
     public void StartFire()
     {
         currentWeapon?.StartFire();

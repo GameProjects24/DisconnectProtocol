@@ -14,6 +14,7 @@ public class PlayerInputs : MonoBehaviour
     public bool fire;          // Стрельба
     public bool reload;        // Перезарядка
     public bool nextWeapon;    // Переключение на следующее оружие
+    public bool aim;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -67,6 +68,11 @@ public class PlayerInputs : MonoBehaviour
     {
         NextWeaponInput(value.isPressed);
     }
+
+    public void OnAim(InputValue value)
+    {
+        AimInput(value.isPressed);
+    }
 #endif
 
     // Обработка движения
@@ -109,6 +115,11 @@ public class PlayerInputs : MonoBehaviour
     public void NextWeaponInput(bool newNextWeaponState)
     {
         nextWeapon = newNextWeaponState;
+    }
+
+    private void AimInput(bool newAimState)
+    {
+        aim = newAimState;
     }
 
     // Фокус приложения и настройка курсора
