@@ -145,20 +145,12 @@ public class WeaponStateFire : WeaponStateBase
                 if (_context.CanFire())
                 {
                     _context.Shoot();
-                }
-
-                if (_context.CanFire())
-                {
                     _timer = 0;
                 }
                 else
                 {
                     _weaponFSM.ActivateState(WeaponStateEnum.Empty);
                 }
-            }
-            else
-            {
-                StopFire();
             }
         }
     }
