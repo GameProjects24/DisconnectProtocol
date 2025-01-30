@@ -24,7 +24,11 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 6782cb9a4660c4f34af5c960df0eee2d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _USE_EMISSION
+  - _USE_METALLIC_MAP
+  - _USE_NORMAL_MAP
+  - _USE_ROUGHNESS_MAP
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -41,11 +45,19 @@ Material:
         m_Texture: {fileID: 2800000, guid: 8c006ec7e7943be43b8afb3f8df57800, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Ao_Map:
+        m_Texture: {fileID: 2800000, guid: 8c006ec7e7943be43b8afb3f8df57800, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorMap:
+        m_Texture: {fileID: 2800000, guid: dcff179cd7b5ce545bd33433a9239f66, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Color_Map:
         m_Texture: {fileID: 2800000, guid: dcff179cd7b5ce545bd33433a9239f66, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -73,7 +85,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: 75f5477ccd7caf44581ab20788ee8290, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Metallic_Map:
+        m_Texture: {fileID: 2800000, guid: 75f5477ccd7caf44581ab20788ee8290, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: b47c75e7b1292d74196fe79571385183, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_Map:
         m_Texture: {fileID: 2800000, guid: b47c75e7b1292d74196fe79571385183, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -82,6 +102,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RoughnessMap:
+        m_Texture: {fileID: 2800000, guid: ce7e0e6714e3af347986b8c775a4ad60, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Roughness_Map:
         m_Texture: {fileID: 2800000, guid: ce7e0e6714e3af347986b8c775a4ad60, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -135,6 +159,11 @@ Material:
     - _Noise_Scale: 50
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Roughness: 0
+    - _USE_EMISSION: 1
+    - _USE_METALLIC_MAP: 1
+    - _USE_NORMAL_MAP: 1
+    - _USE_ROUGHNESS_MAP: 1
     - _UseAoMap: 0
     - _UseColorMap: 0
     - _UseEmissiveMap: 0
@@ -142,8 +171,10 @@ Material:
     - _UseNormalMap: 0
     - _UseRoughnessMap: 0
     m_Colors:
+    - _Base_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 0, g: 0, b: 0, a: 0}
     - _Edge_Color: {r: 0, g: 3.4851756, b: 15.999998, a: 1}
+    - _Emission: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _UvOffset: {r: 0, g: 0, b: 0, a: 0}
     - _UvTiling: {r: 1, g: 1, b: 0, a: 0}

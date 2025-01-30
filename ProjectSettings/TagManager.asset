@@ -8,6 +8,8 @@ TagManager:
   - Door
   - Hide
   - EnemyHp
+  - EnemyWeaponController
+  - EnemyEyes
   layers:
   - Default
   - TransparentFX
