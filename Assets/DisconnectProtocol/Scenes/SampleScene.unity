@@ -37569,11 +37569,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &940593264 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1292317349433931548, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
-  m_PrefabInstance: {fileID: 1085567637229936293}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1041766987
 GameObject:
   m_ObjectHideFlags: 0
@@ -39612,9 +39607,13 @@ PrefabInstance:
       value: Eyes
       objectReference: {fileID: 0}
     - target: {fileID: 2315772090000769995, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
+      propertyPath: m_BlackboardVariableOverridesList.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2315772090000769995, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: managedReferences[3168036721070178871].m_Value
       value: 
-      objectReference: {fileID: 940593264}
+      objectReference: {fileID: 0}
     - target: {fileID: 2315772090000769995, guid: c6ebb3d79da4807488c5b86b9269ff30, type: 3}
       propertyPath: 'm_BlackboardVariableOverridesList.Array.data[5]'
       value: 3168036721070178871

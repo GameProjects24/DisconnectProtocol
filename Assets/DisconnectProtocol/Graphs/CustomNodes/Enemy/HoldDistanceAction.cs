@@ -16,12 +16,14 @@ public partial class HoldDistanceAction : Action
     protected override Status OnStart()
     {
         Self.Value.isStopped = false;
+		Self.Value.SetDestination(Target.Value.position);
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
         Self.Value.SetDestination(Target.Value.position);
+		Debug.Log($"{Self.Value.remainingDistance}");
         if (Self.Value.remainingDistance <= Distance) {
             return Status.Success;
         }
