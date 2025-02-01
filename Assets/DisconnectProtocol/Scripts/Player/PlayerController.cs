@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 	[Tooltip("Acceleration and deceleration")]
 	public float SpeedChangeRate = 10.0f;
 	public event System.Action<bool> OnAim;
+	
+	public event System.Action<bool> OnSprint;
 
 	[Space(10)]
 	[Tooltip("The height the player can jump")]
@@ -66,6 +68,8 @@ public class PlayerController : MonoBehaviour
 	private WeaponController _weaponController;
 
 	private const float _threshold = 0.01f;
+
+	private float targetSpeed;
 
 	private bool IsCurrentDeviceMouse
 	{
@@ -128,13 +132,24 @@ public class PlayerController : MonoBehaviour
 			_input.nextWeapon = false; // Сброс флага после переключения
 		}
 
-		if (_input.aim && !_weaponController.IsCurWeaponReloading())
+		if (_input.aim && !_weaponController.IsCurWeaponReloading() && isGrounded)
 		{
 			OnAim?.Invoke(true);
 		}
 		else
 		{
 			OnAim?.Invoke(false);
+		}
+
+		if (_input.sprint && !_input.aim && !_weaponController.IsCurWeaponReloading())
+		{
+			targetSpeed = SprintSpeed;
+			OnSprint?.Invoke(true);
+		}
+		else
+		{
+			targetSpeed = MoveSpeed;
+			OnSprint?.Invoke(false);
 		}
 	}
 
@@ -167,9 +182,6 @@ public class PlayerController : MonoBehaviour
 
 	private void Move()
 	{
-		// set target speed based on move speed, sprint speed and if sprint is pressed
-		float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
 		// если игрок не на земле, используем только горизонтальную скорость из предыдущего движения
 		if (!isGrounded)
 		{

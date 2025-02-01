@@ -4,7 +4,7 @@ using UnityEngine;
 public class WeaponPosition : MonoBehaviour
 {
     public PlayerController playerController;
-    public PlayerInputs inputs; 
+    public PlayerInputs inputs;
 
     [Header("Sway Settings")]
     public float step = 0.01f;
@@ -20,45 +20,48 @@ public class WeaponPosition : MonoBehaviour
     private float smoothRot = 12f;
 
     [Header("Bobbing Settings")]
-    public float speedCurve;
-    private float curveSin => Mathf.Sin(speedCurve);
-    private float curveCos => Mathf.Cos(speedCurve);
-
+    public float bobSpeed = 5f; // Скорость покачивания
+    public float bobSprintSpeed = 7f;
     public Vector3 travelLimit = Vector3.one * 0.025f;
     public Vector3 bobLimit = Vector3.one * 0.01f;
     private Vector3 bobPosition;
 
-    public float bobExaggeration;
+    public float bobExaggeration = 1f;
 
     [Header("Bob Rotation Settings")]
     public Vector3 multiplier;
     private Vector3 bobEulerRotation;
 
     [Header("Aim Settings")]
-    public Vector3 aimPosition; // Позиция оружия при прицеливании
-    public float aimSpeed = 8f; // Скорость перехода между позициями
-    private Vector3 defaultPosition; // Позиция оружия в обычном состоянии
-    private bool isAiming; // Флаг для проверки состояния прицеливания
+    public Vector3 aimPosition;
+    public float aimSpeed = 8f;
+    private Vector3 defaultPosition;
+    private bool isAiming;
+    private bool isSpinting;
+
+    [Header("Aim Multiplier Settings")]
+    public float aimSwayMultiplier = 0.2f;
+    public float aimBobMultiplier = 0.3f;
+
+    private Vector3 velocity = Vector3.zero;
 
     private void Start()
     {
-        // Запоминаем стартовую позицию как позицию по умолчанию
         defaultPosition = transform.localPosition;
 
-        // Подписываемся на событие прицеливания
         playerController.OnAim += ToggleAim;
+        playerController.OnSprint += ToggleSprint;
     }
 
     private void OnDestroy()
     {
-        // Отписываемся от события
         playerController.OnAim -= ToggleAim;
+        playerController.OnSprint -= ToggleSprint;
     }
 
     private void Update()
     {
         GetInput();
-
         Sway();
         SwayRotation();
         BobOffset();
@@ -81,46 +84,54 @@ public class WeaponPosition : MonoBehaviour
         invertLook.x = Mathf.Clamp(invertLook.x, -maxStepDistance, maxStepDistance);
         invertLook.y = Mathf.Clamp(invertLook.y, -maxStepDistance, maxStepDistance);
 
-        swayPos = invertLook;
+        swayPos = Vector3.Lerp(swayPos, invertLook * (isAiming ? aimSwayMultiplier : 1f), Time.deltaTime * smooth);
     }
 
     private void SwayRotation()
     {
         Vector2 invertLook = lookInput * -rotationStep;
-        // Где " * 1f" поменять на умножение на "коэффициент прицеливания" - уменьшение тряски во время прицеливания и его увеличение без прицеливания
-        invertLook.x = Mathf.Clamp(invertLook.x, -maxRotationStep, maxRotationStep) * 1f;
-        invertLook.y = Mathf.Clamp(invertLook.y, -maxRotationStep, maxRotationStep) * 1f;
-        swayEulerRot = new Vector3(invertLook.y, invertLook.x, invertLook.y);
+        invertLook.x = Mathf.Clamp(invertLook.x, -maxRotationStep, maxRotationStep);
+        invertLook.y = Mathf.Clamp(invertLook.y, -maxRotationStep, maxRotationStep);
+        swayEulerRot = Vector3.Lerp(swayEulerRot, new Vector3(invertLook.y, invertLook.x, invertLook.y) * (isAiming ? aimSwayMultiplier : 1f), Time.deltaTime * smoothRot);
     }
 
     private void CompositePositionRotation()
     {
         Vector3 targetPosition = isAiming ? aimPosition : defaultPosition;
-        // Интерполяция позиции и поворота
-        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition + swayPos + bobPosition, Time.deltaTime * smooth);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
+
+        // Более плавный переход позиции
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition + swayPos + bobPosition, ref velocity, 0.1f);
+
+        // Плавное вращение
+        Quaternion targetRotation = Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation) * Quaternion.Euler(new Vector3 (0, 0, 0));
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * smoothRot);
     }
 
     private void BobOffset()
     {
-        speedCurve += Time.deltaTime * (playerController.isGrounded ? (walkInput.magnitude * bobExaggeration) : 1f) + 0.01f;
-
-        bobPosition.x = (curveCos * bobLimit.x * (playerController.isGrounded ? 1 : 0)) - (walkInput.x * travelLimit.x);
-        bobPosition.y = (curveSin * bobLimit.y) - (walkInput.y * travelLimit.y);
-        bobPosition.z = -(walkInput.y * travelLimit.z);
+        float targetBobSpeed = isSpinting ? bobSprintSpeed : bobSpeed;
+        float time = Time.time * targetBobSpeed;
+        bobPosition.x = (walkInput != Vector2.zero ? (Mathf.Cos(time) * bobLimit.x) - (walkInput.x * travelLimit.x) : 0) * (isAiming ? aimBobMultiplier : 1f);
+        bobPosition.y = (walkInput != Vector2.zero ? (Mathf.Sin(time) * bobLimit.y) - (walkInput.y * travelLimit.y) : 0) * (isAiming ? aimBobMultiplier : 1f);
+        bobPosition.z = -(walkInput.y * travelLimit.z) * (isAiming ? aimBobMultiplier : 1f);
     }
 
     private void BobRotation()
     {
-        // Где " * 1f" поменять на умножение на "коэффициент прицеливания" - уменьшение тряски во время прицеливания и его увеличение без прицеливания
-        bobEulerRotation.x = (walkInput != Vector2.zero ? multiplier.x * (Mathf.Sin(2 * speedCurve)) : multiplier.x * (Mathf.Sin(2 * speedCurve) / 2)) * 1f;
-        bobEulerRotation.y = (walkInput != Vector2.zero ? multiplier.y * curveCos : 0) * 1f;
-        bobEulerRotation.z = (walkInput != Vector2.zero ? multiplier.z * curveCos * walkInput.x : 0) * 1f;
+        float targetBobSpeed = isSpinting ? bobSprintSpeed : bobSpeed;
+        float time = Time.time * targetBobSpeed;
+        bobEulerRotation.x = (walkInput != Vector2.zero ? multiplier.x * Mathf.Sin(2 * time) : 0) * (isAiming ? aimBobMultiplier : 1f) * (playerController.isGrounded ? 1 : 0);
+        bobEulerRotation.y = (walkInput != Vector2.zero ? multiplier.y * Mathf.Cos(time) : 0) * (isAiming ? aimBobMultiplier : 1f) * (playerController.isGrounded ? 1 : 0);
+        bobEulerRotation.z = (walkInput != Vector2.zero ? multiplier.z * Mathf.Cos(time) * walkInput.x : 0) * (isAiming ? aimBobMultiplier : 1f) * (playerController.isGrounded ? 1 : 0);
     }
 
     private void ToggleAim(bool aimState)
     {
-        // Изменяем состояние прицеливания
         isAiming = aimState;
+    }
+
+    private void ToggleSprint(bool sprintState)
+    {
+        isSpinting = sprintState;
     }
 }
