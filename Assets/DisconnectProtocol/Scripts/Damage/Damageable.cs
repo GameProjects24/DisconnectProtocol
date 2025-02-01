@@ -8,6 +8,7 @@ namespace DisconnectProtocol
 		[SerializeField] private float m_maxHp = 100f;
 		public float maxHp { get => m_maxHp; }
 		public float hp { get; private set; }
+		[SerializeField] private GameObject objectToDestroy;
 		public event System.Action OnDamage;
 		public event System.Action OnDie;
 		public event System.Func<IEnumerator> OnDieIEnum;
@@ -30,7 +31,9 @@ namespace DisconnectProtocol
 			foreach (System.Func<IEnumerator> hand in OnDieIEnum.GetInvocationList()) {
 				yield return hand.Invoke();
 			}
-			transform.root.gameObject.SetActive(false);
+			if (objectToDestroy != null) {
+				Destroy(objectToDestroy);
+			}
 		}
     }
 }
