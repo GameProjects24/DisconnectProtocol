@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics;
 
 public class Weapon : MonoBehaviour
 {
@@ -61,7 +62,6 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
         --_cageBullets;
-        --_bulletCount;
 
         Debug.Log("Weapon shoot");
         weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
@@ -69,11 +69,15 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        if (_cageBullets != weaponData.cageSize && HasBullet())
+        if (_cageBullets < weaponData.cageSize && HasBullet())
         {
-            isReloading = true;
+            if (!isReloading)
+            {
+                OnReloadWeapon?.Invoke(); // Вызываем событие
+            }
+            
             _weaponFSM.Reload();
-            OnReloadWeapon?.Invoke(); // Вызываем событие
+            isReloading = true;
         }
     }
 
@@ -81,7 +85,11 @@ public class Weapon : MonoBehaviour
     {
         isReloading = false;
         Debug.Log("Weapon ReloadComplete");
-        _cageBullets = Mathf.Min(weaponData.cageSize, _bulletCount);
+        int neededAmmo = weaponData.cageSize - _cageBullets;
+        int ammoToReload = Mathf.Min(neededAmmo, _bulletCount);
+
+        _cageBullets += ammoToReload;
+        _bulletCount -= ammoToReload;
     }
 
     public int GetCurrentAmmo() => _cageBullets;

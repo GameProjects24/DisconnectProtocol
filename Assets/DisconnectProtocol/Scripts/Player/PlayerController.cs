@@ -126,10 +126,10 @@ public class PlayerController : MonoBehaviour
 			_weaponController.Reload();
 		}
 
-		if (_input.nextWeapon)
+		if (_input.changeWeapon)
 		{
-			//_weaponController.NextWeapon();
-			_input.nextWeapon = false; // Сброс флага после переключения
+			_weaponController.SetActiveWeapon();
+			_input.changeWeapon = false; // Сброс флага после переключения
 		}
 
 		if (_input.aim && !_weaponController.IsCurWeaponReloading() && isGrounded)

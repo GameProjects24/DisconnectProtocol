@@ -13,7 +13,7 @@ public class PlayerInputs : MonoBehaviour
     public bool sprint;        // Спринт
     public bool fire;          // Стрельба
     public bool reload;        // Перезарядка
-    public bool nextWeapon;    // Переключение на следующее оружие
+    public bool changeWeapon;    // Переключение на следующее оружие
     public bool aim;
 
     [Header("Movement Settings")]
@@ -64,9 +64,9 @@ public class PlayerInputs : MonoBehaviour
     }
 
     // Смена оружия
-    public void OnNextWeapon(InputValue value)
+    public void OnChangeWeapon(InputValue value)
     {
-        NextWeaponInput(value.isPressed);
+        ChangeWeaponInput(value.isPressed);
     }
 
     public void OnAim(InputValue value)
@@ -112,9 +112,9 @@ public class PlayerInputs : MonoBehaviour
     }
 
     // Обработка смены оружия
-    public void NextWeaponInput(bool newNextWeaponState)
+    public void ChangeWeaponInput(bool newChangeWeaponState)
     {
-        nextWeapon = newNextWeaponState;
+        changeWeapon = newChangeWeaponState;
     }
 
     private void AimInput(bool newAimState)

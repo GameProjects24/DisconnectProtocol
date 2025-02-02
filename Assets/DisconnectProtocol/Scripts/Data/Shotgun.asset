@@ -15,7 +15,7 @@ MonoBehaviour:
   prefab: {fileID: 4660112240588564902, guid: 047e0d105f2aef84fb8a4c5e8ec9c06a, type: 3}
   weaponName: Shotgun
   weaponIcon: {fileID: 0}
-  damage: 10
+  damage: 100
   fireRate: 1
   range: 50
   isAutomatic: 0
@@ -28,6 +28,4 @@ MonoBehaviour:
   fireSound: {fileID: 0}
   reloadSound: {fileID: 0}
   reloadAnim: {fileID: 7400000, guid: 07d25d79b0f2fab4c9855f7c81058d2b, type: 2}
-  projectilePrefab: {fileID: 3390464235817122846, guid: 9faf6e99fa9d34644873a434450ac2b4, type: 3}
-  projectileSpeed: 20
-  weaponShoot: {fileID: 11400000, guid: c5b05603d3c42404a97ad54d730e8c05, type: 2}
+  weaponShoot: {fileID: 11400000, guid: 4b2cf079356cb2e4090ab13225d5595a, type: 2}

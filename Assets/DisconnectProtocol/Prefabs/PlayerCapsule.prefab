@@ -286,7 +286,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   canPush: 1
-  strength: 1.1
+  strength: 1
 --- !u!114 &4040219882344481318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ MonoBehaviour:
   sprint: 0
   fire: 0
   reload: 0
-  nextWeapon: 0
+  changeWeapon: 0
   aim: 0
   analogMovement: 0
   cursorLocked: 1
@@ -510,6 +510,10 @@ PrefabInstance:
     - target: {fileID: 4660112240588564902, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660112240588564902, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6263026931295665659, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
       propertyPath: m_Layer

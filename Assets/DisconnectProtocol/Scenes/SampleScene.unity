@@ -338,6 +338,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCapsule
       objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 826895078}
     - target: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -34736,6 +34740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d3f2264d55a39418f8a82f4a8b1a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Surface: {fileID: 281279706}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -37202,6 +37207,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1372335452}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &826895078 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 9005220659476430821, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
+  m_PrefabInstance: {fileID: 2147478486}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
