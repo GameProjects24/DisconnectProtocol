@@ -817,6 +817,8 @@ GameObject:
   - component: {fileID: 8922396423892477103}
   - component: {fileID: 6163952445677436522}
   - component: {fileID: 2446992749631921869}
+  - component: {fileID: 5494015413645378002}
+  - component: {fileID: 4419670980281408591}
   m_Layer: 0
   m_Name: MechaBody
   m_TagString: Untagged
@@ -877,6 +879,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxHp: 100
+  objectToDestroy: {fileID: 0}
+--- !u!114 &5494015413645378002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062891064971802836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6dd62bbca5e18cf3900460f1033135d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_agent: {fileID: 0}
+--- !u!114 &4419670980281408591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062891064971802836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56506784a7a2518b4ab1c8e34745483e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_agent: {fileID: 0}
+  m_eyes: {fileID: 6423749284355028981}
+  m_weapon: {fileID: 603488743535502015}
+  m_visionAngle: 30
+  m_holdDistance: 10
 --- !u!1 &2097068011679008877
 GameObject:
   m_ObjectHideFlags: 0
