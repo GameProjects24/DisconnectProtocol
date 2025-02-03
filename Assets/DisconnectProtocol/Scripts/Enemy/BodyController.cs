@@ -4,6 +4,10 @@ using UnityEngine.AI;
 
 namespace DisconnectProtocol
 {
+	public enum BodyState {
+		Aim,
+	}
+
     public class BodyController : MonoBehaviour
     {
         [SerializeField] private NavMeshAgent m_agent;
@@ -13,6 +17,9 @@ namespace DisconnectProtocol
 		[SerializeField] private float m_holdDistance = 10;
 		[Range(0, 1)]
 		[SerializeField] private float m_rotationRate = .5f;
+
+		public event System.Action<BodyState> BodyStateChanged;
+
 		private float m_hd2;
 		private bool m_wasSeen = false;
 		private bool m_isAim = false;
@@ -68,18 +75,21 @@ namespace DisconnectProtocol
 				return;
 			}
 			m_isAim = true;
+			BodyStateChanged?.Invoke(BodyState.Aim);
 			StartCoroutine(AimCor(target));
 		}
 
 		private IEnumerator AimCor(Transform target) {
-			Quaternion rot;
+			float dif;
 			do {
 				var dir = target.position - transform.position;
 				dir.y = 0;
-				transform.rotation = rot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), m_rotationRate);
+				dif = transform.rotation.eulerAngles.y;
+				transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), m_rotationRate);
+				dif -= transform.rotation.eulerAngles.y;
 
 				yield return null;
-			} while (Mathf.Abs(rot.eulerAngles.y) > ANGLE_EPS);
+			} while (Mathf.Abs(dif) > ANGLE_EPS);
 			m_isAim = false;
 		}
     }

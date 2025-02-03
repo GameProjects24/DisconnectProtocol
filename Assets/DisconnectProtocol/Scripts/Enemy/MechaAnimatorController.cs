@@ -7,8 +7,7 @@ namespace DisconnectProtocol
 	[RequireComponent(typeof(Animator))]
     public class MechaAnimatorController : MonoBehaviour
     {
-		[SerializeField] private BehaviorGraphAgent m_agent;
-		private BlackboardVariable<AgentStateChanged> m_stateChanged;
+		[SerializeField] private BodyController m_body;
         private Animator m_animator;
 		private List<Rigidbody> m_rbs = new List<Rigidbody>();
 
@@ -20,29 +19,26 @@ namespace DisconnectProtocol
 				GetComponentsInChildren(m_rbs);
 			}
 			RagdollController.ChangeMode(RCMode.Animator, m_animator, m_rbs);
-
-			if (m_agent && m_stateChanged == null) {
-				if (m_agent.BlackboardReference.GetVariable("AgentStateChanged", out m_stateChanged)) {
-					if (m_stateChanged.Value == null) {
-						m_stateChanged.Value = ScriptableObject.CreateInstance<AgentStateChanged>();
-					}
+			
+			if (m_body == null) {
+				if (TryGetComponent(out m_body)) {
+					m_body.BodyStateChanged += OnBodyStateChanged;
 				}
-			}
-			if (m_stateChanged != null) {
-				m_stateChanged.Value.Event += OnAgentStateChanged;
+			} else {
+				m_body.BodyStateChanged += OnBodyStateChanged;
 			}
 		}
 
 		private void OnDisable() {
-			if (m_stateChanged != null) {
-				m_stateChanged.Value.Event -= OnAgentStateChanged;
+			if (m_body) {
+				m_body.BodyStateChanged -= OnBodyStateChanged;
 			}
 		}
 
-		private void OnAgentStateChanged(AgentState state) {
+		private void OnBodyStateChanged(BodyState state) {
 			switch (state) {
-			case AgentState.HipAim:
-				m_animator.enabled = false;
+			case BodyState.Aim:
+				Debug.Log("Aim");
 				break;
 			}
 		}
