@@ -39,7 +39,7 @@ public class PlayerWeaponAnimationController : MonoBehaviour
 
     private void HandleReload()
     {
-        PlayAnimation("SimpleReloadAnim");
+        _animator.SetTrigger("Reload");
     }
 
     private void HandleOnChangeWeapon(Weapon newWeapon)
@@ -48,6 +48,7 @@ public class PlayerWeaponAnimationController : MonoBehaviour
         {
             // Получаем новый Animator от текущего оружия
             _animator = newWeapon.GetComponent<Animator>();
+            _animator.SetTrigger("Appearance");
         }
     }
 

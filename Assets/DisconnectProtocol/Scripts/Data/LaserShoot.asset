@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5522e5ac31b65a848abe1b54b9811045, type: 3}
+  m_Name: LaserShoot
+  m_EditorClassIdentifier: 
+  pelletCount: 10
+  spreadAngle: 5
+  maxDistance: 50
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 55
+  tracerPrefab: {fileID: 2859782037436083344, guid: c37c14e80aeae8840b3afed39282950d, type: 3}
+  hitEffect: {fileID: 7338582107698948803, guid: 6a84a50015526be4dbaa6ac110e4b2e4, type: 3}

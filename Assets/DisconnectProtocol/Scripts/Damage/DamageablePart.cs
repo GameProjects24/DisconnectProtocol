@@ -19,5 +19,10 @@ namespace DisconnectProtocol
 				body.TakeDamage(d.Damage());
 			}
 		}
+
+		public void TakeDamage(float damage)
+		{
+			body.TakeDamage(damage);
+		}
     }
 }

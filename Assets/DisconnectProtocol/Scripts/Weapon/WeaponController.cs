@@ -9,6 +9,8 @@ public class WeaponController : MonoBehaviour
     public event System.Action OnReload; // Событие для перезарядки
     public delegate void WeaponChangedHandler(Weapon newWeapon);
     public event WeaponChangedHandler OnChangeWeapon;
+    private int counter = 0;
+    private int index = 0;
 
 
     private void Start()
@@ -19,7 +21,7 @@ public class WeaponController : MonoBehaviour
         // Если оружия уже есть, установить первое как активное
         if (weapons.Count > 0)
         {
-            SetActiveWeapon(0);
+            SetActiveWeapon();
             return;
         }
 
@@ -32,7 +34,7 @@ public class WeaponController : MonoBehaviour
         // Установить первое оружие активным
         if (weapons.Count > 0)
         {
-            SetActiveWeapon(0);
+            SetActiveWeapon();
         }
     }
 
@@ -60,10 +62,12 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    public void SetActiveWeapon(int index)
+    public void SetActiveWeapon()
     {
-        if (index < 0 || index >= weapons.Count) return;
+        if (index >= weapons.Count) return;
 
+        index++;
+        index = index % weapons.Count;
         if (currentWeapon != null)
         {
             currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
@@ -91,6 +95,11 @@ public class WeaponController : MonoBehaviour
 	{
 		return currentWeapon != null ? currentWeapon.GetTotalAmmo() : 0;
 	}
+
+    public bool IsCurWeaponReloading()
+    {
+        return currentWeapon.IsReloading;
+    }
 
     public void StartFire()
     {

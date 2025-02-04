@@ -37,8 +37,6 @@ public class WeaponData : ScriptableObject
     public AudioClip reloadSound;
     public AnimationClip reloadAnim;
 
-    [Header("Projectile Settings")]
-    public GameObject projectilePrefab;
-    public float projectileSpeed = 20f;
+    [Header("Shoot Settings")]
     public WeaponShootSO weaponShoot;
 }
