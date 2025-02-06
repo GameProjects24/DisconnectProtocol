@@ -23,7 +23,6 @@ public class WeaponShootShotgunSO : WeaponShootSO
             // Выполняем Raycast
             if (Physics.Raycast(position, spread, out RaycastHit hit, maxDistance, hitMask))
             {
-                Debug.Log("Дробинка попала в " + hit.collider.name);
                 endPoint = hit.point; // Если попали, фиксируем точку попадания
 
                 DamageablePart target = hit.collider.GetComponent<DamageablePart>();
@@ -49,11 +48,14 @@ public class WeaponShootShotgunSO : WeaponShootSO
         }
     }
 
-    private Vector3 GetSpreadDirection(Vector3 direction, float spread)
+    private Vector3 GetSpreadDirection(Vector3 direction, float spreadAngle)
     {
-        float angleX = Random.Range(-spread, spread);
-        float angleY = Random.Range(-spread, spread);
-        Quaternion rotation = Quaternion.Euler(angleX, angleY, 0);
+        // Генерируем случайные углы
+        float azimuth = Random.Range(0f, 360f); // Полный круг
+        float elevation = Random.Range(0f, spreadAngle); // Угол отклонения от центра
+
+        // Конвертируем вектора для сферического отклонения
+        Quaternion rotation = Quaternion.AngleAxis(elevation, Random.insideUnitSphere);
         return rotation * direction;
     }
 }

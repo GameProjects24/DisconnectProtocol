@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 5393215578589016654}
   - component: {fileID: 5393215578589016655}
   - component: {fileID: 5393215578589016640}
+  - component: {fileID: 6778514749051759578}
   m_Layer: 3
   m_Name: Capsule
   m_TagString: Untagged
@@ -205,6 +206,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6778514749051759578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5393215578589016642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 876d101dac9d4f64ba1bbaaa2e6c82ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 2673996022122227287}
+  damageRate: 1
 --- !u!1 &8616685848737228372
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,6 +236,7 @@ GameObject:
   - component: {fileID: 1933692561739407118}
   - component: {fileID: 5153589614250085459}
   - component: {fileID: 7018420814569911637}
+  - component: {fileID: 2673996022122227287}
   m_Layer: 3
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -444,9 +460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c011fa7ed0ce84b8b72088ac3314fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponDataList:
-  - {fileID: 11400000, guid: 4f6f6be2bccc5445a95b5f5bfde88441, type: 2}
-  - {fileID: 11400000, guid: 28bd6ff471a9aac428155bddb706cf27, type: 2}
 --- !u!114 &7018420814569911637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,6 +472,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ffb27e3220814469d1ca70a8b19afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2673996022122227287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546429c310478041084259a7911b4ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHp: 100
+  objectToDestroy: {fileID: 0}
 --- !u!1001 &4146090592388792035
 PrefabInstance:
   m_ObjectHideFlags: 0

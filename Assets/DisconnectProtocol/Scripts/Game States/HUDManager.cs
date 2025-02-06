@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using DisconnectProtocol;
 
 public class HUDManager : MonoBehaviour
 {
@@ -11,31 +12,34 @@ public class HUDManager : MonoBehaviour
     //public TextMeshProUGUI weaponNameText;
     public Image weaponIcon;
     public Image reloadIndicator;
+    public Image hpIndicator;
 
     public WeaponController weaponController;
+    public Damageable damageable;
 
     private Weapon currWeapon;
 
-    private void OnEnable()
+    private void Start()
     {
-        if (weaponController != null)
-        {
-            weaponController.OnChangeWeapon += UpdateWeapon;
-            weaponController.OnReloadComplete += UpdateAmmoUI;
-            weaponController.OnShoot += UpdateAmmoUI;
-            weaponController.OnReload += StartReloadIndicator;
-        }
+        if (weaponController == null || damageable == null) return;
+
+        weaponController.OnChangeWeapon += UpdateWeapon;
+        weaponController.OnReloadComplete += UpdateAmmoUI;
+        weaponController.OnShoot += UpdateAmmoUI;
+        weaponController.OnReload += StartReloadIndicator;
+        damageable.OnDamage += UpdateHPIndicator;
+        UpdateHPIndicator();
     }
 
     private void OnDestroy()
     {
-        if (weaponController != null)
-        {
-            weaponController.OnChangeWeapon -= UpdateWeapon;
-            weaponController.OnReloadComplete -= UpdateAmmoUI;
-            weaponController.OnShoot -= UpdateAmmoUI;
-            weaponController.OnReload -= StartReloadIndicator;
-        }
+        if (weaponController == null || damageable == null) return;
+
+        weaponController.OnChangeWeapon -= UpdateWeapon;
+        weaponController.OnReloadComplete -= UpdateAmmoUI;
+        weaponController.OnShoot -= UpdateAmmoUI;
+        weaponController.OnReload -= StartReloadIndicator;
+        damageable.OnDamage -= UpdateHPIndicator;
     }
 
     private void UpdateWeapon(Weapon newWeapon = null)
@@ -56,24 +60,25 @@ public class HUDManager : MonoBehaviour
 
         cageAmmo.text = $"{weaponController.GetCurrentAmmo()}";
         reserveAmmo.text = $"{weaponController.GetTotalAmmo()}";
-
-        // if (!weaponController.IsCurWeaponReloading())
-        // {
-        //     HideReloadIndicator();
-        // }
     }
 
 
     private void StartReloadIndicator()
     {
         if (reloadIndicator == null || currWeapon == null) return;
-        
+
         float reloadTime = currWeapon.weaponData.reloadTime;
         if (reloadTime > 0)
         {
             reloadIndicator.gameObject.SetActive(true);
             StartCoroutine(AnimateReloadIndicator(reloadTime));
         }
+    }
+
+    private void UpdateHPIndicator()
+    {
+        if (hpIndicator == null) return;
+        hpIndicator.fillAmount = damageable.hp / damageable.maxHp;
     }
 
     private IEnumerator AnimateReloadIndicator(float duration)
@@ -88,16 +93,4 @@ public class HUDManager : MonoBehaviour
         reloadIndicator.fillAmount = 0f;
         reloadIndicator.gameObject.SetActive(false);
     }
-
-    // private void ShowReloadIndicator()
-    // {
-    //     if (reloadIndicator != null)
-    //         reloadIndicator.gameObject.SetActive(true);
-    // }
-
-    // private void HideReloadIndicator()
-    // {
-    //     if (reloadIndicator != null)
-    //         reloadIndicator.gameObject.SetActive(false);
-    // }
 }
