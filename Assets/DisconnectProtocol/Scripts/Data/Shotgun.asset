@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 4660112240588564902, guid: 047e0d105f2aef84fb8a4c5e8ec9c06a, type: 3}
   weaponName: Shotgun
-  weaponIcon: {fileID: 0}
+  weaponIcon: {fileID: 21300000, guid: 8338bc64e14762f41be7068f6fdfa8bf, type: 3}
   damage: 100
   fireRate: 1
   range: 50

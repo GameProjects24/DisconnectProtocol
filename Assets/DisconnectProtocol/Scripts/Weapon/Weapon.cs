@@ -19,7 +19,9 @@ public class Weapon : MonoBehaviour
         get { return isReloading; }
     }
     
-    public event Action OnReloadWeapon; // Событие для перезарядки
+    public event Action OnReloadWeapon;
+    public event Action OnShootWeapon;
+    public event Action OnReloadCompleteWeapon;
 
     public bool CanFire()
     {
@@ -34,13 +36,12 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         _weaponFSM = new WeaponFSM(this);
+        _cageBullets = weaponData.cageSize;
+        _bulletCount = _cageBullets * 2;
     }
 
     private void Start()
     {
-        _cageBullets = weaponData.cageSize;
-        _bulletCount = _cageBullets * 2;
-
         _weaponFSM.ActivateState(WeaponStateEnum.Idle);
     }
 
@@ -65,6 +66,7 @@ public class Weapon : MonoBehaviour
 
         Debug.Log("Weapon shoot");
         weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
+        OnShootWeapon?.Invoke();
     }
 
     public void Reload()
@@ -90,6 +92,7 @@ public class Weapon : MonoBehaviour
 
         _cageBullets += ammoToReload;
         _bulletCount -= ammoToReload;
+        OnReloadCompleteWeapon?.Invoke();
     }
 
     public int GetCurrentAmmo() => _cageBullets;
