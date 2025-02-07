@@ -7,7 +7,7 @@ namespace DisconnectProtocol
 	[RequireComponent(typeof(Animator))]
     public class MechaAnimatorController : MonoBehaviour
     {
-		[SerializeField] private BodyController m_body;
+		[SerializeField] private SoldierBodyController m_body;
         private Animator m_animator;
 		private List<Rigidbody> m_rbs = new List<Rigidbody>();
 

@@ -8,7 +8,7 @@ using UnityEngine;
 [Condition(name: "Can see target", story: "[Body] can see [target]", category: "DisconnectProtocol/Conditions", id: "1579321f13324c849574f5bff137ccae")]
 public partial class InViewAngleCondition : Condition
 {
-	[SerializeReference] public BlackboardVariable<BodyController> Body;
+	[SerializeReference] public BlackboardVariable<SoldierBodyController> Body;
 	[SerializeReference] public BlackboardVariable<Transform> Target;
 
 	public override bool IsTrue()
