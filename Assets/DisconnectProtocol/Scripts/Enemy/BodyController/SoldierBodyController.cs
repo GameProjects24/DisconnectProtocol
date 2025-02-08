@@ -5,7 +5,11 @@ using UnityEngine.AI;
 namespace DisconnectProtocol
 {
 	public enum BodyState {
-		Aim,
+		Idle, Walk,
+	}
+
+	public enum BodyAction {
+		AimStart, AimStop,
 	}
 
     public class SoldierBodyController : MonoBehaviour
@@ -18,6 +22,8 @@ namespace DisconnectProtocol
 		[SerializeField] private float m_rotationRate = .5f;
 
 		public event System.Action<BodyState> BodyStateChanged;
+		private BodyState m_curState = BodyState.Idle;
+		public event System.Action<BodyAction> BodyActionPerformed;
 
 		private Aim m_aimAction;
 		private HoldDistance m_holdDistanceAction;
@@ -32,23 +38,35 @@ namespace DisconnectProtocol
 			m_canSee = new CanSeeTarget(m_eyes ? m_eyes : transform, m_visionAngle);
 		}
 
+		private void ChangeState(BodyState state) {
+			if (m_curState == state) {
+				return;
+			}
+			m_curState = state;
+			BodyStateChanged?.Invoke(state);
+		}
+
 		public bool CanSeeTarget(Transform target) {
 			return m_canSee.Eval(target);
 		}
 
 		public void HoldDistanceStart(Transform target, bool perpetual) {
+			ChangeState(BodyState.Walk);
 			m_holdDistanceAction.Start(target, perpetual);
 		}
 
 		public void HoldDistanceStop() {
+			ChangeState(BodyState.Idle);
 			m_holdDistanceAction.Stop();
 		}
 
 		public void AimStart(Transform target, bool perpetual) {
+			BodyActionPerformed?.Invoke(BodyAction.AimStart);
 			m_aimAction.Start(target, perpetual);
 		}
 
 		public void AimStop() {
+			BodyActionPerformed?.Invoke(BodyAction.AimStop);
 			m_aimAction.Stop();
 		}
     }

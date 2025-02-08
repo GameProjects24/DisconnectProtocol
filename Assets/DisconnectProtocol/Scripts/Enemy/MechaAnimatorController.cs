@@ -11,6 +11,12 @@ namespace DisconnectProtocol
         private Animator m_animator;
 		private List<Rigidbody> m_rbs = new List<Rigidbody>();
 
+		private int m_aimt = Animator.StringToHash("Aim");
+		private int m_idlet = Animator.StringToHash("Idle");
+		private int m_walkt = Animator.StringToHash("Walk");
+		private int m_runt = Animator.StringToHash("Run");
+		private int m_curt;
+
 		private void OnEnable() {
 			if (!m_animator) {
 				m_animator = GetComponent<Animator>();
@@ -22,24 +28,43 @@ namespace DisconnectProtocol
 			
 			if (m_body == null) {
 				if (TryGetComponent(out m_body)) {
-					m_body.BodyStateChanged += OnBodyStateChanged;
+					m_body.BodyStateChanged += OnStateChanged;
+					m_body.BodyActionPerformed += OnActionPerformed;
 				}
 			} else {
-				m_body.BodyStateChanged += OnBodyStateChanged;
+				m_body.BodyStateChanged += OnStateChanged;
+				m_body.BodyActionPerformed += OnActionPerformed;
 			}
 		}
 
 		private void OnDisable() {
 			if (m_body) {
-				m_body.BodyStateChanged -= OnBodyStateChanged;
+				m_body.BodyStateChanged -= OnStateChanged;
+				m_body.BodyActionPerformed -= OnActionPerformed;
 			}
 		}
 
-		private void OnBodyStateChanged(BodyState state) {
+		private void OnStateChanged(BodyState state) {
+			m_animator.ResetTrigger(m_curt);
 			switch (state) {
-			case BodyState.Aim:
-				Debug.Log("Aim");
-				break;
+				case BodyState.Idle:
+					m_curt = m_idlet;
+					break;
+				case BodyState.Walk:
+					m_curt = m_walkt;
+					break;
+			}
+			m_animator.SetTrigger(m_curt);
+		}
+
+		private void OnActionPerformed(BodyAction action) {
+			switch (action) {
+				case BodyAction.AimStart:
+					m_animator.SetTrigger(m_aimt);
+					break;
+				case BodyAction.AimStop:
+					m_animator.ResetTrigger(m_aimt);
+					break;
 			}
 		}
     }
