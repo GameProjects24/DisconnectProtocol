@@ -9,15 +9,9 @@ public class Weapon : MonoBehaviour
 
     private WeaponFSM _weaponFSM;
     public Transform _muzzle;
+    public bool IsReloading { get; private set; }
     private int _cageBullets;
     private int _bulletCount;
-    private bool isReloading;
-
-    // Публичное только для чтения свойство
-    public bool IsReloading
-    {
-        get { return isReloading; }
-    }
     
     public event Action OnReloadWeapon;
     public event Action OnShootWeapon;
@@ -73,19 +67,19 @@ public class Weapon : MonoBehaviour
     {
         if (_cageBullets < weaponData.cageSize && HasBullet())
         {
-            if (!isReloading)
+            if (!IsReloading)
             {
                 OnReloadWeapon?.Invoke(); // Вызываем событие
             }
             
             _weaponFSM.Reload();
-            isReloading = true;
+            IsReloading = true;
         }
     }
 
     public void ReloadComplete()
     {
-        isReloading = false;
+        IsReloading = false;
         Debug.Log("Weapon ReloadComplete");
         int neededAmmo = weaponData.cageSize - _cageBullets;
         int ammoToReload = Mathf.Min(neededAmmo, _bulletCount);
