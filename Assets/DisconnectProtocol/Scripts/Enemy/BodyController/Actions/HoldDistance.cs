@@ -6,7 +6,7 @@ using UnityEngine.Analytics;
 
 namespace DisconnectProtocol
 {
-    public class HoldDistance
+    public class HoldDistance : IStoppable
     {
         public float holdDistance;
 		private MonoBehaviour m_controller;
@@ -15,6 +15,10 @@ namespace DisconnectProtocol
 		private float m_hd2;
 		private bool m_isActive = false;
 		private Coroutine m_cor;
+
+		public event System.Action Stopped;
+		public event System.Action Paused;
+		public event System.Action Resumed;
 
 		private HoldDistance() {}
 		public HoldDistance(MonoBehaviour ctrl, NavMeshAgent agent, float hold) {
@@ -35,7 +39,9 @@ namespace DisconnectProtocol
 			m_isActive = false;
 			if (m_cor != null) {
 				m_controller.StopCoroutine(m_cor);
-			} 
+				m_cor = null;
+				Stopped?.Invoke();
+			}
 		}
 
 		private IEnumerator Cor(Transform target, bool perpetual) {
@@ -45,6 +51,7 @@ namespace DisconnectProtocol
 			do {
 				var dist = Vector3.SqrMagnitude(target.transform.position - self.position);
 				if (dist > m_hd2) {
+					Resumed?.Invoke();
 					m_agent.isStopped = false;
 
 					do {
@@ -56,6 +63,7 @@ namespace DisconnectProtocol
 					m_agent.isStopped = true;
 					m_agent.ResetPath();
 				} else {
+					Paused?.Invoke();
 					yield return null;
 				}
 			} while (perpetual);
@@ -63,6 +71,7 @@ namespace DisconnectProtocol
 			m_agent.isStopped = true;
 			m_agent.ResetPath();
 			m_isActive = false;
+			Stopped?.Invoke();
 		}
     }
 }

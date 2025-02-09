@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DisconnectProtocol
 {
-    public class Aim
+    public class Aim : IStoppable
     {
 		[Range(0, 1)]
 		public float rotationRate;
@@ -13,6 +13,8 @@ namespace DisconnectProtocol
 		private bool m_isActive;
 
 		private const float EPS = .1f;
+
+		public event System.Action Stopped;
 
 		private Aim() {}
 		public Aim(MonoBehaviour controller, float rotRate) {
@@ -31,6 +33,8 @@ namespace DisconnectProtocol
 			m_isActive = false;
 			if (m_cor != null) {
 				m_controller.StopCoroutine(m_cor);
+				m_cor = null;
+				Stopped?.Invoke();
 			}
 		}
 
@@ -48,6 +52,7 @@ namespace DisconnectProtocol
 				yield return null;
 			} while (perpetual || Mathf.Abs(dif) > EPS);
 			m_isActive = false;
+			Stopped?.Invoke();
 		}
     }
 }

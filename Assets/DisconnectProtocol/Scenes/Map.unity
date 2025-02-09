@@ -21378,6 +21378,14 @@ PrefabInstance:
       propertyPath: managedReferences[8456755321245270219].GUID.m_Value1
       value: 10457106550902519661
       objectReference: {fileID: 0}
+    - target: {fileID: 3669867238786646100, guid: 520aa32394f616219b7e0bc8adaa02f8, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 69e9b761319e90071af5819e57ee1df2, type: 2}
+    - target: {fileID: 4215003867668219560, guid: 520aa32394f616219b7e0bc8adaa02f8, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 69e9b761319e90071af5819e57ee1df2, type: 2}
     - target: {fileID: 5085206269589741811, guid: 520aa32394f616219b7e0bc8adaa02f8, type: 3}
       propertyPath: objectToDestroy
       value: 

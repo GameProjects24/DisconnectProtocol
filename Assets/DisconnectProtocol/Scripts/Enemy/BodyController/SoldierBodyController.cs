@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,6 +24,7 @@ namespace DisconnectProtocol
 
 		public event System.Action<BodyState> BodyStateChanged;
 		private BodyState m_curState = BodyState.Idle;
+		private IStoppable m_curStoppable;
 		public event System.Action<BodyAction> BodyActionPerformed;
 
 		private Aim m_aimAction;
@@ -34,7 +36,13 @@ namespace DisconnectProtocol
 				m_agent = GetComponentInParent<NavMeshAgent>();
 			}
 			m_aimAction = new Aim(this, m_rotationRate);
+			m_aimAction.Stopped += OnAimStop;
+
 			m_holdDistanceAction = new HoldDistance(this, m_agent, m_holdDistance);
+			m_holdDistanceAction.Stopped += OnHoldDistanceStop;
+			m_holdDistanceAction.Paused += OnHoldDistancePause;
+			m_holdDistanceAction.Resumed += OnHoldDistanceResume;
+
 			m_canSee = new CanSeeTarget(m_eyes ? m_eyes : transform, m_visionAngle);
 		}
 
@@ -46,19 +54,43 @@ namespace DisconnectProtocol
 			BodyStateChanged?.Invoke(state);
 		}
 
+		private void ChangeStoppable(IStoppable stp) {
+			if (m_curStoppable == stp) {
+				return;
+			}
+			m_curStoppable?.Stop();
+			m_curStoppable = stp;
+		}
+
+
 		public bool CanSeeTarget(Transform target) {
 			return m_canSee.Eval(target);
 		}
 
+
 		public void HoldDistanceStart(Transform target, bool perpetual) {
 			ChangeState(BodyState.Walk);
+			ChangeStoppable(m_holdDistanceAction);
 			m_holdDistanceAction.Start(target, perpetual);
 		}
 
 		public void HoldDistanceStop() {
-			ChangeState(BodyState.Idle);
 			m_holdDistanceAction.Stop();
 		}
+
+		private void OnHoldDistanceStop() {
+			ChangeState(BodyState.Idle);
+			m_curStoppable = null;
+		}
+
+		private void OnHoldDistancePause() {
+			ChangeState(BodyState.Idle);
+		}
+
+		private void OnHoldDistanceResume() {
+			ChangeState(BodyState.Walk);
+		}
+
 
 		public void AimStart(Transform target, bool perpetual) {
 			BodyActionPerformed?.Invoke(BodyAction.AimStart);
@@ -66,8 +98,11 @@ namespace DisconnectProtocol
 		}
 
 		public void AimStop() {
-			BodyActionPerformed?.Invoke(BodyAction.AimStop);
 			m_aimAction.Stop();
+		}
+
+		private void OnAimStop() {
+			BodyActionPerformed?.Invoke(BodyAction.AimStop);
 		}
     }
 }
