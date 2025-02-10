@@ -72,8 +72,7 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 4806854259142033448
   - rid: 4806854259142033672
-  - rid: 4806854259142033749
-  - rid: 4806854259142033750
+  - rid: 8456755254940401772
   - rid: 3168036539725250717
   - rid: 3168036759559208960
   m_IsInitialised: 0
@@ -113,22 +112,14 @@ MonoBehaviour:
           m_Value1: 15173840344543718161
         Name: Target
         m_Value: {fileID: 0}
-    - rid: 4806854259142033749
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+    - rid: 8456755254940401772
+      type: {class: 'BlackboardVariable`1[[DisconnectProtocol.BodyController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 3801059577840017264
-          m_Value1: 11463188120785505243
-        Name: View Distance
-        m_Value: 10
-    - rid: 4806854259142033750
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 817337310723333955
-          m_Value1: 10304007474415771291
-        Name: Distance
-        m_Value: 7
+          m_Value0: 6774816361996853633
+          m_Value1: 3170153206340809580
+        Name: Body
+        m_Value: {fileID: 5954219333793440909}
 --- !u!1 &3766263565598545864
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +192,7 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 4806854259142033448
   - rid: 3168036759559208961
+  - rid: 8456755254940401773
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -222,6 +214,14 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 3766263565598545864}
+    - rid: 8456755254940401773
+      type: {class: 'BlackboardVariable`1[[DisconnectProtocol.BodyController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 14232830855533523633
+          m_Value1: 7222231068056083143
+        Name: Body
+        m_Value: {fileID: 6499518411330986609}
 --- !u!1 &6350954153082987206
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,10 +326,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4487864454488313469}
     m_Modifications:
+    - target: {fileID: 115320796247127159, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4f6f6be2bccc5445a95b5f5bfde88441, type: 2}
     - target: {fileID: 2062891064971802836, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: m_Name
       value: MechaBody
       objectReference: {fileID: 0}
+    - target: {fileID: 2446992749631921869, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: objectToDestroy
+      value: 
+      objectReference: {fileID: 3766263565598545864}
     - target: {fileID: 8922396423892477103, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -380,6 +388,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8922396423892477103, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
   m_PrefabInstance: {fileID: 7450993206842900030}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6499518411330986609 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4419670980281408591, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+  m_PrefabInstance: {fileID: 7450993206842900030}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56506784a7a2518b4ab1c8e34745483e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8067197871411427522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -388,10 +407,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1327491188881244693}
     m_Modifications:
+    - target: {fileID: 115320796247127159, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4f6f6be2bccc5445a95b5f5bfde88441, type: 2}
     - target: {fileID: 2062891064971802836, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: m_Name
       value: MechaBody
       objectReference: {fileID: 0}
+    - target: {fileID: 2446992749631921869, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: objectToDestroy
+      value: 
+      objectReference: {fileID: 3319844338161966759}
     - target: {fileID: 8922396423892477103, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -442,3 +469,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8922396423892477103, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
   m_PrefabInstance: {fileID: 8067197871411427522}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5954219333793440909 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4419670980281408591, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+  m_PrefabInstance: {fileID: 8067197871411427522}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56506784a7a2518b4ab1c8e34745483e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

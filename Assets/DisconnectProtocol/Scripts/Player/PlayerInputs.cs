@@ -7,13 +7,13 @@ using UnityEngine.InputSystem;
 public class PlayerInputs : MonoBehaviour
 {
     [Header("Character Input Values")]
-    public Vector2 move;       // Движение
-    public Vector2 look;       // Повороты камеры
-    public bool jump;          // Прыжок
-    public bool sprint;        // Спринт
-    public bool fire;          // Стрельба
-    public bool reload;        // Перезарядка
-    public bool changeWeapon;    // Переключение на следующее оружие
+    public Vector2 move;
+    public Vector2 look;
+    public bool jump;
+    public bool sprint;
+    public bool fire;
+    public bool reload;
+    public bool changeWeapon;
     public bool aim;
 
     [Header("Movement Settings")]

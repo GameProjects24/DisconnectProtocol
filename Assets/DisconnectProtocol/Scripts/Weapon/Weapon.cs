@@ -9,17 +9,13 @@ public class Weapon : MonoBehaviour
 
     private WeaponFSM _weaponFSM;
     public Transform _muzzle;
+    public bool IsReloading { get; private set; }
     private int _cageBullets;
     private int _bulletCount;
-    private bool isReloading;
-
-    // Публичное только для чтения свойство
-    public bool IsReloading
-    {
-        get { return isReloading; }
-    }
     
-    public event Action OnReloadWeapon; // Событие для перезарядки
+    public event Action OnReloadWeapon;
+    public event Action OnShootWeapon;
+    public event Action OnReloadCompleteWeapon;
 
     public bool CanFire()
     {
@@ -34,13 +30,12 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         _weaponFSM = new WeaponFSM(this);
+        _cageBullets = weaponData.cageSize;
+        _bulletCount = _cageBullets * 2;
     }
 
     private void Start()
     {
-        _cageBullets = weaponData.cageSize;
-        _bulletCount = _cageBullets * 2;
-
         _weaponFSM.ActivateState(WeaponStateEnum.Idle);
     }
 
@@ -65,31 +60,33 @@ public class Weapon : MonoBehaviour
 
         Debug.Log("Weapon shoot");
         weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
+        OnShootWeapon?.Invoke();
     }
 
     public void Reload()
     {
         if (_cageBullets < weaponData.cageSize && HasBullet())
         {
-            if (!isReloading)
+            if (!IsReloading)
             {
                 OnReloadWeapon?.Invoke(); // Вызываем событие
             }
             
             _weaponFSM.Reload();
-            isReloading = true;
+            IsReloading = true;
         }
     }
 
     public void ReloadComplete()
     {
-        isReloading = false;
+        IsReloading = false;
         Debug.Log("Weapon ReloadComplete");
         int neededAmmo = weaponData.cageSize - _cageBullets;
         int ammoToReload = Mathf.Min(neededAmmo, _bulletCount);
 
         _cageBullets += ammoToReload;
         _bulletCount -= ammoToReload;
+        OnReloadCompleteWeapon?.Invoke();
     }
 
     public int GetCurrentAmmo() => _cageBullets;

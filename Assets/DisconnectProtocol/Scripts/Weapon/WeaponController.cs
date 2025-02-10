@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public List<WeaponData> weaponDataList; // Список данных оружия
-    private List<Weapon> weapons = new List<Weapon>(); // Список созданных оружий
-    private Weapon currentWeapon; // Текущее оружие
-    public event System.Action OnReload; // Событие для перезарядки
+    private List<Weapon> weapons = new List<Weapon>();
+    private Weapon currentWeapon;
+    public event Action OnReload;
+    public event Action OnShoot;
+    public event Action OnReloadComplete;
     public delegate void WeaponChangedHandler(Weapon newWeapon);
     public event WeaponChangedHandler OnChangeWeapon;
-    private int counter = 0;
     private int index = 0;
 
 
@@ -22,43 +23,6 @@ public class WeaponController : MonoBehaviour
         if (weapons.Count > 0)
         {
             SetActiveWeapon();
-            return;
-        }
-
-        // Создать оружие из данных, если его нет
-        foreach (var weaponData in weaponDataList)
-        {
-            CreateWeapon(weaponData);
-        }
-
-        // Установить первое оружие активным
-        if (weapons.Count > 0)
-        {
-            SetActiveWeapon();
-        }
-    }
-
-    private void CreateWeapon(WeaponData weaponData)
-    {
-        if (weaponData == null || weaponData.prefab == null)
-        {
-            Debug.LogWarning("Invalid weapon data or prefab.");
-            return;
-        }
-
-        // Создать оружие и присоединить его к контроллеру
-        GameObject weaponObj = Instantiate(weaponData.prefab, transform);
-        Weapon weapon = weaponObj.GetComponent<Weapon>();
-
-        if (weapon != null)
-        {
-            weapons.Add(weapon);
-            weaponObj.SetActive(false);
-        }
-        else
-        {
-            Debug.LogWarning("Prefab does not have a Weapon component.");
-            Destroy(weaponObj);
         }
     }
 
@@ -71,6 +35,8 @@ public class WeaponController : MonoBehaviour
         if (currentWeapon != null)
         {
             currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
+            currentWeapon.OnShootWeapon -= HandleShootWeapon;
+            currentWeapon.OnReloadCompleteWeapon -= HandleReloadWeapon;
             currentWeapon.gameObject.SetActive(false);
         }
 
@@ -78,10 +44,12 @@ public class WeaponController : MonoBehaviour
         currentWeapon.gameObject.SetActive(true);
         
         currentWeapon.OnReloadWeapon += HandleReloadWeapon;
+        currentWeapon.OnShootWeapon += HandleShootWeapon;
+        currentWeapon.OnReloadCompleteWeapon += HandleReloadCompleteWeapon;
         OnChangeWeapon?.Invoke(currentWeapon);
     }
 
-	public bool CanFire()
+    public bool CanFire()
 	{
 		return currentWeapon != null ? currentWeapon.CanFire() : false;
 	}
@@ -123,6 +91,16 @@ public class WeaponController : MonoBehaviour
 
     private void HandleReloadWeapon()
     {
-        OnReload?.Invoke(); // Вызываем событие
+        OnReload?.Invoke();
+    }
+
+    private void HandleShootWeapon()
+    {
+        OnShoot?.Invoke();;
+    }
+
+    private void HandleReloadCompleteWeapon()
+    {
+        OnReloadComplete?.Invoke();
     }
 }
