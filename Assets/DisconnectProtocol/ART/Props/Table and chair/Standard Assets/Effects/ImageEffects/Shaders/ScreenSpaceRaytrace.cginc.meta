@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 26c67b7245085cf438e3d42d50d94f55
+timeCreated: 1425661779
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/ImageEffects/Shaders/ScreenSpaceRaytrace.cginc
+  uploadId: 163741

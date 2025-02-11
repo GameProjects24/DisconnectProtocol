@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2521140a5d0e0d0448b780a0885ace40
+timeCreated: 1498105470
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96670
+  packageName: Trash Bin
+  packageVersion: 1.0
+  assetPath: Assets/Models/Trash Bin/Model/Materials/trash_bin.mat
+  uploadId: 195210

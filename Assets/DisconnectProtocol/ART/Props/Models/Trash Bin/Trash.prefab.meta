@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0b50edd1ab1ea9c4ba8edc42f1b15181
+timeCreated: 1498676994
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96670
+  packageName: Trash Bin
+  packageVersion: 1.0
+  assetPath: Assets/Models/Trash Bin/Trash.prefab
+  uploadId: 195210

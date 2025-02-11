@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 419e976ce3354ca4895c43e78bbd4dec
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 85732
+  packageName: 3D Free Modular Kit
+  packageVersion: 2.0
+  assetPath: Assets/_Barking_Dog/Common Scripts/MouseLook.cs
+  uploadId: 679479
