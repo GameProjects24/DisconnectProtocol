@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Drone
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Down
+    m_Weight: 0
+  - m_Path: DroneGuard
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main/Down_Half
+    m_Weight: 1
+  - m_Path: DroneGuard/Bone_Main/Down_Half/Down_Half_end
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main/Left_Arm 1
+    m_Weight: 1
+  - m_Path: DroneGuard/Bone_Main/Left_Arm 1/Left_Weapon
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main/Left_Arm 1/Left_Weapon/Left_Weapon_end
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main/Right_Arm 1
+    m_Weight: 1
+  - m_Path: DroneGuard/Bone_Main/Right_Arm 1/Right_Weapon
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main/Right_Arm 1/Right_Weapon/Right_Weapon_end
+    m_Weight: 0
+  - m_Path: DroneGuard/Bone_Main/Up_Half
+    m_Weight: 1
+  - m_Path: DroneGuard/Bone_Main/Up_Half/Up_Half_end
+    m_Weight: 0
+  - m_Path: Left_Arm
+    m_Weight: 0
+  - m_Path: Right_Arm
+    m_Weight: 0
+  - m_Path: Up
+    m_Weight: 0
