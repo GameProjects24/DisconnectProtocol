@@ -6,6 +6,7 @@ public class WeaponTransformManager : MonoBehaviour
     public Quaternion DefaultRotation { get; private set; }
     
     private Vector3 targetPosition;
+    private Quaternion targetRotation;
     private Vector3 positionOffset;
     private Vector3 rotationOffset;
 
@@ -29,6 +30,11 @@ public class WeaponTransformManager : MonoBehaviour
         targetPosition = newTargetPosition;
     }
 
+    public void SetTargetRotation(Quaternion newTargetRotation)
+    {
+        targetRotation = newTargetRotation;
+    }
+
     public void AddPositionOffset(Vector3 offset)
     {
         positionOffset += offset;
@@ -43,7 +49,7 @@ public class WeaponTransformManager : MonoBehaviour
     {
         // **Складываем все смещения (sway + bobbing + aim)**
         Vector3 finalPosition = targetPosition + positionOffset;
-        Quaternion finalRotation = Quaternion.Euler(rotationOffset) * DefaultRotation;
+        Quaternion finalRotation = Quaternion.Euler(rotationOffset) * DefaultRotation * targetRotation;
 
         // **Плавное движение и поворот**
         transform.localPosition = Vector3.SmoothDamp(transform.localPosition, finalPosition, ref velocity, 0.1f);
