@@ -6,6 +6,11 @@ using UnityEngine.Analytics;
 
 namespace DisconnectProtocol
 {
+	public interface IHoldDistance {
+		public void Start(Transform target, bool perpetual);
+		public void Stop();
+	}
+
     public class HoldDistance : IStoppable
     {
         public float holdDistance;
@@ -21,11 +26,11 @@ namespace DisconnectProtocol
 		public event System.Action Resumed;
 
 		private HoldDistance() {}
-		public HoldDistance(MonoBehaviour ctrl, NavMeshAgent agent, float hold) {
+		public HoldDistance(MonoBehaviour ctrl, NavMeshAgent agent, float distance) {
 			m_controller = ctrl;
 			m_agent = agent;
-			holdDistance = hold;
-			m_hd2 = hold * hold;
+			holdDistance = distance;
+			m_hd2 = distance * distance;
 		}
 
 		public void Start(Transform target, bool perpetual) {
