@@ -2,53 +2,54 @@ using UnityEngine;
 
 public class WeaponLookAtCenter : MonoBehaviour
 {
-    public Camera playerCamera;
+    [Header("Ссылки")]
     private WeaponTransformManager transformManager;
+    private Camera mainCamera;
 
-    [Header("Correction Settings")]
-    public float maxCorrectionAngle = 5f;  // Максимальный угол коррекции
-    public float correctionSpeed = 8f;     // Скорость поворота
-    public float maxDistance = 50f;        // Максимальная дистанция для корректировки
+    [Header("Настройки Raycast")]
+    public float raycastDistance = 50f;
 
-    private Quaternion defaultRotation;
+    [Header("Настройки сглаживания")]
+    public float smoothRot = 12f;
+
+    private Quaternion currentLookOffset = Quaternion.identity;
 
     private void Start()
     {
+        mainCamera = Camera.main;
         transformManager = GetComponent<WeaponTransformManager>();
-        defaultRotation = transformManager.DefaultRotation; // Запоминаем начальную ротацию
+        
     }
 
     private void Update()
     {
-        AdjustWeaponRotation();
-    }
+        if (mainCamera == null || transformManager == null)
+            return;
 
-    private void AdjustWeaponRotation()
-    {
-        // Выпускаем луч из центра экрана
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        RaycastHit hit;
+        Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        Vector3 aimPoint;
 
-        Quaternion targetRotation;
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance))
         {
-            // Если попали в объект, направляем оружие к нему
-            Vector3 directionToTarget = (hit.point - transform.position).normalized;
-            targetRotation = Quaternion.LookRotation(directionToTarget);
+            aimPoint = hit.point;
         }
         else
         {
-            // Если объект слишком далеко или ничего не найдено — оставляем стандартный поворот
-            targetRotation = defaultRotation;
+            aimPoint = mainCamera.transform.position + mainCamera.transform.forward * raycastDistance;
         }
 
-        // Ограничиваем угол поворота
-        targetRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxCorrectionAngle);
+        // Вычисляем направление от оружия к точке попадания
+        Vector3 direction = (aimPoint - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        // Плавно интерполируем поворот
-        Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * correctionSpeed);
+        Quaternion headRotation = transform.parent.rotation;
 
-        // Передаём в WeaponTransformManager именно целевую ротацию
-        transformManager.SetTargetRotation(finalRotation);
+        Quaternion targetOffset = Quaternion.Inverse(transformManager.DefaultRotation) * Quaternion.Inverse(headRotation) * targetRotation;
+
+        currentLookOffset = Quaternion.Slerp(currentLookOffset, targetOffset, Time.deltaTime * smoothRot);
+
+        // Преобразуем в Euler-углы (как ожидает WeaponTransformManager) и передаем смещение
+        Vector3 offsetEuler = currentLookOffset.eulerAngles;
+        transformManager.AddRotationOffset(offsetEuler);
     }
 }

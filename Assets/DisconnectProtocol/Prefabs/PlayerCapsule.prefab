@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4127713579383272856}
   - component: {fileID: 3401367865867635706}
   - component: {fileID: 9142416825071343384}
+  - component: {fileID: 3462504448705127915}
   m_Layer: 3
   m_Name: WeaponHolder
   m_TagString: Untagged
@@ -28,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3950799913973294936}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.34, y: -0.34, z: 0.37}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.34000006, y: -0.34000003, z: 0.37000012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -49,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff11b5533de983641a8e0c3c49045f07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smooth: 10
+  targetRotation: {x: 0, y: 0, z: 0, w: 0}
   smoothRot: 12
 --- !u!114 &4127713579383272856
 MonoBehaviour:
@@ -105,6 +106,20 @@ MonoBehaviour:
   rotationStep: 4
   maxRotationStep: 5
   aimSwayMultiplier: 0.2
+--- !u!114 &3462504448705127915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950799913973294936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27560fc6f1e046a49951244bc4bdbd60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 50
+  smoothRot: 12
 --- !u!1 &4135013735270702863
 GameObject:
   m_ObjectHideFlags: 0
