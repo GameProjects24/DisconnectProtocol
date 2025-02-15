@@ -24,7 +24,7 @@ namespace DisconnectProtocol
 		}
 
 		void IHoldDistance.Start(Transform target, bool perpetual) {
-			Debug.Log($"Drone");
+			// Debug.Log($"Drone");
 			m_hda.Start(target, perpetual);
 		}
 
