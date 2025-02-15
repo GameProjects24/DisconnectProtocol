@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 4127713579383272856}
   - component: {fileID: 3401367865867635706}
   - component: {fileID: 9142416825071343384}
-  - component: {fileID: 3462504448705127915}
+  - component: {fileID: 7055910718363402644}
+  - component: {fileID: 5343233743457351191}
   m_Layer: 3
   m_Name: WeaponHolder
   m_TagString: Untagged
@@ -106,7 +107,7 @@ MonoBehaviour:
   rotationStep: 4
   maxRotationStep: 5
   aimSwayMultiplier: 0.2
---- !u!114 &3462504448705127915
+--- !u!114 &7055910718363402644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,8 +119,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27560fc6f1e046a49951244bc4bdbd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raycastDistance: 50
+  weaponController: {fileID: 5153589614250085459}
+  raycastDistance: 100
+  minHitDistance: 2
   smoothRot: 12
+--- !u!114 &5343233743457351191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950799913973294936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4631235a4b72d7240923876b5a35ae9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponController: {fileID: 5153589614250085459}
+  recoilKickback: {x: 0, y: 0, z: -0.1}
+  recoilRotation: {x: -2, y: 1, z: 0.5}
+  recoilRecoverySpeed: 8
+  aimRecoilMultiplierPosition: 0.5
+  aimRecoilMultiplierRotation: 0.5
 --- !u!1 &4135013735270702863
 GameObject:
   m_ObjectHideFlags: 0

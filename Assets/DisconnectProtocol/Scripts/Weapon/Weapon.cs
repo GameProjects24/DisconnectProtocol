@@ -8,7 +8,7 @@ public class Weapon : MonoBehaviour
     public WeaponData weaponData;
 
     private WeaponFSM _weaponFSM;
-    public Transform _muzzle;
+    [SerializeField] private Transform _muzzle;
     public bool IsReloading { get; private set; }
     private int _cageBullets;
     private int _bulletCount;
@@ -92,4 +92,6 @@ public class Weapon : MonoBehaviour
     public int GetCurrentAmmo() => _cageBullets;
 
     public int GetTotalAmmo() => _bulletCount;
+
+    public Transform GetMuzzle() => _muzzle;
 }
