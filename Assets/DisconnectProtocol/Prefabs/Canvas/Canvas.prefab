@@ -588,6 +588,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1614223595527786587}
+  - component: {fileID: 4203930763765188373}
   m_Layer: 5
   m_Name: Crosshair Controller
   m_TagString: Untagged
@@ -614,6 +615,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4203930763765188373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753391144073018890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e5b46b89f0b2e04fb4790ee52c7d4bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairRectTransform: {fileID: 8060171607358500610}
+  weaponHolder: {fileID: 0}
+  baseSize: 16
+  maxSize: 300
+  smoothSpeed: 10
+  decaySpeed: 5
+  bobbingMultiplier: 30
+  swayMultiplier: 300
+  recoilMultiplier: 30
 --- !u!1 &2047138104681386714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1805,6 +1827,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5167348706703773180}
   - component: {fileID: 5349967055226810866}
+  - component: {fileID: 8736166617824687749}
   m_Layer: 5
   m_Name: Player HUD
   m_TagString: Untagged
@@ -1848,6 +1871,25 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &8736166617824687749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7349415091865692695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37880fcc296416c4e82689bdeeb8a376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cageAmmo: {fileID: 6492748739666543211}
+  reserveAmmo: {fileID: 4100433707049364822}
+  weaponIcon: {fileID: 3527229991444389816}
+  reloadIndicator: {fileID: 7097565654344644718}
+  hpIndicator: {fileID: 5775791823573191353}
+  weaponController: {fileID: 0}
+  damageable: {fileID: 0}
 --- !u!1 &8607349400280414593
 GameObject:
   m_ObjectHideFlags: 0

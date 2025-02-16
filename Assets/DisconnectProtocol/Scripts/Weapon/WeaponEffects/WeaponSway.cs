@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
+    public event Action<float> OnSwaySpread;
     private WeaponTransformManager positionManager;
     public PlayerInputs inputs;
 
@@ -22,6 +24,7 @@ public class WeaponSway : MonoBehaviour
     private Vector3 swayEulerRot;
     private float swayMultiplier;
     private WeaponAiming weaponAim;
+    private float maxSwaySpread;
 
     private void Start()
     {
@@ -55,5 +58,8 @@ public class WeaponSway : MonoBehaviour
         // Передаём смещения в WeaponPositionManager
         positionManager.AddPositionOffset(swayPos);
         positionManager.AddRotationOffset(swayEulerRot);
+
+        maxSwaySpread = new Vector3(maxStepDistance, maxStepDistance, maxStepDistance).magnitude * swayMultiplier;
+        OnSwaySpread?.Invoke(maxSwaySpread);
     }
 }

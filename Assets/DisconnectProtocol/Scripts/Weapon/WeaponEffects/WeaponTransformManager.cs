@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine; 
 
 public class WeaponTransformManager : MonoBehaviour
 {
@@ -10,6 +10,10 @@ public class WeaponTransformManager : MonoBehaviour
 
     private Vector3 positionOffset;
     private Quaternion rotationOffset;
+
+    // Новые поля для сохранения последних смещений
+    public Vector3 LastPositionOffset { get; private set; }
+    public Quaternion LastRotationOffset { get; private set; }
 
     private Vector3 velocity = Vector3.zero;
     public float smoothRot = 12f;
@@ -45,12 +49,12 @@ public class WeaponTransformManager : MonoBehaviour
 
     public void AddRotationOffset(Quaternion offset)
     {
-        rotationOffset *= offset; // Корректное применение кватерниона
+        rotationOffset *= offset;
     }
 
     public void AddRotationOffset(Vector3 eulerOffset)
     {
-        AddRotationOffset(Quaternion.Euler(eulerOffset)); // Конвертируем углы Эйлера в кватернион
+        AddRotationOffset(Quaternion.Euler(eulerOffset));
     }
 
     private void ApplyTransform()
@@ -62,9 +66,12 @@ public class WeaponTransformManager : MonoBehaviour
         transform.localPosition = Vector3.SmoothDamp(transform.localPosition, finalPosition, ref velocity, 0.1f);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, finalRotation, Time.deltaTime * smoothRot);
 
-        // Очищаем смещения после каждого кадра
+        // Сохраняем смещения перед их очисткой
+        LastPositionOffset = positionOffset;
+        LastRotationOffset = rotationOffset;
+
+        // Очищаем смещения после каждого кадра, чтобы они обновлялись заново
         positionOffset = Vector3.zero;
         rotationOffset = Quaternion.identity;
     }
-
 }

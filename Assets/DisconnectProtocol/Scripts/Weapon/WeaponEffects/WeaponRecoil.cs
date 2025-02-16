@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class WeaponRecoil : MonoBehaviour
 {
+    public event Action<float> OnRecoilSpread;
     private WeaponTransformManager transformManager;
     public WeaponController weaponController;
     private WeaponAiming weaponAiming;
@@ -17,6 +20,7 @@ public class WeaponRecoil : MonoBehaviour
 
     private Vector3 currentRecoilPos;
     private Quaternion currentRecoilRot = Quaternion.identity;
+    private float maxRecoilSpread;
 
     private void Start()
     {
@@ -52,6 +56,9 @@ public class WeaponRecoil : MonoBehaviour
 
         transformManager.AddPositionOffset(currentRecoilPos);
         transformManager.AddRotationOffset(currentRecoilRot);
+
+        maxRecoilSpread = recoilRotation.magnitude * rotMultiplier;
+        OnRecoilSpread?.Invoke(maxRecoilSpread);
     }
 
     private void RecoverRecoil()
