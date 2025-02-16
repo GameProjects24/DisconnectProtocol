@@ -4,18 +4,12 @@ using UnityEngine;
 
 namespace DisconnectProtocol
 {
-    public class SlideForwardDoor : MonoBehaviour
+    public sealed class SlideForwardDoor : BasicDoor
     {
-		public enum State {
-			Open = -1, Close = 1,
-		}
+		// public  System.Action<IDoor.State> StateChanged;
 
-		public event System.Action<State> StateChanged;
-
-		[SerializeField] private State m_last = State.Open;
 		[Range(0, 1)]
 		[SerializeField] private float m_rate = .02f;
-		private bool m_isRunning = false;
 
 		private Transform m_tr;
 		private Vector3 m_size;
@@ -30,30 +24,7 @@ namespace DisconnectProtocol
 			}
 		}
 
-		public void Open(bool isInterrupt = false) {
-			if (m_last == State.Open) {
-				return;
-			}
-			Toggle(isInterrupt);
-		}
-
-		public void Close(bool isInterrupt = false) {
-			if (m_last == State.Close) {
-				return;
-			}
-			Toggle(isInterrupt);
-		}
-
-		public void Toggle(bool isInterrupt = false) {
-			if (m_isRunning && !isInterrupt) {
-				return;
-			}
-			m_isRunning = true;
-			m_last = (State)(-(int)m_last);
-			StartCoroutine(ChangeStateCor());
-		}
-
-		private IEnumerator ChangeStateCor() {
+		protected override IEnumerator ChangeStateCor() {
 			var dest = m_tr.position + ElMul(m_tr.forward * (float)m_last, m_size);
 
 			do {
@@ -63,8 +34,12 @@ namespace DisconnectProtocol
 			} while (ElEpsGr(dest - m_tr.position, EPS));
 
 			m_isRunning = false;
-			StateChanged?.Invoke(m_last);
+			OnStateChanged(m_last);
 			yield break;
+		}
+
+		protected override void OnStateChanged(IDoor.State state) {
+			base.OnStateChanged(state);
 		}
 
 		private Vector3 ElMul(Vector3 a, Vector3 b) {

@@ -9,7 +9,7 @@ namespace DisconnectProtocol
     public class NextLevelElevator : MonoBehaviour
     {
 		[SerializeField] private Interactable m_toggle;
-		private SFDoor m_door;
+		private ComplexDoor m_door;
 
 		private Collider m_col;
 		private List<Transform> m_passengers = new List<Transform>();
@@ -24,7 +24,7 @@ namespace DisconnectProtocol
 				place.SetActive(false);
 			}
 
-			if (m_door) {
+			if (m_door != null) {
 				m_door.Open();
 				foreach (var tr in m_passengers) {
 					tr.SetParent(null, true);
@@ -41,7 +41,7 @@ namespace DisconnectProtocol
 			if (m_toggle == null) {
 				m_toggle = GetComponentInChildren<Interactable>();
 			}
-			m_door = GetComponentInChildren<SFDoor>();
+			m_door = new ComplexDoor(GetComponentsInChildren<IDoor>());
 			m_door.StateChanged += OnDoorStateChanged;
 		}
 
@@ -63,8 +63,8 @@ namespace DisconnectProtocol
 			m_door.Toggle();
 		}
 
-		private void OnDoorStateChanged(SFDoor.State state) {
-			if (state == SFDoor.State.Close) {
+		private void OnDoorStateChanged(IDoor.State state) {
+			if (state == IDoor.State.Close) {
 				foreach (var tr in m_passengers) {
 					tr.SetParent(transform, true);
 				}
