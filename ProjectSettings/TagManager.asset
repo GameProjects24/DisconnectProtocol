@@ -10,6 +10,7 @@ TagManager:
   - EnemyHp
   - EnemyWeaponController
   - EnemyEyes
+  - ElevatorNextLevel
   layers:
   - Default
   - TransparentFX

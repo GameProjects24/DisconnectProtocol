@@ -1,61 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 
 namespace DisconnectProtocol
 {
     public class SlideForwardDoor : MonoBehaviour
     {
-		public enum Op {
+		public enum State {
 			Open = -1, Close = 1,
 		}
 
-		[SerializeField] private Op m_current = Op.Open;
-		[Range(0, 1)]
-		[SerializeField] private float m_rate = .1f;
+		public event System.Action<State> StateChanged;
 
-		private Stack<Op> m_ops = new Stack<Op>();
-		private Coroutine m_cor;
+		[SerializeField] private State m_last = State.Open;
+		[Range(0, 1)]
+		[SerializeField] private float m_rate = .02f;
+		private bool m_isRunning = false;
+
 		private Transform m_tr;
-		private Renderer m_rend;
+		private Vector3 m_size;
 
 		private const float EPS = .1f;
 
-		private void Start() {
+		private void Awake() {
 			m_tr = transform;
-			m_rend = GetComponentInChildren<Renderer>();
-		}
-
-		private void Update() {
-			if (Input.GetKeyDown(KeyCode.C)) {
-				AddOp(Op.Close);
-			} else if (Input.GetKeyDown(KeyCode.O)) {
-				AddOp(Op.Open);
+			var rend = GetComponentInChildren<Renderer>();
+			if (rend != null) {
+				m_size = rend.bounds.size;
 			}
 		}
 
-		public void AddOp(Op op) {
-			if (!(m_ops.TryPeek(out var o) && o == op) && op != m_current) {
-				m_ops.Push(op);
+		public void Open(bool isInterrupt = false) {
+			if (m_last == State.Open) {
+				return;
 			}
-
-			if (m_cor == null) {
-				m_cor = StartCoroutine(PerformOp());
-			}
+			Toggle(isInterrupt);
 		}
 
-		private IEnumerator PerformOp() {
-			while (m_ops.TryPop(out var op)) {
-				m_current = op;
-				var dest = m_tr.position + ElMul(m_tr.forward * (float)op, m_rend.bounds.size);
-				do {
-					yield return null;
-					var vel = Vector3.zero;
-					m_tr.position = Vector3.Lerp(m_tr.position, dest, m_rate);
-				} while (ElEpsGr(dest - m_tr.position, EPS));
+		public void Close(bool isInterrupt = false) {
+			if (m_last == State.Close) {
+				return;
 			}
-			m_cor = null;
+			Toggle(isInterrupt);
+		}
+
+		public void Toggle(bool isInterrupt = false) {
+			if (m_isRunning && !isInterrupt) {
+				return;
+			}
+			m_isRunning = true;
+			m_last = (State)(-(int)m_last);
+			StartCoroutine(ChangeStateCor());
+		}
+
+		private IEnumerator ChangeStateCor() {
+			var dest = m_tr.position + ElMul(m_tr.forward * (float)m_last, m_size);
+
+			do {
+				yield return null;
+				var vel = Vector3.zero;
+				m_tr.position = Vector3.Lerp(m_tr.position, dest, m_rate);
+			} while (ElEpsGr(dest - m_tr.position, EPS));
+
+			m_isRunning = false;
+			StateChanged?.Invoke(m_last);
 			yield break;
 		}
 

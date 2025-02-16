@@ -7,7 +7,6 @@ namespace DisconnectProtocol
 		private Interactable m_inter;
 
 		public void Interact() {
-			Debug.Log("Inter");
 			if (m_inter) {
 				m_inter.Interact();
 			}
