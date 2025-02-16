@@ -1,4 +1,5 @@
 using UnityEngine;
+using DisconnectProtocol;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -66,6 +67,7 @@ public class PlayerController : MonoBehaviour
 	private PlayerInputs _input;
 	private GameObject _mainCamera;
 	private WeaponController _weaponController;
+	private Interactor _interactor;
 
 	private const float _threshold = 0.01f;
 
@@ -104,6 +106,7 @@ public class PlayerController : MonoBehaviour
 #else
 		Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
+		_interactor = GetComponentInChildren<Interactor>();
 	}
 
 	private void Update()
@@ -150,6 +153,11 @@ public class PlayerController : MonoBehaviour
 		{
 			targetSpeed = MoveSpeed;
 			OnSprint?.Invoke(false);
+		}
+
+		if (_input.interact)
+		{
+			_interactor.Interact();
 		}
 	}
 
