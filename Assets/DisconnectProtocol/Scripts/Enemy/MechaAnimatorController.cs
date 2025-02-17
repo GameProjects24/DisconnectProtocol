@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.Behavior;
 using UnityEngine;
+using SBC = DisconnectProtocol.SoldierBodyController;
 
 namespace DisconnectProtocol
 {
@@ -44,25 +45,25 @@ namespace DisconnectProtocol
 			}
 		}
 
-		private void OnStateChanged(BodyState state) {
+		private void OnStateChanged(SBC.BodyState state) {
 			m_animator.ResetTrigger(m_curt);
 			switch (state) {
-				case BodyState.Idle:
+				case SBC.BodyState.Idle:
 					m_curt = m_idlet;
 					break;
-				case BodyState.Walk:
+				case SBC.BodyState.Walk:
 					m_curt = m_walkt;
 					break;
 			}
 			m_animator.SetTrigger(m_curt);
 		}
 
-		private void OnActionPerformed(BodyAction action) {
+		private void OnActionPerformed(SoldierBodyController.BodyAction action) {
 			switch (action) {
-				case BodyAction.AimStart:
+				case SBC.BodyAction.AimStart:
 					m_animator.SetTrigger(m_aimt);
 					break;
-				case BodyAction.AimStop:
+				case SBC.BodyAction.AimStop:
 					m_animator.ResetTrigger(m_aimt);
 					break;
 			}

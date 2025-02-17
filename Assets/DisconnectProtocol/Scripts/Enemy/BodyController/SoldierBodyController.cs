@@ -5,16 +5,16 @@ using UnityEngine.AI;
 
 namespace DisconnectProtocol
 {
-	public enum BodyState {
-		Idle, Walk,
-	}
-
-	public enum BodyAction {
-		AimStart, AimStop,
-	}
-
-    public class SoldierBodyController : MonoBehaviour
+    public class SoldierBodyController : MonoBehaviour, IHoldDistance
     {
+		public enum BodyState {
+			Idle, Walk,
+		}
+
+		public enum BodyAction {
+			AimStart, AimStop,
+		}
+
         [SerializeField] private NavMeshAgent m_agent;
 		[SerializeField] private Transform m_eyes;
 		[SerializeField] private float m_visionAngle = 30;
@@ -68,13 +68,13 @@ namespace DisconnectProtocol
 		}
 
 
-		public void HoldDistanceStart(Transform target, bool perpetual) {
+		void IHoldDistance.Start(Transform target, bool perpetual) {
 			ChangeState(BodyState.Walk);
 			ChangeStoppable(m_holdDistanceAction);
 			m_holdDistanceAction.Start(target, perpetual);
 		}
 
-		public void HoldDistanceStop() {
+		void IHoldDistance.Stop() {
 			m_holdDistanceAction.Stop();
 		}
 

@@ -15,6 +15,7 @@ public class PlayerInputs : MonoBehaviour
     public bool reload;
     public bool changeWeapon;
     public bool aim;
+	public bool interact;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -73,6 +74,11 @@ public class PlayerInputs : MonoBehaviour
     {
         AimInput(value.isPressed);
     }
+
+	public void OnInteract(InputValue value)
+	{
+		InteractInput(value.isPressed);
+	}
 #endif
 
     // Обработка движения
@@ -121,6 +127,11 @@ public class PlayerInputs : MonoBehaviour
     {
         aim = newAimState;
     }
+
+	private void InteractInput(bool newInteractState)
+	{
+		interact = newInteractState;
+	}
 
     // Фокус приложения и настройка курсора
     private void OnApplicationFocus(bool hasFocus)

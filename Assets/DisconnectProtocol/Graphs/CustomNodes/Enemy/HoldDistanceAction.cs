@@ -10,7 +10,7 @@ using DisconnectProtocol;
 [NodeDescription(name: "HoldDistance", story: "[Body] perpetually [isPerpetual] holds distance from [target]", category: "DisconnectProtocol/Actions", id: "a85448343e3e7947fa5bab0e822fccd8")]
 public partial class HoldDistanceAction : Action
 {
-    [SerializeReference] public BlackboardVariable<SoldierBodyController> Body;
+    [SerializeReference] public BlackboardVariable<MonoBehaviour> Body;
 	[SerializeReference] public BlackboardVariable<bool> IsPerpetual;
     [SerializeReference] public BlackboardVariable<Transform> Target;
 
@@ -21,7 +21,7 @@ public partial class HoldDistanceAction : Action
 
     protected override Status OnUpdate()
     {
-		Body.Value.HoldDistanceStart(Target, IsPerpetual);
+		(Body.Value as IHoldDistance)?.Start(Target, IsPerpetual);
 		return Status.Success;
     }
 
