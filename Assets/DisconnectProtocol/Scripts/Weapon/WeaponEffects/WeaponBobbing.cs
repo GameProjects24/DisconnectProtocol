@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class WeaponBobbing : MonoBehaviour
 {
+    public event Action<float> OnBobbingSpread;
     private WeaponTransformManager positionManager;
     public PlayerController playerController;
     public PlayerInputs inputs;
@@ -23,6 +25,7 @@ public class WeaponBobbing : MonoBehaviour
     private float targetBobSpeed;
     private float time;
     private float bobMultiplier;
+    private float maxBobbingSpread;
 
     private void Start()
     {
@@ -69,6 +72,9 @@ public class WeaponBobbing : MonoBehaviour
             bobEulerRotation.x = (multiplier.x * Mathf.Sin(2 * time)) * bobMultiplier;
             bobEulerRotation.y = (multiplier.y * Mathf.Cos(time)) * bobMultiplier;
             bobEulerRotation.z = (multiplier.z * Mathf.Cos(time) * walkInput.x) * bobMultiplier;
+
+            maxBobbingSpread = new Vector3(Mathf.Abs(multiplier.x), Mathf.Abs(multiplier.y), Mathf.Abs(multiplier.z)).magnitude * bobMultiplier;
+            OnBobbingSpread?.Invoke(maxBobbingSpread);
         }
 
         positionManager.AddPositionOffset(bobPosition);

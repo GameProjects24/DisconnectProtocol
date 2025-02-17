@@ -234,8 +234,6 @@ public class PlayerController : MonoBehaviour
 
 		// move the player
 		_controller.Move(_currentMoveDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-
-
 	}
 
 	private void JumpAndGravity()

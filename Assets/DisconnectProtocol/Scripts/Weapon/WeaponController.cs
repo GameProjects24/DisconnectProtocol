@@ -96,7 +96,7 @@ public class WeaponController : MonoBehaviour
 
     private void HandleShootWeapon()
     {
-        OnShoot?.Invoke();;
+        OnShoot?.Invoke();
     }
 
     private void HandleReloadCompleteWeapon()
