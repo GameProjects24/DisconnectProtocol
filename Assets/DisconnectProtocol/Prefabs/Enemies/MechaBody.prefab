@@ -892,7 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6dd62bbca5e18cf3900460f1033135d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_agent: {fileID: 0}
+  m_body: {fileID: 0}
 --- !u!114 &4419670980281408591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -910,6 +910,7 @@ MonoBehaviour:
   m_weapon: {fileID: 603488743535502015}
   m_visionAngle: 30
   m_holdDistance: 10
+  m_rotationRate: 0.5
 --- !u!1 &2097068011679008877
 GameObject:
   m_ObjectHideFlags: 0

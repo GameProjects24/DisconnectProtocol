@@ -523,6 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxHp: 100
+  objectToDestroy: {fileID: 0}
 --- !u!114 &1024619296981602778
 MonoBehaviour:
   m_ObjectHideFlags: 0
