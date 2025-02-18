@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4764de1511e0eaf4ab8c672cff930deb
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118783
+  packageName: Sci-Fi PBR Props
+  packageVersion: 2.0
+  assetPath: Assets/SciFiProps/SciFiPropsPostProcessProfile.asset
+  uploadId: 306779

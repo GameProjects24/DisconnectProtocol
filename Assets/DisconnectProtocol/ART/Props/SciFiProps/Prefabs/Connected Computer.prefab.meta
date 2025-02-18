@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8f0250ba2b1b4e8418caf4aa132dd277
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118783
+  packageName: Sci-Fi PBR Props
+  packageVersion: 2.0
+  assetPath: Assets/SciFiProps/Prefabs/Connected Computer.prefab
+  uploadId: 306779

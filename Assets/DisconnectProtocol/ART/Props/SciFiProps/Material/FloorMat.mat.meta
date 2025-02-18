@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: da3ea724760dca246af1395e82b5ff44
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118783
+  packageName: Sci-Fi PBR Props
+  packageVersion: 2.0
+  assetPath: Assets/SciFiProps/Material/FloorMat.mat
+  uploadId: 306779

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7f43056a042c7e34082157710165a75d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118783
+  packageName: Sci-Fi PBR Props
+  packageVersion: 2.0
+  assetPath: Assets/SciFiProps/Prefabs/Computer1.prefab
+  uploadId: 306779
