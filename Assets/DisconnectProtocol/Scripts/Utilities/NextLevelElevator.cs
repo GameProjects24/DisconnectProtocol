@@ -1,6 +1,6 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using SFDoor = DisconnectProtocol.SlideForwardDoor;
 using UnityEngine.SceneManagement;
 
 namespace DisconnectProtocol
@@ -9,40 +9,45 @@ namespace DisconnectProtocol
     public class NextLevelElevator : MonoBehaviour
     {
 		[SerializeField] private Interactable m_toggle;
-		private ComplexDoor m_door;
+		public string nextScene;
 
+		private ComplexDoor m_door;
 		private Collider m_col;
 		private List<Transform> m_passengers = new List<Transform>();
+		private Transform m_tr;
 
-		public string nextScene;
 
 		private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 			var place = GameObject.FindGameObjectWithTag("ElevatorNextLevel");
 			if (place) {
-				transform.position = place.transform.position;
-				transform.rotation = place.transform.rotation;
 				place.SetActive(false);
+				var placet = place.transform;
+
+				m_tr.SetPositionAndRotation(placet.position, placet.rotation);
 			}
 
-			if (m_door != null) {
-				m_door.Open();
-				foreach (var tr in m_passengers) {
-					tr.SetParent(null, true);
-				}
-			}
+			m_door?.Open();
 		}
 
 		private void Awake() {
-			m_col = GetComponent<Collider>();
-			m_col.isTrigger = true;
+			if (m_tr == null) {
+				m_tr = transform;
+			}
+			if (m_col == null) {
+				m_col = GetComponent<Collider>();
+				m_col.isTrigger = true;
+			}
 		}
 
 		private void Start() {
 			if (m_toggle == null) {
 				m_toggle = GetComponentInChildren<Interactable>();
+				m_toggle.Interacted += OnToggled;
 			}
-			m_door = new ComplexDoor(GetComponentsInChildren<IDoor>());
-			m_door.StateChanged += OnDoorStateChanged;
+			if (m_door == null) {
+				m_door = new ComplexDoor(GetComponentsInChildren<IDoor>());
+				m_door.StateChanged += OnDoorStateChanged;
+			}
 		}
 
 		private void OnEnable() {
@@ -65,18 +70,17 @@ namespace DisconnectProtocol
 
 		private void OnDoorStateChanged(IDoor.State state) {
 			if (state == IDoor.State.Close) {
-				foreach (var tr in m_passengers) {
-					tr.SetParent(transform, true);
-				}
 				SceneLoader.Load(this, nextScene);
 			}
 		}
 
 		private void OnTriggerEnter(Collider other) {
+			other.transform.SetParent(m_tr, true);
 			m_passengers.Add(other.transform);
 		}
 
 		private void OnTriggerExit(Collider other) {
+			other.transform.SetParent(null, true);
 			m_passengers.Remove(other.transform);
 		}
 	}
