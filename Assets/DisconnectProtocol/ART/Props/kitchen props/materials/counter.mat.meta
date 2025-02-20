@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cc562f63147f83443989c4ee021af5d5
+timeCreated: 1484056898
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80208
+  packageName: Kitchen Props Free
+  packageVersion: 1.0
+  assetPath: Assets/kitchen props/materials/counter.mat
+  uploadId: 262813
