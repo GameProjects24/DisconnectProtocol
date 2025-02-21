@@ -9,7 +9,7 @@ namespace DisconnectProtocol
     public class NextLevelElevator : MonoBehaviour
     {
 		[SerializeField] private Interactable m_toggle;
-		public string nextScene;
+		public string nextLevel;
 
 		private ComplexDoor m_door;
 		private Collider m_col;
@@ -70,7 +70,7 @@ namespace DisconnectProtocol
 
 		private void OnDoorStateChanged(IDoor.State state) {
 			if (state == IDoor.State.Close) {
-				SceneLoader.Load(this, nextScene);
+				GameController.instance.ChangeLevel(nextLevel);
 			}
 		}
 

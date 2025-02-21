@@ -6,11 +6,12 @@ namespace DisconnectProtocol
     public class GameController : MonoBehaviour {
 		public static GameController instance { get; private set; } 
 		public PlayerData pd { get; private set; } = new PlayerData();
-		private string m_pdPath = Path.Combine(Application.persistentDataPath, "playerData");
+		private string m_pdPath;
 
 		private void Awake() {
 			if (instance == null) {
 				instance = this;
+				m_pdPath = Path.Combine(Application.persistentDataPath, "playerData");
 			}
 			LoadPlayerData();
 		}
