@@ -44,7 +44,7 @@ public class DeathScreenAnimController : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
 
         // Ждем initialDelay секунд
-        sequence.AppendInterval(initialDelay);
+        sequence.AppendInterval(initialDelay).SetUpdate(UpdateType.Normal, true);
 
 
         // Эффект печатания текста
@@ -54,8 +54,8 @@ public class DeathScreenAnimController : MonoBehaviour
 
         restartButton.SetActive(true);
         mainMenuButton.SetActive(true);
-        sequence.Append(restartButtonCanvasGroup.DOFade(1f, buttonsFadeDuration));
-        sequence.Join(mainMenuButtonCanvasGroup.DOFade(1f, buttonsFadeDuration));
+        sequence.Append(restartButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
+        sequence.Join(mainMenuButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
     }
 
     private IEnumerator TypeText()
@@ -66,7 +66,7 @@ public class DeathScreenAnimController : MonoBehaviour
         for (int i = 0; i <= totalCharacters; i++)
         {
             gameOverText.text = fullText.Substring(0, i);
-            yield return new WaitForSeconds(timePerCharacter);
+            yield return new WaitForSecondsRealtime(timePerCharacter);
         }
     }
 }
