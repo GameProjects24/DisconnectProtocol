@@ -49,7 +49,7 @@ public class DeathScreenAnimController : MonoBehaviour
 
         // Эффект печатания текста
         sequence.AppendCallback(() => StartCoroutine(TypeText()));
-        sequence.AppendInterval(typeDuration + initialDelay);
+        sequence.AppendInterval(initialDelay);
 
 
         restartButton.SetActive(true);
