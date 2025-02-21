@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 
-public class DeathScreenAnimController : MonoBehaviour
+public class ScreenAnimController : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI gameOverText;
