@@ -14,7 +14,7 @@ public class ScreenAnimController : MonoBehaviour
     private CanvasGroup mainMenuButtonCanvasGroup;
 
     [Header("Glitch Panel")]
-    public GameObject glitchPanel; // Тот самый объект с шейдером
+    public GameObject glitchPanel;
     private Material glitchMaterial;
     private Image glitchImage;
 
@@ -60,7 +60,7 @@ public class ScreenAnimController : MonoBehaviour
             {
                 glitchPanel.SetActive(true);
                 glitchMaterial.SetFloat("_DeadZone", 0f);
-            });
+            }).SetUpdate(UpdateType.Normal, true);
 
             sequence.Append(
                 DOTween.To(
@@ -68,18 +68,17 @@ public class ScreenAnimController : MonoBehaviour
                     x => glitchMaterial.SetFloat("_DeadZone", x),
                     1f,
                     initialDelay
-                )
-                .SetUpdate(true)
+                ).SetUpdate(UpdateType.Normal, true)
             );
 
             sequence.AppendCallback(() =>
             {
                 glitchPanel.SetActive(false);
-            });
+            }).SetUpdate(UpdateType.Normal, true);
         }
         else
         {
-            sequence.AppendInterval(initialDelay);
+            sequence.AppendInterval(initialDelay).SetUpdate(UpdateType.Normal, true);
         }
 
         // Эффект печатания текста
@@ -92,8 +91,8 @@ public class ScreenAnimController : MonoBehaviour
             restartButton.SetActive(true);
             mainMenuButton.SetActive(true);
         });
-        sequence.Append(restartButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(true));
-        sequence.Join(mainMenuButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(true));
+        sequence.Append(restartButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
+        sequence.Join(mainMenuButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
     }
 
     private IEnumerator TypeText()

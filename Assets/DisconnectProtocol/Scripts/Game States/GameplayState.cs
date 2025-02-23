@@ -13,8 +13,8 @@ public class GameplayState : MonoBehaviour
     
     private void OnEnable()
     {
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         
         // Подписываемся на событие смерти игрока
         if (damageble != null)

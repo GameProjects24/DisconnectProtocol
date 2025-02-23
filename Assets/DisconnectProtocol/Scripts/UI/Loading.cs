@@ -5,7 +5,7 @@ using DG.Tweening;
 public class Loading : MonoBehaviour
 {
     private RectTransform rectComponent;
-    private Image imageComp;
+    private Image loadImage;
     private bool up;
 
     public float rotateTime = 1f;
@@ -17,11 +17,11 @@ public class Loading : MonoBehaviour
 
     private void Start()
     {
+        if (rectComponent == null) return;
         rectComponent = GetComponent<RectTransform>();
-        imageComp = rectComponent.GetComponent<Image>();
+        loadImage = rectComponent.GetComponent<Image>();
         up = true;
 
-        // Вращение с помощью DOTween: плавное вращение с бесконечным повторением
         rectComponent.DORotate(new Vector3(0f, 0f, 360f), rotateTime, RotateMode.FastBeyond360)
             .SetLoops(-1, LoopType.Incremental)
             .SetEase(Ease.Linear);
@@ -34,11 +34,12 @@ public class Loading : MonoBehaviour
 
     private void changeSize()
     {
-        float currentSize = imageComp.fillAmount;
+        if (rectComponent == null || loadImage == null) return;
+        float currentSize = loadImage.fillAmount;
 
         if (currentSize < endSize && up)
         {
-            imageComp.DOFillAmount(imageComp.fillAmount + openSpeed, openSpeed);
+            loadImage.DOFillAmount(loadImage.fillAmount + openSpeed, openSpeed);
         }
         else if (currentSize >= endSize && up)
         {
@@ -46,7 +47,7 @@ public class Loading : MonoBehaviour
         }
         else if (currentSize >= startSize && !up)
         {
-            imageComp.DOFillAmount(imageComp.fillAmount - closeSpeed, closeSpeed);
+            loadImage.DOFillAmount(loadImage.fillAmount - closeSpeed, closeSpeed);
         }
         else if (currentSize < startSize && !up)
         {
