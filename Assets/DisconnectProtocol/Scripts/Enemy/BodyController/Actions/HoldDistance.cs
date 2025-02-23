@@ -18,12 +18,14 @@ namespace DisconnectProtocol
 		private NavMeshAgent m_agent;
 
 		private float m_hd2;
-		private bool m_isActive = false;
 		private Coroutine m_cor;
 
 		public event System.Action Stopped;
 		public event System.Action Paused;
 		public event System.Action Resumed;
+
+		private bool m_isJustStarted;
+		private bool m_isNotPaused = true;
 
 		private HoldDistance() {}
 		public HoldDistance(MonoBehaviour ctrl, NavMeshAgent agent, float distance) {
@@ -34,14 +36,14 @@ namespace DisconnectProtocol
 		}
 
 		public void Start(Transform target, bool perpetual) {
-			if (m_isActive) {
+			if (m_cor != null) {
 				return;
 			}
+			m_isJustStarted = true;
 			m_cor = m_controller.StartCoroutine(Cor(target, perpetual));
 		}
 
 		public void Stop() {
-			m_isActive = false;
 			if (m_cor != null) {
 				m_controller.StopCoroutine(m_cor);
 				m_cor = null;
@@ -50,32 +52,39 @@ namespace DisconnectProtocol
 		}
 
 		private IEnumerator Cor(Transform target, bool perpetual) {
-			m_isActive = true;
-			var self = m_controller.transform;
+			var self = m_agent.transform;
 
 			do {
 				var dist = Vector3.SqrMagnitude(target.transform.position - self.position);
 				if (dist > m_hd2) {
-					Resumed?.Invoke();
+					if (m_isJustStarted) {
+						m_isJustStarted = false;
+					} else {
+						Resumed?.Invoke();
+					}
+					m_isNotPaused = true;
 					m_agent.isStopped = false;
 
 					do {
 						m_agent.SetDestination(target.transform.position);
 						dist = Vector3.SqrMagnitude(target.transform.position - self.position);
-						yield return null;
+						yield return new WaitForFixedUpdate();
 					} while (dist > m_hd2);
 					
 					m_agent.isStopped = true;
 					m_agent.ResetPath();
 				} else {
-					Paused?.Invoke();
-					yield return null;
+					if (m_isNotPaused) {
+						m_isNotPaused = false;
+						Paused?.Invoke();
+					}
+					yield return new WaitForFixedUpdate();
 				}
 			} while (perpetual);
 
 			m_agent.isStopped = true;
 			m_agent.ResetPath();
-			m_isActive = false;
+			m_cor = null;
 			Stopped?.Invoke();
 		}
     }
