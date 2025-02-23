@@ -28,8 +28,10 @@ namespace DisconnectProtocol
 
 		private IEnumerator Die() {
 			OnDie?.Invoke();
-			foreach (System.Func<IEnumerator> hand in OnDieIEnum.GetInvocationList()) {
-				yield return hand.Invoke();
+			if (OnDieIEnum != null) {
+				foreach (System.Func<IEnumerator> hand in OnDieIEnum.GetInvocationList()) {
+					yield return hand.Invoke();
+				}
 			}
 			if (objectToDestroy != null) {
 				Destroy(objectToDestroy);

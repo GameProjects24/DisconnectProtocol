@@ -1,3 +1,4 @@
+using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,23 +11,43 @@ namespace DisconnectProtocol
 		}
 
 		[SerializeField] private NavMeshAgent m_agent;
+		[SerializeField] private Damageable m_dmg;
+		[SerializeField] private BehaviorGraphAgent m_brain;
 		[SerializeField] private float m_holdDistance = 10f;
         
 		private Transform m_tr;
-		private Transform m_agentr;
 		private HoldDistance m_hda;
 
 		private void Start() {
 			if (m_agent == null) {
 				m_agent = gameObject.GetComponentWherever<NavMeshAgent>();
 			}
-			m_agentr = m_agent.transform;
+			if (m_brain == null) {
+				m_brain = gameObject.GetComponentWherever<BehaviorGraphAgent>();
+			}
 			m_tr = transform;
 
 			m_hda = new HoldDistance(this, m_agent, m_holdDistance);
 			m_hda.Paused += OnHoldDistancePause;
 			m_hda.Resumed += OnHoldDistanceResume;
 			m_hda.Stopped += OnHoldDistanceStop;
+		}
+
+		private void OnEnable() {
+			if (m_dmg == null) {
+				m_dmg = gameObject.GetComponentWherever<Damageable>();
+			}
+			m_dmg.OnDie += OnDie;
+		}
+
+		private void OnDisable() {
+			m_dmg.OnDie -= OnDie;
+		}
+
+		private void OnDie() {
+			m_brain.enabled = false;
+			m_agent.enabled = false;
+			m_hda.Stop();
 		}
 
 		private void LateUpdate() {

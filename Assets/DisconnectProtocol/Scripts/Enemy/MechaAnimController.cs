@@ -6,9 +6,9 @@ using SBC = DisconnectProtocol.SoldierBodyController;
 namespace DisconnectProtocol
 {
 	[RequireComponent(typeof(Animator))]
-    public class MechaAnimatorController : MonoBehaviour
+    public class MechaAnimController : MonoBehaviour
     {
-		[SerializeField] private SoldierBodyController m_body;
+		[SerializeField] private SBC m_body;
         private Animator m_animator;
 		private List<Rigidbody> m_rbs = new List<Rigidbody>();
 
@@ -58,7 +58,7 @@ namespace DisconnectProtocol
 			m_animator.SetTrigger(m_curt);
 		}
 
-		private void OnActionPerformed(SoldierBodyController.BodyAction action) {
+		private void OnActionPerformed(SBC.BodyAction action) {
 			switch (action) {
 				case SBC.BodyAction.AimStart:
 					m_animator.SetTrigger(m_aimt);

@@ -9,8 +9,7 @@ namespace DisconnectProtocol
 		GravityRagdoll,
 	}
 
-    public static class RagdollController
-    {
+    public static class RagdollController {
 		public static void ChangeMode(RCMode mode, Animator animator, List<Rigidbody> rbs) {
 			bool isAnimator = mode == RCMode.Animator;
 			bool useGravity = mode == RCMode.GravityRagdoll;
