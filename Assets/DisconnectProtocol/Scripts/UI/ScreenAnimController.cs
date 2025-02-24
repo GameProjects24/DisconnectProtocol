@@ -93,7 +93,7 @@ public class ScreenAnimController : MonoBehaviour
         }
 
         // Если есть задний фон, показываем его анимированно
-        if (bgPanel != null)
+        else if (bgPanel != null)
         {
             sequence.Append(
                 bgImage.DOFade(bgStartAlfa, initialDelay)

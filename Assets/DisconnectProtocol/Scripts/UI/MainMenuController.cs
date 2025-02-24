@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DisconnectProtocol;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class MainMenuController : MonoBehaviour
         mainMenuPanel.SetActive(false);
         loadingPanel.SetActive(true);
 
-        StartCoroutine(LoadGameSceneAsync());
+        GameController.instance.ChangeLevel(gameSceneName);
     }
 
     // Метод для выхода из игры
@@ -27,17 +28,5 @@ public class MainMenuController : MonoBehaviour
 #else
         Application.Quit();  // Для сборки
 #endif
-    }
-
-    // Загрузка сцены игры асинхронно с отображением панели загрузки
-    private System.Collections.IEnumerator LoadGameSceneAsync()
-    {
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(gameSceneName);
-
-        // Пока сцена не будет загружена
-        while (!asyncOperation.isDone)
-        {
-            yield return null; // Подождать следующий кадр
-        }
     }
 }

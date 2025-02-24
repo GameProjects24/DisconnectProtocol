@@ -14,6 +14,9 @@ namespace DisconnectProtocol
 		}
 
 		public bool Eval(Transform target) {
+			if (target == null) {
+				return false;
+			}
 			var dir = target.position - m_eyes.position;
 			bool inAngle = Vector3.Angle(m_eyes.forward, dir) <= visionAngle;
 			if (!inAngle) {

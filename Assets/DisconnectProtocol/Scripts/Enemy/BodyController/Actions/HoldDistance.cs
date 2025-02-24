@@ -55,6 +55,7 @@ namespace DisconnectProtocol
 			var self = m_agent.transform;
 
 			do {
+				if (target == null) break;
 				var dist = Vector3.SqrMagnitude(target.transform.position - self.position);
 				if (dist > m_hd2) {
 					if (m_isJustStarted) {
@@ -66,6 +67,7 @@ namespace DisconnectProtocol
 					m_agent.isStopped = false;
 
 					do {
+						if (target == null) break;
 						m_agent.SetDestination(target.transform.position);
 						dist = Vector3.SqrMagnitude(target.transform.position - self.position);
 						yield return new WaitForFixedUpdate();

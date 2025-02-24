@@ -18,12 +18,13 @@ namespace DisconnectProtocol
 		}
 
         private void Update() {
-			var cp = target.position;
-			var cpl = cp;
-			objects.RemoveAll(o => o == null);
-			foreach (var obj in objects) {
-				cpl.y = obj.position.y;
-				obj.LookAt(cpl);
+			if (target) {
+				var cp = target.position;
+				objects.RemoveAll(o => o == null);
+				foreach (var obj in objects) {
+					cp.y = obj.position.y;
+					obj.LookAt(cp);
+				}
 			}
         }
     }

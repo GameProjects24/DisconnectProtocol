@@ -4,15 +4,29 @@ using UnityEngine;
 namespace DisconnectProtocol
 {
     public class GameController : MonoBehaviour {
-		public static GameController instance { get; private set; } 
+		private static GameController m_instance;
+		public static GameController instance {
+			get {
+				if (m_instance == null) {
+					m_instance = FindAnyObjectByType<GameController>();
+				}
+				return m_instance;
+			}
+		}
 		public PlayerData pd { get; private set; } = new PlayerData();
 		private string m_pdPath;
 
 		private void Awake() {
-			if (instance == null) {
-				instance = this;
+			if (m_instance == null) {
+				m_instance = this;
 				m_pdPath = Path.Combine(Application.persistentDataPath, "playerData");
 			}
+			if (m_instance != this) {
+				Destroy(gameObject);
+				return;
+			}
+
+			DontDestroyOnLoad(gameObject);
 			LoadPlayerData();
 		}
 
@@ -37,9 +51,9 @@ namespace DisconnectProtocol
 		/// </summary>
 		/// <param name="level"></param>
 		public void ChangeLevel(string level) {
-			SceneLoader.Load(this, level);
 			pd.lastLevel = level;
 			pd.isValid = true;
+			SceneLoader.Load(this, level);
 		}
 
 		/// <summary>

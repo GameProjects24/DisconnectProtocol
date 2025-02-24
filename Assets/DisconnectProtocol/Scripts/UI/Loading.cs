@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using DG.Tweening;
 
+[RequireComponent(typeof(RectTransform))]
 public class Loading : MonoBehaviour
 {
     private RectTransform rectComponent;
@@ -18,7 +19,6 @@ public class Loading : MonoBehaviour
 
     private void Start()
     {
-        if (rectComponent == null) return;
         rectComponent = GetComponent<RectTransform>();
         loadImage = rectComponent.GetComponent<Image>();
         up = true;

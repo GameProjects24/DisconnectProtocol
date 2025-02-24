@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 5153589614250085459}
   - component: {fileID: 7018420814569911637}
   - component: {fileID: 2673996022122227287}
+  - component: {fileID: 8075142659106392070}
   m_Layer: 3
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -401,9 +402,8 @@ MonoBehaviour:
   reload: 0
   changeWeapon: 0
   aim: 0
+  interact: 0
   analogMovement: 0
-  cursorLocked: 1
-  cursorInputForLook: 1
 --- !u!114 &8616685848737228376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -499,7 +499,7 @@ MonoBehaviour:
     m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &1933692561739407118
@@ -564,6 +564,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxHp: 100
   objectToDestroy: {fileID: 0}
+--- !u!114 &8075142659106392070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3507eec0eb60bd1da3810678f15db6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4146090592388792035
 PrefabInstance:
   m_ObjectHideFlags: 0

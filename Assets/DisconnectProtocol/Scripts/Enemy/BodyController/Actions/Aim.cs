@@ -40,6 +40,7 @@ namespace DisconnectProtocol
 			var self = m_controller.transform;
 			float dif;
 			do {
+				if (target == null) break;
 				var dir = target.position - self.position;
 				dir.y = 0;
 				dif = self.rotation.eulerAngles.y;

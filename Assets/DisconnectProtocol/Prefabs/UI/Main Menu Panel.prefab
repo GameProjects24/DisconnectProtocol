@@ -266,9 +266,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverText: {fileID: 7347122049824458588}
-  restartButton: {fileID: 6315084773792341463}
-  mainMenuButton: {fileID: 8874848767375024066}
+  Button1: {fileID: 6315084773792341463}
+  Button2: {fileID: 8874848767375024066}
   glitchPanel: {fileID: 0}
+  bgPanel: {fileID: 0}
   initialDelay: 1
   typeDuration: 0.5
   buttonsFadeDuration: 1
