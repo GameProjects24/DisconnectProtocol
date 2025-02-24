@@ -8,15 +8,22 @@ public class ScreenAnimController : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI gameOverText;
-    public GameObject restartButton;
-    public GameObject mainMenuButton;
-    private CanvasGroup restartButtonCanvasGroup;
-    private CanvasGroup mainMenuButtonCanvasGroup;
+    public GameObject Button1;
+    public GameObject Button2;
+    private CanvasGroup Button1CanvasGroup;
+    private CanvasGroup Button2CanvasGroup;
 
     [Header("Glitch Panel")]
     public GameObject glitchPanel;
     private Material glitchMaterial;
     private Image glitchImage;
+
+    [Header("BG Panel")]
+    public GameObject bgPanel;
+    private Material bgMaterial;
+    private Image bgImage;
+    private float bgStartAlfa;
+
 
     [Header("Timing Settings")]
     public float initialDelay = 1f;       // Задержка перед анимацией шейдера и печатанием
@@ -32,19 +39,26 @@ public class ScreenAnimController : MonoBehaviour
         fullText = gameOverText.text;
         gameOverText.text = "";
 
-        restartButtonCanvasGroup = restartButton.GetComponent<CanvasGroup>();
-        mainMenuButtonCanvasGroup = mainMenuButton.GetComponent<CanvasGroup>();
-        restartButtonCanvasGroup.alpha = 0f;
-        mainMenuButtonCanvasGroup.alpha = 0f;
-        restartButton.SetActive(false);
-        mainMenuButton.SetActive(false);
+        Button1CanvasGroup = Button1.GetComponent<CanvasGroup>();
+        Button2CanvasGroup = Button2.GetComponent<CanvasGroup>();
+        Button1CanvasGroup.alpha = 0f;
+        Button2CanvasGroup.alpha = 0f;
+        Button1.SetActive(false);
+        Button2.SetActive(false);
+
+        if (bgPanel != null)
+        {
+            bgImage = bgPanel.GetComponent<Image>();
+            bgMaterial = bgImage.material;
+            bgStartAlfa = bgImage.color.a;
+            // Обнуляем прозрачность (alfa)
+            bgImage.color = new Color (bgImage.color.r, bgImage.color.g, bgImage.color.b, 0f);
+        }
 
         if (glitchPanel != null)
         {
-
             glitchImage = glitchPanel.GetComponent<Image>();
             glitchMaterial = glitchImage.material;
-
         }
 
         ShowScreen();
@@ -54,6 +68,7 @@ public class ScreenAnimController : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
 
+        // Если есть гличи, показываем их анимированно
         if (glitchPanel != null)
         {
             sequence.AppendCallback(() =>
@@ -76,6 +91,16 @@ public class ScreenAnimController : MonoBehaviour
                 glitchPanel.SetActive(false);
             }).SetUpdate(UpdateType.Normal, true);
         }
+
+        // Если есть задний фон, показываем его анимированно
+        if (bgPanel != null)
+        {
+            sequence.Append(
+                bgImage.DOFade(bgStartAlfa, initialDelay)
+                .SetUpdate(UpdateType.Normal, true)
+            );
+        }
+
         else
         {
             sequence.AppendInterval(initialDelay).SetUpdate(UpdateType.Normal, true);
@@ -88,11 +113,11 @@ public class ScreenAnimController : MonoBehaviour
         // Появление кнопок
         sequence.AppendCallback(() =>
         {
-            restartButton.SetActive(true);
-            mainMenuButton.SetActive(true);
+            Button1.SetActive(true);
+            Button2.SetActive(true);
         });
-        sequence.Append(restartButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
-        sequence.Join(mainMenuButtonCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
+        sequence.Append(Button1CanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
+        sequence.Join(Button2CanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
     }
 
     private IEnumerator TypeText()
