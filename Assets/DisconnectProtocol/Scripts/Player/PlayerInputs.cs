@@ -20,10 +20,6 @@ public class PlayerInputs : MonoBehaviour
     [Header("Movement Settings")]
     public bool analogMovement;
 
-    [Header("Mouse Cursor Settings")]
-    public bool cursorLocked = true;
-    public bool cursorInputForLook = true;
-
 #if ENABLE_INPUT_SYSTEM
     // Движение
     public void OnMove(InputValue value)
@@ -34,10 +30,7 @@ public class PlayerInputs : MonoBehaviour
     // Вращение камеры
     public void OnLook(InputValue value)
     {
-        if (cursorInputForLook)
-        {
-            LookInput(value.Get<Vector2>());
-        }
+        LookInput(value.Get<Vector2>());
     }
 
     // Прыжок
@@ -132,12 +125,6 @@ public class PlayerInputs : MonoBehaviour
 	{
 		interact = newInteractState;
 	}
-
-    // Фокус приложения и настройка курсора
-    private void OnApplicationFocus(bool hasFocus)
-    {
-        SetCursorState(cursorLocked);
-    }
 
     // Установка состояния курсора
     private void SetCursorState(bool newState)
