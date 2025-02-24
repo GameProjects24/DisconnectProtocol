@@ -10,7 +10,6 @@ namespace DisconnectProtocol
 
 		private MonoBehaviour m_controller;
 		private Coroutine m_cor;
-		private bool m_isActive;
 
 		private const float EPS = .1f;
 
@@ -23,14 +22,13 @@ namespace DisconnectProtocol
 		}
 
 		public void Start(Transform target, bool perpetual) {
-			if (m_isActive) {
+			if (m_cor != null) {
 				return;
 			}
 			m_cor = m_controller.StartCoroutine(Cor(target, perpetual));
 		}
 
 		public void Stop() {
-			m_isActive = false;
 			if (m_cor != null) {
 				m_controller.StopCoroutine(m_cor);
 				m_cor = null;
@@ -39,7 +37,6 @@ namespace DisconnectProtocol
 		}
 
 		private IEnumerator Cor(Transform target, bool perpetual) {
-			m_isActive = true;
 			var self = m_controller.transform;
 			float dif;
 			do {
@@ -51,7 +48,7 @@ namespace DisconnectProtocol
 
 				yield return null;
 			} while (perpetual || Mathf.Abs(dif) > EPS);
-			m_isActive = false;
+			m_cor = null;
 			Stopped?.Invoke();
 		}
     }

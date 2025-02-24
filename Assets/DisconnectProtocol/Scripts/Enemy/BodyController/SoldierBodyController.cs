@@ -5,8 +5,7 @@ using UnityEngine.AI;
 
 namespace DisconnectProtocol
 {
-    public class SoldierBodyController : MonoBehaviour, IHoldDistance
-    {
+    public class SoldierBodyController : MonoBehaviour, IHoldDistance {
 		public enum BodyState {
 			Idle, Walk,
 		}

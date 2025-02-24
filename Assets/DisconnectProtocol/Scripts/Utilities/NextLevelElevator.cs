@@ -1,6 +1,6 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using SFDoor = DisconnectProtocol.SlideForwardDoor;
 using UnityEngine.SceneManagement;
 
 namespace DisconnectProtocol
@@ -8,41 +8,73 @@ namespace DisconnectProtocol
 	[RequireComponent(typeof(Collider))]
     public class NextLevelElevator : MonoBehaviour
     {
-		[SerializeField] private Interactable m_toggle;
-		private ComplexDoor m_door;
+		private struct Passenger {
+			public Transform self;
+			public Transform parent;
 
-		private Collider m_col;
-		private List<Transform> m_passengers = new List<Transform>();
-
-		public string nextScene;
-
-		private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-			var place = GameObject.FindGameObjectWithTag("ElevatorNextLevel");
-			if (place) {
-				transform.position = place.transform.position;
-				transform.rotation = place.transform.rotation;
-				place.SetActive(false);
+			public Passenger(Transform self) {
+				this.self = self;
+				parent = self.parent;
 			}
 
-			if (m_door != null) {
-				m_door.Open();
-				foreach (var tr in m_passengers) {
-					tr.SetParent(null, true);
-				}
+			public void ToParent() {
+				self.SetParent(parent, true);
+			}
+
+			public void Deconstruct(out Transform self, out Transform parent) {
+				self = this.self;
+				parent = this.parent;
+			}
+		}
+
+		[SerializeField] private Interactable m_toggle;
+		public string nextLevel;
+
+		private ComplexDoor m_door;
+		private Collider m_col;
+		private List<Passenger> m_passengers = new List<Passenger>();
+		private Transform m_tr;
+
+
+		private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+			StartCoroutine(ChangePlace());
+		}
+
+		private IEnumerator ChangePlace() {
+			yield return null;
+			var place = GameObject.FindGameObjectWithTag("ElevatorNextLevel");
+			if (place) {
+				place.SetActive(false);
+				var placet = place.transform;
+
+				m_tr.SetPositionAndRotation(placet.position, placet.rotation);
+			}
+
+			m_door?.Open();
+			foreach (var pas in m_passengers) {
+				pas.ToParent();
 			}
 		}
 
 		private void Awake() {
-			m_col = GetComponent<Collider>();
-			m_col.isTrigger = true;
+			if (m_tr == null) {
+				m_tr = transform;
+			}
+			if (m_col == null) {
+				m_col = GetComponent<Collider>();
+				m_col.isTrigger = true;
+			}
 		}
 
 		private void Start() {
 			if (m_toggle == null) {
 				m_toggle = GetComponentInChildren<Interactable>();
+				m_toggle.Interacted += OnToggled;
 			}
-			m_door = new ComplexDoor(GetComponentsInChildren<IDoor>());
-			m_door.StateChanged += OnDoorStateChanged;
+			if (m_door == null) {
+				m_door = new ComplexDoor(GetComponentsInChildren<IDoor>());
+				m_door.StateChanged += OnDoorStateChanged;
+			}
 		}
 
 		private void OnEnable() {
@@ -65,19 +97,19 @@ namespace DisconnectProtocol
 
 		private void OnDoorStateChanged(IDoor.State state) {
 			if (state == IDoor.State.Close) {
-				foreach (var tr in m_passengers) {
-					tr.SetParent(transform, true);
+				foreach ((var pas, _) in m_passengers) {
+					pas.SetParent(m_tr, true);
 				}
-				SceneLoader.Load(this, nextScene);
+				GameController.instance.ChangeLevel(nextLevel);
 			}
 		}
 
 		private void OnTriggerEnter(Collider other) {
-			m_passengers.Add(other.transform);
+			m_passengers.Add(new Passenger(other.transform));
 		}
 
 		private void OnTriggerExit(Collider other) {
-			m_passengers.Remove(other.transform);
+			m_passengers.RemoveAll(p => p.self == other.transform);
 		}
 	}
 }
