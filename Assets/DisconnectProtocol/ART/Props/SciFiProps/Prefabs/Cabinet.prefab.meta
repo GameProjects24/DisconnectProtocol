@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fb3f307d37061c240ba7c71bdd276f84
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118783
+  packageName: Sci-Fi PBR Props
+  packageVersion: 2.0
+  assetPath: Assets/SciFiProps/Prefabs/Cabinet.prefab
+  uploadId: 306779

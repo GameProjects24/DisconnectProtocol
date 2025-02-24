@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "com.unity.2d.sprite": "1.0.0",
+    "com.unity.ads": "4.4.2",
     "com.unity.ai.navigation": "2.0.5",
+    "com.unity.analytics": "3.8.1",
     "com.unity.behavior": "1.0.7",
     "com.unity.burst": "1.8.18",
     "com.unity.cinemachine": "3.1.2",
@@ -15,7 +17,9 @@
     "com.unity.multiplayer.center": "1.0.0",
     "com.unity.nuget.mono-cecil": "1.11.4",
     "com.unity.package-validation-suite": "0.22.0-preview",
+    "com.unity.postprocessing": "3.4.0",
     "com.unity.probuilder": "6.0.4",
+    "com.unity.purchasing": "4.12.2",
     "com.unity.render-pipelines.core": "17.0.3",
     "com.unity.render-pipelines.universal": "17.0.3",
     "com.unity.render-pipelines.universal-config": "17.0.3",

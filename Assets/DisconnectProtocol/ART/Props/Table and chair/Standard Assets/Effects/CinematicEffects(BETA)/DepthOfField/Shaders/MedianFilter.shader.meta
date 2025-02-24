@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a058b22d4123add4b807e832604e5e7b
+timeCreated: 1449046205
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/CinematicEffects(BETA)/DepthOfField/Shaders/MedianFilter.shader
+  uploadId: 163741

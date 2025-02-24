@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e3750ed9101e1b641a1c62d48ef3dac0
+timeCreated: 1634718450
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12949
+  packageName: Yughues Free Metal Materials
+  packageVersion: 2.0
+  assetPath: Assets/YughuesFreeMetalMaterials/Demo/P_DEMO_YFMM_Spheres.prefab
+  uploadId: 460211

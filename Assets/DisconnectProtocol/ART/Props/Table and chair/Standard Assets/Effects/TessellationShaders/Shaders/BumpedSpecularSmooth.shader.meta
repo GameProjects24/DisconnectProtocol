@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 3954501323f24464f9e4418c78d8e8ce
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/TessellationShaders/Shaders/BumpedSpecularSmooth.shader
+  uploadId: 163741

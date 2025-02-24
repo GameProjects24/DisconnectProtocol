@@ -1,0 +1,149 @@
+fileFormatVersion: 2
+guid: 41643e72c6ea3694bbd7059743f34966
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Frame_Door_Final
+    100002: //RootNode
+    100004: KeyLock_Keyboard_Final
+    100006: Left_Door_Final
+    100008: Right_Door_Final
+    100010: Signal_Final
+    400000: Frame_Door_Final
+    400002: //RootNode
+    400004: KeyLock_Keyboard_Final
+    400006: Left_Door_Final
+    400008: Right_Door_Final
+    400010: Signal_Final
+    2100000: Frame_Final_MaT
+    2100002: Terminal_Final_MAT
+    2100004: Doors_Final_MAT
+    2100006: Signal_Final_MAT
+    2300000: Frame_Door_Final
+    2300002: KeyLock_Keyboard_Final
+    2300004: Left_Door_Final
+    2300006: Right_Door_Final
+    2300008: Signal_Final
+    3300000: Frame_Door_Final
+    3300002: KeyLock_Keyboard_Final
+    3300004: Left_Door_Final
+    3300006: Right_Door_Final
+    3300008: Signal_Final
+    4300000: Frame_Door_Final
+    4300002: KeyLock_Keyboard_Final
+    4300004: Left_Door_Final
+    4300006: Right_Door_Final
+    4300008: Signal_Final
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Doors_Final_MAT
+    second: {fileID: 2100000, guid: 36cfda7a82536104c92f64134e5f839b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Frame_Final_MaT
+    second: {fileID: 2100000, guid: fdd86698b6dd6ad4cb5dacd16d3b3001, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Signal_Final_MAT
+    second: {fileID: 2100000, guid: fdd86698b6dd6ad4cb5dacd16d3b3001, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Terminal_Final_MAT
+    second: {fileID: 2100000, guid: dd927a539c4799c43a0a2b8628807bf5, type: 2}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182385
+  packageName: Futuristic Security Door
+  packageVersion: 1.0
+  assetPath: Assets/Future Pad Door - FREE/Assets/Meshes/Future_Door_Final.fbx
+  uploadId: 399072

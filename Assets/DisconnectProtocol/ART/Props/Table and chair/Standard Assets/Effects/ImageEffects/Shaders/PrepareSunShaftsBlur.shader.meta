@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 9ad381ed8492840ab9f165df743e4826
+ShaderImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/ImageEffects/Shaders/PrepareSunShaftsBlur.shader
+  uploadId: 163741

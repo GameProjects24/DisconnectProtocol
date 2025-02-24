@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5009e9d1b4124d742b8cdf74e3c3f8a6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 85732
+  packageName: 3D Free Modular Kit
+  packageVersion: 2.0
+  assetPath: Assets/_Barking_Dog/Common Scripts/Turn_Move.cs
+  uploadId: 679479

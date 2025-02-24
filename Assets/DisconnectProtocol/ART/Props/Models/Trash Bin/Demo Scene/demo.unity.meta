@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dae1529b4f1bca448b5a692f14997345
+timeCreated: 1498707456
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96670
+  packageName: Trash Bin
+  packageVersion: 1.0
+  assetPath: Assets/Models/Trash Bin/Demo Scene/demo.unity
+  uploadId: 195210

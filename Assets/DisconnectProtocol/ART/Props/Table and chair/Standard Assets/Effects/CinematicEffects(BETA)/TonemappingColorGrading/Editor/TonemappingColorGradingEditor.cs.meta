@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 64bb64b30a05a0d4b8afe58a356fc8fb
+timeCreated: 1441354689
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/CinematicEffects(BETA)/TonemappingColorGrading/Editor/TonemappingColorGradingEditor.cs
+  uploadId: 163741

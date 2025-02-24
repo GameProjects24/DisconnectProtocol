@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c961b8ed1f00f924d804ada5143bd0e8
+timeCreated: 1449750679
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/CinematicEffects(BETA)/DepthOfField/Shaders/BokehSplatting.shader
+  uploadId: 163741

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 01a668cc78047034a8a0c5ca2d24c6f7
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83834
+  packageName: Modern Table With Chairs
+  packageVersion: 1.0
+  assetPath: Assets/Table and chair/Standard Assets/Effects/Projectors/Shaders/ProjectorMultiply.shader
+  uploadId: 163741
