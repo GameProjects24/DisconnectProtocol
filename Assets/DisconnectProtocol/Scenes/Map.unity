@@ -28411,7 +28411,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25c2a47c2d6963f388e4cc5c5807ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_brain: {fileID: 0}
   m_agent: {fileID: 0}
+  m_dmg: {fileID: 0}
   m_holdDistance: 10
 --- !u!114 &1548412972
 MonoBehaviour:
