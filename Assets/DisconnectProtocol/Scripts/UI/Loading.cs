@@ -14,6 +14,7 @@ public class Loading : MonoBehaviour
     public float endSize = 0.8f;
     public float openSpeed = 0.005f;
     public float closeSpeed = 0.01f;
+    private float currentSize;
 
     private void Start()
     {
@@ -24,7 +25,8 @@ public class Loading : MonoBehaviour
 
         rectComponent.DORotate(new Vector3(0f, 0f, 360f), rotateTime, RotateMode.FastBeyond360)
             .SetLoops(-1, LoopType.Incremental)
-            .SetEase(Ease.Linear);
+            .SetEase(Ease.Linear)
+            .SetUpdate(UpdateType.Normal, true);
     }
 
     private void Update()
@@ -35,11 +37,11 @@ public class Loading : MonoBehaviour
     private void changeSize()
     {
         if (rectComponent == null || loadImage == null) return;
-        float currentSize = loadImage.fillAmount;
+        currentSize = loadImage.fillAmount;
 
         if (currentSize < endSize && up)
         {
-            loadImage.DOFillAmount(loadImage.fillAmount + openSpeed, openSpeed);
+            loadImage.DOFillAmount(loadImage.fillAmount + openSpeed, openSpeed).SetUpdate(UpdateType.Normal, true);
         }
         else if (currentSize >= endSize && up)
         {
@@ -47,7 +49,7 @@ public class Loading : MonoBehaviour
         }
         else if (currentSize >= startSize && !up)
         {
-            loadImage.DOFillAmount(loadImage.fillAmount - closeSpeed, closeSpeed);
+            loadImage.DOFillAmount(loadImage.fillAmount - closeSpeed, closeSpeed).SetUpdate(UpdateType.Normal, true);
         }
         else if (currentSize < startSize && !up)
         {

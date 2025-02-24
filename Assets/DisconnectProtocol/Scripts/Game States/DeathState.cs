@@ -2,17 +2,29 @@ using UnityEngine;
 
 namespace DisconnectProtocol
 {
-    public class DeathState : MonoBehaviour
+    public class DeathState : GameState
     {
-        public GameObject deathScreen;
-        private void OnEnable()
+        public GameObject deathScreen;   // Ссылка на экран смерти (с анимациями и кнопками)
+
+        public override void OnEnter()
         {
-            deathScreen.SetActive(true);
+            base.OnEnter();
+            // Остановка времени для геймплея (но анимации на DeathScreen могут использовать unscaled time)
+            Time.timeScale = 0f;
+
+            if (deathScreen != null)
+                deathScreen.SetActive(true);
         }
 
-        private void OnDisable()
+        public override void OnExit()
         {
-            deathScreen.SetActive(false);
+            if (deathScreen != null)
+                deathScreen.SetActive(false);
+
+            // При выходе из состояния смерти можно восстановить время
+            Time.timeScale = 1f;
+
+            base.OnExit();
         }
     }
 }

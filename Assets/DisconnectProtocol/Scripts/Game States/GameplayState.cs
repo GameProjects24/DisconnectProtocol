@@ -1,54 +1,41 @@
 using UnityEngine;
-using System.Collections;
 using DisconnectProtocol;
+using UnityEngine.InputSystem;
 
-public class GameplayState : MonoBehaviour
+public class GameplayState : GameState
 {
     [Header("State References")]
-    [Tooltip("Объект, отвечающий за состояние смерти (экран смерти с анимациями и кнопками)")]
-    public GameObject deathStateObject;
-    
-    [Tooltip("Скрипт игрока, в котором вызывается событие OnDie")]
-    public Damageable damageble;
-    
-    private void OnEnable()
+
+    public GameObject uiPanel;
+    public InputActionAsset inputActions;
+    public InputActionMap inputMap;
+
+    private void Awake()
     {
+        inputMap = inputActions.FindActionMap("Gameplay");
+        //uiActionMap = inputActions.FindActionMap("UI");
+    }
+
+    public override void OnEnter()
+    {
+        base.OnEnter();
+        Time.timeScale = 1f;
+
+        if (uiPanel != null) uiPanel.SetActive(true);
+        if (inputMap != null) inputMap.Enable();
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        
-        // Подписываемся на событие смерти игрока
-        if (damageble != null)
-        {
-            damageble.OnDie += OnPlayerDie;
-        }
     }
-    
-    private void OnDisable()
+
+    public override void OnExit()
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        // Отписываемся от события смерти
-        if (damageble != null)
-        {
-            damageble.OnDie -= OnPlayerDie;
-        }
-    }
-    
-    private void Start()
-    {
-        Time.timeScale = 1f;
-    }
-    
-    private void OnPlayerDie()
-    {
-        Time.timeScale = 0f;
+        if (uiPanel != null) uiPanel.SetActive(false);
+        if (inputMap != null) inputMap.Disable();
 
-        if (deathStateObject != null)
-        {
-            deathStateObject.SetActive(true);
-        }
-        
-        gameObject.SetActive(false);
+        base.OnExit();
     }
 }
