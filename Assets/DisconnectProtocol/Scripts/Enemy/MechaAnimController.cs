@@ -29,41 +29,41 @@ namespace DisconnectProtocol
 			
 			if (m_body == null) {
 				if (TryGetComponent(out m_body)) {
-					m_body.BodyStateChanged += OnStateChanged;
-					m_body.BodyActionPerformed += OnActionPerformed;
+					m_body.StateChanged += OnStateChanged;
+					m_body.ActionDone += OnActionPerformed;
 				}
 			} else {
-				m_body.BodyStateChanged += OnStateChanged;
-				m_body.BodyActionPerformed += OnActionPerformed;
+				m_body.StateChanged += OnStateChanged;
+				m_body.ActionDone += OnActionPerformed;
 			}
 		}
 
 		private void OnDisable() {
 			if (m_body) {
-				m_body.BodyStateChanged -= OnStateChanged;
-				m_body.BodyActionPerformed -= OnActionPerformed;
+				m_body.StateChanged -= OnStateChanged;
+				m_body.ActionDone -= OnActionPerformed;
 			}
 		}
 
-		private void OnStateChanged(SBC.BodyState state) {
+		private void OnStateChanged(SBC.State state) {
 			m_animator.ResetTrigger(m_curt);
 			switch (state) {
-				case SBC.BodyState.Idle:
+				case SBC.State.Idle:
 					m_curt = m_idlet;
 					break;
-				case SBC.BodyState.Walk:
+				case SBC.State.Walk:
 					m_curt = m_walkt;
 					break;
 			}
 			m_animator.SetTrigger(m_curt);
 		}
 
-		private void OnActionPerformed(SBC.BodyAction action) {
+		private void OnActionPerformed(SBC.Action action) {
 			switch (action) {
-				case SBC.BodyAction.AimStart:
+				case SBC.Action.AimStart:
 					m_animator.SetTrigger(m_aimt);
 					break;
-				case SBC.BodyAction.AimStop:
+				case SBC.Action.AimStop:
 					m_animator.ResetTrigger(m_aimt);
 					break;
 			}

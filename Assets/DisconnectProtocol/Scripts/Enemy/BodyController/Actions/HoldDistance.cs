@@ -7,8 +7,8 @@ using UnityEngine.Analytics;
 namespace DisconnectProtocol
 {
 	public interface IHoldDistance {
-		public void Start(Transform target, bool perpetual);
-		public void Stop();
+		void Start(Transform target, bool perpetual);
+		void Stop();
 	}
 
     public class HoldDistance : IStoppable

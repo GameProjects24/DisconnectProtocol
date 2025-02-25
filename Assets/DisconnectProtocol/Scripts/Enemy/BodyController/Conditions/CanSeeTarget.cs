@@ -2,8 +2,11 @@ using UnityEngine;
 
 namespace DisconnectProtocol
 {
-    public class CanSeeTarget
-    {
+	public interface ICanSeeTarget {
+		bool Eval(Transform target);
+	}
+
+    public class CanSeeTarget {
         public float visionAngle;
 		private Transform m_eyes;
 

@@ -3,8 +3,12 @@ using UnityEngine;
 
 namespace DisconnectProtocol
 {
-    public class Aim : IStoppable
-    {
+	public interface IAim {
+		void Start(Transform target, bool perpetual);
+		void Stop();
+	}
+
+    public class Aim {
 		[Range(0, 1)]
 		public float rotationRate;
 
