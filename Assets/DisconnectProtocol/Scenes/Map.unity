@@ -24337,18 +24337,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2879963618884242480, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
-      propertyPath: m_angleMax
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879963618884242480, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
-      propertyPath: m_targetDistMax
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879963618884242480, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
-      propertyPath: m_targetDistMin
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 3297002155256968261, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
       propertyPath: managedReferences[8456755680966082641].m_Value
       value: 
@@ -24360,18 +24348,6 @@ PrefabInstance:
     - target: {fileID: 5749173183080044543, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7349139447061399797, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
-      propertyPath: m_Speed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7349139447061399797, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
-      propertyPath: m_Acceleration
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 7349139447061399797, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7770422419799957020, guid: 024a21df857818c0c97e2609b3350c04, type: 3}
       propertyPath: m_LocalPosition.x

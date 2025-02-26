@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 2695778211152381558}
   - component: {fileID: 7349139447061399797}
   - component: {fileID: 3297002155256968261}
+  - component: {fileID: 6180737325284679129}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -292,11 +293,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 12
+  m_Acceleration: 16
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -350,6 +351,18 @@ MonoBehaviour:
           m_Value1: 10206309312175236078
         Name: Target
         m_Value: {fileID: 0}
+--- !u!114 &6180737325284679129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334261489895768627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3507eec0eb60bd1da3810678f15db6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1900067975094631699
 PrefabInstance:
   m_ObjectHideFlags: 0

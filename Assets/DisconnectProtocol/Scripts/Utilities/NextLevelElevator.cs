@@ -8,7 +8,7 @@ namespace DisconnectProtocol
 	[RequireComponent(typeof(Collider))]
     public class NextLevelElevator : MonoBehaviour
     {
-		private struct Passenger {
+		private class Passenger {
 			public Transform self;
 			public Transform parent;
 
@@ -105,7 +105,16 @@ namespace DisconnectProtocol
 		}
 
 		private void OnTriggerEnter(Collider other) {
-			m_passengers.Add(new Passenger(other.transform));
+			var pas = other.transform;
+			var whole = other.GetComponentInParent<Whole>();
+			if (whole != null) {
+				pas = whole.transform;
+				var tryp = m_passengers.Find(p => p.self == pas);
+				if (tryp != null) {
+					return;
+				}
+			}
+			m_passengers.Add(new Passenger(pas));
 		}
 
 		private void OnTriggerExit(Collider other) {
