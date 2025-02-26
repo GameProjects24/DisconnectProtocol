@@ -5,10 +5,11 @@ using DBC = DisconnectProtocol.DroneBodyController;
 
 namespace DisconnectProtocol
 {
-    public class DroneBodyController : BodyController<DBC.State, DBC.Action>, IHoldDistance
+    public class DroneBodyController : BodyController<DBC.State, DBC.Action>,
+	IHoldDistance, IBlinkHorizontal
     {
 		public enum State {
-			Idle, Following,
+			Idle, Follow, Blink
 		}
 
 		public enum Action {
@@ -20,12 +21,19 @@ namespace DisconnectProtocol
 		[SerializeField] private NavMeshAgent m_agent;
 		[SerializeField] private Damageable m_dmg;
 
-		[Header("Parameters")]
+		[Header("Hold Distance")]
 		[SerializeField] private float m_holdDistance = 10f;
+
+		[Header("Blink")]
+		[SerializeField] private float m_angleMin = 10f;
+		[SerializeField] private float m_angleMax = 90f;
+		[SerializeField] private float m_targetDistMin = 2f;
+		[SerializeField] private float m_targetDistMax = 5f;
         
 		private Transform m_tr;
 
 		private HoldDistance m_hda;
+		private BlinkHorizontal m_blih;
 
 		private void Start() {
 			m_tr = transform;
@@ -35,8 +43,18 @@ namespace DisconnectProtocol
 			m_hda.Resumed += OnStateResume;
 			m_hda.Stopped += OnStateStop;
 			m_states.Add(m_hda, new FlowState(
-				start: State.Following, stop: State.Idle,
-				resume: State.Following, pause: State.Idle
+				start: State.Follow, stop: State.Idle,
+				resume: State.Follow, pause: State.Idle
+			));
+
+			m_blih = new BlinkHorizontal(this, m_agent);
+			m_blih.angleMin = m_angleMin;
+			m_blih.angleMax = m_angleMax;
+			m_blih.distMin = m_targetDistMin;
+			m_blih.distMax = m_targetDistMax;
+			m_blih.Stopped += OnStateStop;
+			m_states.Add(m_blih, new FlowState(
+				start: State.Blink, stop: State.Idle
 			));
 		}
 
@@ -79,6 +97,15 @@ namespace DisconnectProtocol
 
 		void IHoldDistance.Stop() {
 			m_hda.Stop();
+		}
+
+		bool IBlinkHorizontal.TryStart(Transform target) {
+			ChangeStoppable(m_blih);
+			return m_blih.TryStart(target);
+		}
+
+		void IBlinkHorizontal.Stop() {
+			m_blih.Stop();
 		}
 	}
 }

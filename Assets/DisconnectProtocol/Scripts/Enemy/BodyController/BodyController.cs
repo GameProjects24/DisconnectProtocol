@@ -18,6 +18,12 @@ namespace DisconnectProtocol
 				this.resume = resume;
 				this.stop = stop;
 			}
+			public FlowState(TState start, TState stop) {
+				this.start = start;
+				this.pause = default;
+				this.resume = default;
+				this.stop = stop;
+			}
 		}
 		protected Dictionary<IStoppable, FlowState> m_states = new Dictionary<IStoppable, FlowState>();
 		protected TState m_curState;
