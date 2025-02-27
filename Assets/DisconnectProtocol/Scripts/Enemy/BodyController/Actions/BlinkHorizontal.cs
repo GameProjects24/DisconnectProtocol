@@ -24,10 +24,14 @@ namespace DisconnectProtocol
 		public event System.Action Stopped;
 
 		private BlinkHorizontal() {}
-		public BlinkHorizontal(MonoBehaviour ctrl, NavMeshAgent agent) {
+		public BlinkHorizontal(MonoBehaviour ctrl, NavMeshAgent agent, float angleMin, float angleMax, float distMin, float distMax) {
 			m_ctrl = ctrl;
 			m_agent = agent;
 			m_agentTr = agent.transform;
+			this.angleMin = angleMin;
+			this.angleMax = angleMax;
+			this.distMin = distMin;
+			this.distMax = distMax;
 		}
 
 		public bool TryStart(Transform target) {
@@ -63,11 +67,11 @@ namespace DisconnectProtocol
 
 		private Vector3? FindPos(Transform target) {
 			float angleRand = Random.Range(angleMin, angleMax);
-			float[] angles = {
+			System.Span<float> angles = stackalloc[] {
 				angleRand, angleMin, angleMax,
 				-angleRand, -angleMin, -angleMax,
 			};
-			float[] dists = {
+			System.Span<float> dists = stackalloc[] {
 				Random.Range(distMin, distMax), distMin, distMax
 			};
 
