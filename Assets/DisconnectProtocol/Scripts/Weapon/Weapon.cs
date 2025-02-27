@@ -62,10 +62,9 @@ public class Weapon : MonoBehaviour
             if (!IsReloading)
             {
                 OnReloadWeapon?.Invoke(); // Вызываем событие
+                _weaponFSM.ActivateState(WeaponStateEnum.Reload);
+                IsReloading = true;
             }
-
-            _weaponFSM.ActivateState(WeaponStateEnum.Reload);
-            IsReloading = true;
         }
     }
 

@@ -19,6 +19,7 @@ public class WeaponFSM
     private Dictionary<WeaponStateEnum, IWeaponState> _states = new Dictionary<WeaponStateEnum, IWeaponState>();
     private Weapon _context;
     private Inventory _inventory;
+    public bool IsFiring { get; private set; } = false;
 
     public WeaponFSM(Weapon context, Inventory inventory)
     {
@@ -33,13 +34,13 @@ public class WeaponFSM
 
     public void ActivateState(WeaponStateEnum state)
     {
-        Debug.Log($"FSM > activate: {state}");
         if (_currentState != null)
         {
+            if (_states[state] == _currentState) return;
+
             _currentState.Exit();
             _currentState = null;
         }
-
 
         if (_states.TryGetValue(state, out _currentState))
         {
@@ -49,11 +50,13 @@ public class WeaponFSM
 
     public void StartFire()
     {
+        IsFiring = true;
         _currentState?.StartFire();
     }
 
     public void StopFire()
     {
+        IsFiring = false;
         _currentState?.StopFire();
     }
 
@@ -116,8 +119,6 @@ public class WeaponStateIdle : WeaponStateBase
 public class WeaponStateFire : WeaponStateBase
 {
     private float _timer;
-    private bool _isFiring;
-
     private readonly WeaponFSM _weaponFSM;
     private readonly Weapon _context;
 
@@ -127,51 +128,53 @@ public class WeaponStateFire : WeaponStateBase
         _context = context;
     }
 
-    override public void Enter()
+    public override void Enter()
     {
         _timer = 0f;
-        _isFiring = true;
         _context.Shoot();
     }
 
     public override void Update()
     {
-        if (_isFiring)
+        _timer += Time.deltaTime;
+
+        // Ждём окончания задержки перед следующим действием
+        if (_timer >= _context.weaponData.fireRate)
         {
-            _timer += Time.deltaTime;
-            if (_timer >= _context.weaponData.fireRate)
+            if (_context.HasAmmo())
             {
-                if (_context.HasAmmo() && _context.weaponData.isAutomatic)
+                if (_weaponFSM.IsFiring)
                 {
-                    if (_context.CanFire())
+                    if (_context.weaponData.isAutomatic)
                     {
                         _context.Shoot();
-                        _timer = 0f;
-                    }
-                    else
-                    {
-                        _weaponFSM.ActivateState(WeaponStateEnum.Empty);
-                        _isFiring = false;
+                        _timer = 0f; // Сброс таймера, если оружие автоматическое и кнопка зажата
+
                     }
                 }
-                else if (_context.weaponData.isAutoReload)
+                else
                 {
-                    _weaponFSM.ActivateState(WeaponStateEnum.Reload);
-                    _isFiring = false;
+                    // Если кнопка не нажата, переходим в Idle
+                    _weaponFSM.ActivateState(WeaponStateEnum.Idle);
                 }
+            }
+            else
+            {
+                _weaponFSM.ActivateState(WeaponStateEnum.Empty); // Если нет патронов, уходим в Empty
             }
         }
     }
 
     public override void StopFire()
     {
-        if (_isFiring)
+        // Только если задержка прошла, мы выходим в Idle
+        if (_timer >= _context.weaponData.fireRate)
         {
             _weaponFSM.ActivateState(WeaponStateEnum.Idle);
-            _isFiring = false;
         }
     }
 }
+
 
 public class WeaponStateReload : WeaponStateBase
 {
