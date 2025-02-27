@@ -13,6 +13,8 @@ public class WeaponController : MonoBehaviour
     public event WeaponChangedHandler OnChangeWeapon;
     private int index = 0;
 
+    public Inventory _inventory;
+
 
     private void Start()
     {
@@ -36,7 +38,7 @@ public class WeaponController : MonoBehaviour
         {
             currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
             currentWeapon.OnShootWeapon -= HandleShootWeapon;
-            currentWeapon.OnReloadCompleteWeapon -= HandleReloadWeapon;
+            currentWeapon.OnReloadCompleteWeapon -= HandleReloadCompleteWeapon;
             currentWeapon.gameObject.SetActive(false);
         }
 
@@ -49,19 +51,24 @@ public class WeaponController : MonoBehaviour
         OnChangeWeapon?.Invoke(currentWeapon);
     }
 
+    public Weapon GetCurrentWeapon()
+    {
+        return currentWeapon;
+    }
+
     public bool CanFire()
 	{
-		return currentWeapon != null ? currentWeapon.CanFire() : false;
+		return currentWeapon != null && _inventory.HasAmmo(currentWeapon);
 	}
 
 	public int GetCurrentAmmo()
 	{
-		return currentWeapon != null ? currentWeapon.GetCurrentAmmo() : 0;
+		return currentWeapon != null ? currentWeapon.GetCageAmmo() : 0;
 	}
 
 	public int GetTotalAmmo()
 	{
-		return currentWeapon != null ? currentWeapon.GetTotalAmmo() : 0;
+		return currentWeapon != null ? currentWeapon.GetReserveAmmo() : 0;
 	}
 
     public bool IsCurWeaponReloading()
@@ -81,7 +88,10 @@ public class WeaponController : MonoBehaviour
 
 	public void Shoot()
 	{
-		currentWeapon?.Shoot();
+		if (CanFire())
+        {
+            currentWeapon?.Shoot();
+        }
 	}
 
     public void Reload()

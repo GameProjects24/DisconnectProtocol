@@ -17,9 +17,14 @@ public class WeaponFSM
 {
     private IWeaponState _currentState;
     private Dictionary<WeaponStateEnum, IWeaponState> _states = new Dictionary<WeaponStateEnum, IWeaponState>();
+    private Weapon _context;
+    private Inventory _inventory;
 
-    public WeaponFSM(Weapon context)
+    public WeaponFSM(Weapon context, Inventory inventory)
     {
+        _context = context;
+        _inventory = inventory;
+
         _states.Add(WeaponStateEnum.Idle, new WeaponStateIdle(this, context));
         _states.Add(WeaponStateEnum.Fire, new WeaponStateFire(this, context));
         _states.Add(WeaponStateEnum.Reload, new WeaponStateReload(this, context));
@@ -68,23 +73,15 @@ public abstract class WeaponStateBase : IWeaponState
 {
     public virtual void Enter() { }
 
-    public virtual void Exit()
-    {
-    }
+    public virtual void Exit() { }
 
-    public virtual void Reload()
-    {
-    }
+    public virtual void Reload() { }
 
     public virtual void StartFire() { }
 
-    public virtual void StopFire()
-    {
-    }
+    public virtual void StopFire() { }
 
-    public virtual void Update()
-    {
-    }
+    public virtual void Update() { }
 }
 
 public class WeaponStateIdle : WeaponStateBase
@@ -105,9 +102,13 @@ public class WeaponStateIdle : WeaponStateBase
 
     public override void StartFire()
     {
-        if (_context.CanFire())
+        if (_context.HasAmmo())
         {
             _weaponFSM.ActivateState(WeaponStateEnum.Fire);
+        }
+        else
+        {
+            _weaponFSM.ActivateState(WeaponStateEnum.Empty);
         }
     }
 }
@@ -115,6 +116,7 @@ public class WeaponStateIdle : WeaponStateBase
 public class WeaponStateFire : WeaponStateBase
 {
     private float _timer;
+    private bool _isFiring;
 
     private readonly WeaponFSM _weaponFSM;
     private readonly Weapon _context;
@@ -128,28 +130,34 @@ public class WeaponStateFire : WeaponStateBase
     override public void Enter()
     {
         _timer = 0f;
+        _isFiring = true;
         _context.Shoot();
     }
 
     public override void Update()
     {
-        _timer += Time.deltaTime;
-        if (_timer >= _context.weaponData.fireRate)
+        if (_isFiring)
         {
-            if (!_context.HasBullet() && _context.weaponData.isAutoReload)
+            _timer += Time.deltaTime;
+            if (_timer >= _context.weaponData.fireRate)
             {
-                _weaponFSM.ActivateState(WeaponStateEnum.Reload);
-            }
-            else if (_context.weaponData.isAutomatic)
-            {
-                if (_context.CanFire())
+                if (_context.HasAmmo() && _context.weaponData.isAutomatic)
                 {
-                    _context.Shoot();
-                    _timer = 0;
+                    if (_context.CanFire())
+                    {
+                        _context.Shoot();
+                        _timer = 0f;
+                    }
+                    else
+                    {
+                        _weaponFSM.ActivateState(WeaponStateEnum.Empty);
+                        _isFiring = false;
+                    }
                 }
-                else
+                else if (_context.weaponData.isAutoReload)
                 {
-                    _weaponFSM.ActivateState(WeaponStateEnum.Empty);
+                    _weaponFSM.ActivateState(WeaponStateEnum.Reload);
+                    _isFiring = false;
                 }
             }
         }
@@ -157,7 +165,11 @@ public class WeaponStateFire : WeaponStateBase
 
     public override void StopFire()
     {
-        _weaponFSM.ActivateState(WeaponStateEnum.Idle);
+        if (_isFiring)
+        {
+            _weaponFSM.ActivateState(WeaponStateEnum.Idle);
+            _isFiring = false;
+        }
     }
 }
 
@@ -177,6 +189,7 @@ public class WeaponStateReload : WeaponStateBase
     override public void Enter()
     {
         _timer = 0f;
+        _context.Reload();
     }
 
     public override void Update()
