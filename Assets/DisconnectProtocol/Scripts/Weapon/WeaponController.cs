@@ -13,7 +13,7 @@ public class WeaponController : MonoBehaviour
     public event WeaponChangedHandler OnChangeWeapon;
     private int index = 0;
 
-    public Inventory _inventory;
+    [SerializeField] private Inventory _inventory;
 
 
     private void Start()
@@ -26,7 +26,21 @@ public class WeaponController : MonoBehaviour
         {
             SetActiveWeapon();
         }
+
+		if (_inventory == null) {
+			_inventory = GetComponentInChildren<Inventory>();
+		}
     }
+
+	public InventoryData GetInventoryData()
+	{
+		return _inventory.SaveInventory();
+	}
+
+	public void SetInventoryData(InventoryData inv)
+	{
+		_inventory.LoadInventory(inv);
+	}
 
     public void SetActiveWeapon()
     {

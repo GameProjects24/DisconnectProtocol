@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
 	private PlayerInputs _input;
 	private GameObject _mainCamera;
 	private WeaponController _weaponController;
+	public WeaponController weaponController { get => _weaponController; }
 	private Interactor _interactor;
 
 	private const float _threshold = 0.01f;

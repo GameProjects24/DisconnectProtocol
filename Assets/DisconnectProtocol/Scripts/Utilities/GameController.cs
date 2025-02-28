@@ -39,10 +39,10 @@ namespace DisconnectProtocol
 		/// </summary>
 		/// <param name="fallbackLevel">Level to load if there's no saved</param>
 		public void LoadLevel(string fallbackLevel) {
-			if (pd.isValid) {
-				SceneLoader.Load(this, pd.lastLevel);
-			} else {
+			if (string.IsNullOrEmpty(pd.lastLevel)) {
 				ChangeLevel(fallbackLevel);
+			} else {
+				SceneLoader.Load(this, pd.lastLevel);
 			}
 		}
 
@@ -52,7 +52,6 @@ namespace DisconnectProtocol
 		/// <param name="level"></param>
 		public void ChangeLevel(string level) {
 			pd.lastLevel = level;
-			pd.isValid = true;
 			SceneLoader.Load(this, level);
 		}
 
