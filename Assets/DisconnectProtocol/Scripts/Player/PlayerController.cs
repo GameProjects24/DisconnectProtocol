@@ -1,5 +1,7 @@
 using UnityEngine;
 using DisconnectProtocol;
+using System.Data.Common;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -67,7 +69,12 @@ public class PlayerController : MonoBehaviour
 	private PlayerInputs _input;
 	private GameObject _mainCamera;
 	private WeaponController _weaponController;
-	public WeaponController weaponController { get => _weaponController; }
+	public WeaponController weaponController { get {
+		if (_weaponController == null) {
+			_weaponController = GetComponent<WeaponController>();
+		}
+		return _weaponController;
+	}}
 	private Interactor _interactor;
 
 	private const float _threshold = 0.01f;
@@ -98,7 +105,6 @@ public class PlayerController : MonoBehaviour
 
 	private void Start()
 	{
-
 		_weaponController = GetComponent<WeaponController>();
 		_controller = GetComponent<CharacterController>();
 		_input = GetComponent<PlayerInputs>();

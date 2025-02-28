@@ -2,6 +2,7 @@ using UnityEngine;
 using DisconnectProtocol;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameplayState : GameState
 {
@@ -18,15 +19,6 @@ public class GameplayState : GameState
         inputMap = inputActions.FindActionMap("Gameplay");
         //uiActionMap = inputActions.FindActionMap("UI");
     }
-
-	private void Start()
-	{
-		if (_player == null) {
-			_player = FindAnyObjectByType<PlayerController>();
-			_playerTr = _player.transform;
-		}
-		LoadPlayerData(SceneManager.GetActiveScene().name);
-	}
 
     public override void OnEnter()
     {
@@ -63,12 +55,22 @@ public class GameplayState : GameState
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		LoadPlayerData(scene.name);
+		if (_player == null) {
+			_player = FindAnyObjectByType<PlayerController>();
+			_playerTr = _player.transform;
+		}
+		if (scene.name == GameController.instance.pd.lastLevel) {
+			LoadPlayerData(scene.name);
+		} else {
+			StartCoroutine(SavePlayerData());
+			GameController.instance.pd.lastLevel = scene.name;
+		}
 	}
 
-	private void SavePlayerData()
+	private IEnumerator SavePlayerData()
 	{
-		Debug.Log($"{_playerTr.position} | {_playerTr.name}");
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 		GameController.instance.pd.SetLocation(_playerTr);
 		GameController.instance.pd.SetInventoryData(_player.weaponController.GetInventoryData());
 	}

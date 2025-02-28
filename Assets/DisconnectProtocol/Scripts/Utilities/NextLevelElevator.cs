@@ -98,7 +98,9 @@ namespace DisconnectProtocol
 		private void OnDoorStateChanged(IDoor.State state) {
 			if (state == IDoor.State.Close) {
 				foreach ((var pas, _) in m_passengers) {
-					pas.SetParent(m_tr, true);
+					if (pas != null) {
+						pas.SetParent(m_tr, true);
+					}
 				}
 				GameController.instance.ChangeLevel(nextLevel);
 			}

@@ -51,7 +51,7 @@ namespace DisconnectProtocol
 		/// </summary>
 		/// <param name="level"></param>
 		public void ChangeLevel(string level) {
-			pd.lastLevel = level;
+			// pd.lastLevel = level;
 			SceneLoader.Load(this, level);
 		}
 

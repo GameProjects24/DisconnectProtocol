@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -75,14 +76,10 @@ public class Inventory : MonoBehaviour
         // Сохраняем оружие
         foreach (Weapon weapon in weapons)
         {
-            data.weaponList.Add(weapon.weaponData.weaponName);
-            data.cageAmmoInventory.Add(weapon.weaponData.weaponName, weapon.GetCageAmmo());
-        }
-
-        // Сохраняем патроны для каждого оружия
-        foreach (var ammo in reserveAmmoInventory)
-        {
-            data.reserveAmmoInventory.Add(ammo.Key.weaponName, ammo.Value);
+            var info = new WeaponInfo();
+            info.cageAmmo = weapon.GetCageAmmo();
+            info.reserveAmmo = reserveAmmoInventory[weapon.weaponData];
+            data.weapons.Add(weapon.weaponData.weaponName, info);
         }
 
         return data;
@@ -92,27 +89,15 @@ public class Inventory : MonoBehaviour
     public void LoadInventory(InventoryData data)
     {
         // Восстанавливаем оружие
-        foreach (string weaponName in data.weaponList)
+        foreach ((var name, var info) in data.weapons)
         {
-            WeaponData weaponData = FindWeaponData(weaponName);
+            WeaponData weaponData = FindWeaponData(name);
             if (weaponData != null)
             {
                 Weapon newWeapon = CreateWeapon(weaponData);
+                newWeapon.SetCageAmmo(info.cageAmmo);
+                reserveAmmoInventory[weaponData] = info.reserveAmmo;
                 AddWeapon(newWeapon);
-                if (data.cageAmmoInventory.ContainsKey(weaponName))
-                {
-                    newWeapon.SetCageAmmo(data.cageAmmoInventory[weaponName]);
-                }
-            }
-        }
-
-        // Восстанавливаем патроны
-        foreach (var ammo in data.reserveAmmoInventory)
-        {
-            WeaponData weaponData = FindWeaponData(ammo.Key);
-            if (weaponData != null)
-            {
-                reserveAmmoInventory[weaponData] = ammo.Value;
             }
         }
     }
@@ -143,7 +128,43 @@ public class Inventory : MonoBehaviour
 [Serializable]
 public class InventoryData
 {
-    public List<string> weaponList = new List<string>(); // Список имен оружий
-    public Dictionary<string, int> reserveAmmoInventory = new Dictionary<string, int>(); // Количество патронов для каждого оружия
-    public Dictionary<string, int> cageAmmoInventory = new Dictionary<string, int>();
+    public Dictionary<string, WeaponInfo> weapons = new Dictionary<string, WeaponInfo>();
+}
+
+[Serializable]
+public class WeaponInfo
+{
+    public int reserveAmmo;
+    public int cageAmmo;
+}
+
+public class SerDictionary<TKey, TValue> : ISerializationCallbackReceiver
+{
+    public List<TKey> keys = new List<TKey>();
+    public List<TValue> values = new List<TValue>();
+    public Dictionary<TKey, TValue>  myDictionary = new Dictionary<TKey, TValue>();
+
+    public void OnBeforeSerialize()
+    {
+        keys.Clear();
+        values.Clear();
+        foreach (var kvp in myDictionary)
+        {
+            keys.Add(kvp.Key);
+            values.Add(kvp.Value);
+        }
+    }
+
+    public void OnAfterDeserialize()
+    {
+        myDictionary = new Dictionary<TKey, TValue>();
+        if (keys.Count != values.Count)
+        {
+            throw new DataException("Some of TKey or TValue don't Serializable");
+        }
+        for (int i = 0; i < keys.Count; i++)
+        {
+            myDictionary.Add(keys[i], values[i]);
+        }
+    }
 }

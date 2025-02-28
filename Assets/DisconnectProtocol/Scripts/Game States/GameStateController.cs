@@ -24,16 +24,12 @@ public class GameStateController : MonoBehaviour
                 states[state.GetType()] = state;
                 state.gameObject.SetActive(false);
             }
+            ChangeState<GameplayState>();
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        ChangeState<GameplayState>();
     }
 
     private void OnEnable()
