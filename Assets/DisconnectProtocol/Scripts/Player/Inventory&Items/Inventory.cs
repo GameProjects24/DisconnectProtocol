@@ -5,7 +5,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [Header("Inventory Settings")]
-    public List<Weapon> weapons = new List<Weapon>(); // Список оружия
+    public List<Weapon> weapons = new List<Weapon>();
     public Dictionary<WeaponData, int> reserveAmmoInventory = new Dictionary<WeaponData, int>();
     public Dictionary<WeaponData, int> cageAmmoInventory = new Dictionary<WeaponData, int>();
     public WeaponController weaponController;
@@ -67,7 +67,7 @@ public class Inventory : MonoBehaviour
         return reserveAmmoInventory.ContainsKey(weapon.weaponData) && reserveAmmoInventory[weapon.weaponData] > 0;
     }
 
-    // Сохранение состояния инвентаря (например, в чекпоинте)
+    // Сохранение состояния инвентаря
     public InventoryData SaveInventory()
     {
         InventoryData data = new InventoryData();
@@ -119,7 +119,6 @@ public class Inventory : MonoBehaviour
 
     private WeaponData FindWeaponData(string weaponName)
     {
-        // Поиск WeaponData по имени оружия (можно настроить в редакторе или через массив)
         foreach (WeaponData data in Resources.LoadAll<WeaponData>("Weapons"))
         {
             if (data.weaponName == weaponName)
@@ -132,7 +131,7 @@ public class Inventory : MonoBehaviour
 
     private Weapon CreateWeapon(WeaponData weaponData)
     {
-        GameObject weaponObject = Instantiate(weaponData.prefab); // Создаём экземпляр оружия
+        GameObject weaponObject = Instantiate(weaponData.prefab);
         Weapon newWeapon = weaponObject.GetComponent<Weapon>();
         newWeapon.weaponData = weaponData;
         return newWeapon;
