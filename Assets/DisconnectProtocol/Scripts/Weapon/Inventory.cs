@@ -1,170 +1,228 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 
+
 public class Inventory : MonoBehaviour
 {
-    [Header("Inventory Settings")]
-    public List<Weapon> weapons = new List<Weapon>(); // Список оружия
-    public Dictionary<WeaponData, int> reserveAmmoInventory = new Dictionary<WeaponData, int>();
-    public Dictionary<WeaponData, int> cageAmmoInventory = new Dictionary<WeaponData, int>();
-    public WeaponController weaponController;
+	[System.Serializable]
+	public class WeaponInfo
+	{
+		public string name;
+		public int reserveAmmo;
+		public int cageAmmo;
+	}
 
-    private void Start()
-    {
-        InitializeInventory();
-    }
+	[System.Serializable]
+	public class InventoryData
+	{
+		public List<WeaponInfo> weapons = new List<WeaponInfo>();
+	}
 
-    // Инициализация инвентаря
-    public void InitializeInventory()
-    {
-        foreach (Weapon weapon in weapons)
-        {
-            // Добавляем оружие в инвентарь, если его ещё нет
-            if (!reserveAmmoInventory.ContainsKey(weapon.weaponData))
-            {
-                reserveAmmoInventory.Add(weapon.weaponData, Mathf.Min(weapon.weaponData.maxAmmo, weapon.weaponData.cageSize));
-            }
-        }
-    }
+	[Header("Weapons")]
+	public Transform weaponHolder;
+	public List<WeaponData> initialWeapons;
+	public Dictionary<Weapon, WeaponInfo> weapons = new Dictionary<Weapon, WeaponInfo>();
+	private List<Weapon> m_factWeapons = new List<Weapon>();
+	private int m_weaponIdx = 0;
+	private WeaponData[] m_weaponRes;
 
-    // Добавление оружия в инвентарь
-    public void AddWeapon(Weapon weapon)
-    {
-        if (!weapons.Contains(weapon))
-        {
-            weapons.Add(weapon);
-            reserveAmmoInventory[weapon.weaponData] = weapon.weaponData.maxAmmo / 4;
-        }
-    }
+	private void Awake()
+	{
+		m_weaponRes = Resources.LoadAll<WeaponData>("Weapons");
+		if (weaponHolder == null)
+		{
+			weaponHolder = transform;
+		}
+		foreach (var wd in initialWeapons)
+		{
+			AddWeapon(CreateWeapon(wd));
+		}
+	}
 
-    // Получение информации о текущем количестве патронов для конкретного оружия
-    public int GetReserveAmmo(Weapon weapon)
-    {
-        return reserveAmmoInventory.ContainsKey(weapon.weaponData) ? reserveAmmoInventory[weapon.weaponData] : 0;
-    }
+	private void NewWeapon(Weapon weapon)
+	{
+		weapon.inventory = this;
+		weapon.transform.SetParent(weaponHolder);
+		weapon.gameObject.SetActive(false);
+		m_factWeapons.Add(weapon);
+	}
 
-    // Пополнение патронов для оружия
-    public void AddAmmo(Weapon weapon, int amount)
-    {
-        if (reserveAmmoInventory.ContainsKey(weapon.weaponData))
-        {
-            reserveAmmoInventory[weapon.weaponData] = Mathf.Min(reserveAmmoInventory[weapon.weaponData] + amount, weapon.weaponData.maxAmmo);
-        }
-    }
+	// Добавление оружия в инвентарь
+	public void AddWeapon(Weapon weapon)
+	{
+		// how about adding ammos?
+		if (weapon == null || weapons.ContainsKey(weapon))
+		{
+			return;
+		}
+		var wd = weapon.weaponData;
+		var info = new WeaponInfo();
+		info.name = wd.weaponName;
+		info.reserveAmmo = Mathf.Min(wd.cageSize, wd.maxAmmo);
+		weapons.Add(weapon, info);
+		
+		NewWeapon(weapon);
+	}
 
-    public void SpendAmmo(Weapon weapon, int amount)
-    {
-        if (reserveAmmoInventory.ContainsKey(weapon.weaponData))
-        {
-            reserveAmmoInventory[weapon.weaponData] = Mathf.Max(reserveAmmoInventory[weapon.weaponData] - amount, 0);
-        }
-    }
+	public bool TryGetNextWeapon(out Weapon weapon)
+	{
+		weapon = null;
+		if (weapons.Count == 0)
+		{
+			return false;
+		}
+		if (weapons.Count == 1)
+		{
+			weapon = m_factWeapons[m_weaponIdx];
+			return true;
+		}
+		int prev = m_weaponIdx;
+		do {
+			m_weaponIdx = (m_weaponIdx + 1) % m_factWeapons.Count;
+			if (weapons.ContainsKey(m_factWeapons[m_weaponIdx]))
+			{
+				weapon = m_factWeapons[m_weaponIdx];
+				break;
+			}
+		} while (m_weaponIdx != prev);
+		return true;
+	}
 
-    // Проверка, есть ли патроны для текущего оружия
-    public bool HasAmmo(Weapon weapon)
-    {
-        return reserveAmmoInventory.ContainsKey(weapon.weaponData) && reserveAmmoInventory[weapon.weaponData] > 0;
-    }
+	// Получение информации о текущем количестве патронов для конкретного оружия
+	// why is it in inventory???
+	public int GetReserveAmmo(Weapon weapon)
+	{
+		return weapons.TryGetValue(weapon, out var wi) ? wi.reserveAmmo : 0;
+	}
 
-    // Сохранение состояния инвентаря (например, в чекпоинте)
-    public InventoryData SaveInventory()
-    {
-        InventoryData data = new InventoryData();
+	// Пополнение патронов для оружия
+	public void AddAmmo(Weapon weapon, int amount)
+	{
+		if (weapons.TryGetValue(weapon, out var wi))
+		{
+			wi.reserveAmmo = Mathf.Min(wi.reserveAmmo + amount, weapon.weaponData.maxAmmo);
+		}
+	}
 
-        // Сохраняем оружие
-        foreach (Weapon weapon in weapons)
-        {
-            var info = new WeaponInfo();
-            info.cageAmmo = weapon.GetCageAmmo();
-            info.reserveAmmo = reserveAmmoInventory[weapon.weaponData];
-            data.weapons.Add(weapon.weaponData.weaponName, info);
-        }
+	// how about combine GetReserveAmmo and SpendAmmo into
+	// int TrySpendAmmo(Weapon, int) ?
+	public void SpendAmmo(Weapon weapon, int amount)
+	{
+		if (weapons.TryGetValue(weapon, out var wi))
+		{
+			wi.reserveAmmo = Mathf.Max(wi.reserveAmmo - amount, 0);
+		}
+	}
 
-        return data;
-    }
+	// Проверка, есть ли патроны для текущего оружия
+	public bool HasAmmo(Weapon weapon)
+	{
+		return weapons.TryGetValue(weapon, out var wi) && wi.reserveAmmo > 0;
+	}
 
-    // Восстановление состояния инвентаря
-    public void LoadInventory(InventoryData data)
-    {
-        // Восстанавливаем оружие
-        foreach ((var name, var info) in data.weapons)
-        {
-            WeaponData weaponData = FindWeaponData(name);
-            if (weaponData != null)
-            {
-                Weapon newWeapon = CreateWeapon(weaponData);
-                newWeapon.SetCageAmmo(info.cageAmmo);
-                reserveAmmoInventory[weaponData] = info.reserveAmmo;
-                AddWeapon(newWeapon);
-            }
-        }
-    }
+	// Сохранение состояния инвентаря (например, в чекпоинте)
+	// should consider moving
+	// cageAmmo counting in logic of other methods
+	public InventoryData ToInventoryData()
+	{
+		var data = new InventoryData();
+		foreach ((var weapon, var info) in weapons)
+		{
+			info.cageAmmo = weapon.GetCageAmmo();
+			data.weapons.Add(info);
+		}
+		return data;
+	}
 
-    private WeaponData FindWeaponData(string weaponName)
-    {
-        // Поиск WeaponData по имени оружия (можно настроить в редакторе или через массив)
-        foreach (WeaponData data in Resources.LoadAll<WeaponData>("Weapons"))
-        {
-            if (data.weaponName == weaponName)
-            {
-                return data;
-            }
-        }
-        return null;
-    }
+	public void FromInventoryData(InventoryData data)
+	{
+		weapons.Clear();
+		foreach (var wi in data.weapons)
+		{
+			Weapon weapon = null;
+			if (!TryFindWeapon(wi.name, out weapon))
+			{
+				if (TryFindWeaponData(wi.name, out var wd))
+				{
+					weapon = CreateWeapon(wd);
+				}
+			}
+			if (weapon != null)
+			{
+				weapon.SetCageAmmo(wi.cageAmmo);
+				weapons.Add(weapon, wi);
+				NewWeapon(weapon);
+			}
+		}
+	}
 
-    private Weapon CreateWeapon(WeaponData weaponData)
-    {
-        GameObject weaponObject = Instantiate(weaponData.prefab); // Создаём экземпляр оружия
-        Weapon newWeapon = weaponObject.GetComponent<Weapon>();
-        newWeapon.weaponData = weaponData;
-        return newWeapon;
-    }
+	private bool TryFindWeapon(string name, out Weapon weapon)
+	{
+		weapon = null;
+		foreach (var w in m_factWeapons)
+		{
+			if (w.weaponData.weaponName == name)
+			{
+				weapon = w;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private bool TryFindWeaponData(string weaponName, out WeaponData weaponData)
+	{
+		weaponData = null;
+		// Поиск WeaponData по имени оружия (можно настроить в редакторе или через массив)
+		foreach (var data in m_weaponRes)
+		{
+			if (data.weaponName == weaponName)
+			{
+				weaponData = data;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Weapon CreateWeapon(WeaponData weaponData)
+	{
+		GameObject weaponObject = Instantiate(weaponData.prefab, weaponHolder);
+		Weapon newWeapon = weaponObject.GetComponent<Weapon>();
+		newWeapon.weaponData = weaponData;
+		return newWeapon;
+	}
 }
 
-// Класс для сохранения инвентаря
-[Serializable]
-public class InventoryData
-{
-    public Dictionary<string, WeaponInfo> weapons = new Dictionary<string, WeaponInfo>();
-}
-
-[Serializable]
-public class WeaponInfo
-{
-    public int reserveAmmo;
-    public int cageAmmo;
-}
-
+[System.Serializable]
 public class SerDictionary<TKey, TValue> : ISerializationCallbackReceiver
 {
-    public List<TKey> keys = new List<TKey>();
-    public List<TValue> values = new List<TValue>();
-    public Dictionary<TKey, TValue>  myDictionary = new Dictionary<TKey, TValue>();
+	public List<TKey> keys = new List<TKey>();
+	public List<TValue> values = new List<TValue>();
+	public Dictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
 
-    public void OnBeforeSerialize()
-    {
-        keys.Clear();
-        values.Clear();
-        foreach (var kvp in myDictionary)
-        {
-            keys.Add(kvp.Key);
-            values.Add(kvp.Value);
-        }
-    }
+	public void OnBeforeSerialize()
+	{
+		keys.Clear();
+		values.Clear();
+		foreach (var kvp in dict)
+		{
+			keys.Add(kvp.Key);
+			values.Add(kvp.Value);
+		}
+	}
 
-    public void OnAfterDeserialize()
-    {
-        myDictionary = new Dictionary<TKey, TValue>();
-        if (keys.Count != values.Count)
-        {
-            throw new DataException("Some of TKey or TValue don't Serializable");
-        }
-        for (int i = 0; i < keys.Count; i++)
-        {
-            myDictionary.Add(keys[i], values[i]);
-        }
-    }
+	public void OnAfterDeserialize()
+	{
+		dict = new Dictionary<TKey, TValue>();
+		if (keys.Count != values.Count)
+		{
+			throw new DataException("Some of TKey or TValue don't Serializable");
+		}
+		for (int i = 0; i < keys.Count; i++)
+		{
+			dict.Add(keys[i], values[i]);
+		}
+	}
 }

@@ -1,53 +1,49 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    private List<Weapon> weapons = new List<Weapon>();
     private Weapon currentWeapon;
     public event Action OnReload;
     public event Action OnShoot;
     public event Action OnReloadComplete;
     public delegate void WeaponChangedHandler(Weapon newWeapon);
     public event WeaponChangedHandler OnChangeWeapon;
-    private int index = 0;
 
     [SerializeField] private Inventory _inventory;
+	public Inventory inventory {
+		get {
+			if (_inventory == null) {
+				_inventory = GetComponentInChildren<Inventory>();
+			}
+			return _inventory;
+		}
+		set => _inventory = value;
+	}
 
 
     private void Start()
     {
-        // Получить все уже существующие оружия
-        GetComponentsInChildren(true, weapons);
-
-        // Если оружия уже есть, установить первое как активное
-        if (weapons.Count > 0)
-        {
-            SetActiveWeapon();
-        }
-
-		if (_inventory == null) {
-			_inventory = GetComponentInChildren<Inventory>();
-		}
+		SetActiveWeapon();
     }
 
-	public InventoryData GetInventoryData()
+	public Inventory.InventoryData GetInventory()
 	{
-		return _inventory.SaveInventory();
+		return inventory.ToInventoryData();
 	}
 
-	public void SetInventoryData(InventoryData inv)
+	public void SetInventory(Inventory.InventoryData data)
 	{
-		_inventory.LoadInventory(inv);
+		inventory.FromInventoryData(data);
 	}
 
     public void SetActiveWeapon()
     {
-        if (index >= weapons.Count) return;
-
-        index++;
-        index = index % weapons.Count;
+		Weapon nextWeapon;
+        if (!inventory.TryGetNextWeapon(out nextWeapon))
+		{
+			return;
+		}
         if (currentWeapon != null)
         {
             currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
@@ -56,7 +52,7 @@ public class WeaponController : MonoBehaviour
             currentWeapon.gameObject.SetActive(false);
         }
 
-        currentWeapon = weapons[index];
+        currentWeapon = nextWeapon;
         currentWeapon.gameObject.SetActive(true);
         
         currentWeapon.OnReloadWeapon += HandleReloadWeapon;
@@ -72,7 +68,7 @@ public class WeaponController : MonoBehaviour
 
     public bool CanFire()
 	{
-		return currentWeapon != null && _inventory.HasAmmo(currentWeapon);
+		return currentWeapon != null && inventory.HasAmmo(currentWeapon);
 	}
 
 	public int GetCurrentAmmo()

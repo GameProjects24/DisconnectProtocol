@@ -6,8 +6,8 @@ namespace DisconnectProtocol
 	[System.Serializable]
 	public class PlayerData : IData {
 		public string lastLevel;
-		public InventoryData weaponInventory = new InventoryData();
-		public LocationData location = new LocationData();
+		public Inventory.InventoryData inventory;
+		public LocationData location;
 
 		public void SetLocation(Transform obj) {
 			location.pos = obj.position;
@@ -19,17 +19,6 @@ namespace DisconnectProtocol
 				return;
 			}
 			obj.SetPositionAndRotation(location.pos, location.rot);
-		}
-
-		public void SetInventoryData(InventoryData inv) {
-			weaponInventory = inv;
-		}
-
-		public InventoryData TryGetInventoryData(string scene) {
-			if (scene != lastLevel) {
-				return null;
-			}
-			return weaponInventory;
 		}
 
 		public string ToFormat() {
@@ -45,5 +34,16 @@ namespace DisconnectProtocol
 	public class LocationData {
 		public Vector3 pos;
 		public Quaternion rot;
+
+		public static LocationData FromTransform(Transform tr) {
+			var ld = new LocationData();
+			ld.pos = tr.position;
+			ld.rot = tr.rotation;
+			return ld;
+		}
+
+		public void ToTransform(ref Transform tr) {
+			tr.SetPositionAndRotation(pos, rot);
+		}
 	}
 }

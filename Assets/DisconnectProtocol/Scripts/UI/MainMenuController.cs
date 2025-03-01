@@ -16,7 +16,7 @@ public class MainMenuController : MonoBehaviour
         mainMenuPanel.SetActive(false);
         loadingPanel.SetActive(true);
 
-        GameController.instance.ChangeLevel(gameSceneName);
+        GameController.instance.ChangeScene(gameSceneName);
     }
 
     // Метод для выхода из игры

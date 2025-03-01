@@ -12,8 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dae811b980ad354e88d37cce0322b6f, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  weaponName: 
-  damage: 0
-  fireRate: 0
-  maxAmmo: 0
-  weaponPrefab: {fileID: 0}
+  prefab: {fileID: 4660112240588564902, guid: 047e0d105f2aef84fb8a4c5e8ec9c06a, type: 3}
+  weaponName: Shotgun
+  weaponIcon: {fileID: 21300000, guid: 8338bc64e14762f41be7068f6fdfa8bf, type: 3}
+  damage: 100
+  fireRate: 1
+  range: 50
+  isAutomatic: 0
+  isAutoReload: 0
+  cageSize: 5
+  maxAmmo: 90
+  recoilKickback: {x: 0, y: 0.1, z: -0.1}
+  recoilRecoveryTime: 0.2
+  muzzleFlashEffect: {fileID: 0}
+  fireSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  reloadAnim: {fileID: 7400000, guid: 07d25d79b0f2fab4c9855f7c81058d2b, type: 2}
+  weaponShoot: {fileID: 11400000, guid: 4b2cf079356cb2e4090ab13225d5595a, type: 2}

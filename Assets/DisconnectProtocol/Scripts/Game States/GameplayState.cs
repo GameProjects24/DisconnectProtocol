@@ -62,26 +62,25 @@ public class GameplayState : GameState
 		if (scene.name == GameController.instance.pd.lastLevel) {
 			LoadPlayerData(scene.name);
 		} else {
-			StartCoroutine(SavePlayerData());
-			GameController.instance.pd.lastLevel = scene.name;
+			StartCoroutine(SavePlayerData(scene.name));
 		}
 	}
 
-	private IEnumerator SavePlayerData()
+	private IEnumerator SavePlayerData(string scene)
 	{
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
-		GameController.instance.pd.SetLocation(_playerTr);
-		GameController.instance.pd.SetInventoryData(_player.weaponController.GetInventoryData());
+		var pd = new PlayerData();
+		pd.lastLevel = scene;
+		pd.location = LocationData.FromTransform(_playerTr);
+		pd.inventory = _player.weaponController.GetInventory();
+		GameController.instance.pd = pd;
 	}
 
 	private void LoadPlayerData(string scene)
 	{
-		GameController.instance.pd.TryLoadLocation(scene, ref _playerTr);
-		var inv = GameController.instance.pd.TryGetInventoryData(scene);
-		if (inv != null)
-		{
-			_player.weaponController.SetInventoryData(inv);
-		}
+		var pd = GameController.instance.pd;
+		pd.location.ToTransform(ref _playerTr);
+		_player.weaponController.SetInventory(pd.inventory);
 	}
 }

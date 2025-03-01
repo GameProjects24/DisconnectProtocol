@@ -102,7 +102,7 @@ namespace DisconnectProtocol
 						pas.SetParent(m_tr, true);
 					}
 				}
-				GameController.instance.ChangeLevel(nextLevel);
+				GameController.instance.ChangeScene(nextLevel);
 			}
 		}
 
