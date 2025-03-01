@@ -14,6 +14,8 @@ public class GameplayState : GameState
 	private PlayerController _player;
 	private Transform _playerTr;
 
+	public event System.Func<IEnumerator> LevelLoaded;
+
     private void Awake()
     {
         inputMap = inputActions.FindActionMap("Gameplay");
@@ -59,28 +61,43 @@ public class GameplayState : GameState
 			_player = FindAnyObjectByType<PlayerController>();
 			_playerTr = _player.transform;
 		}
-		if (scene.name == GameController.instance.pd.lastLevel) {
-			LoadPlayerData(scene.name);
-		} else {
-			StartCoroutine(SavePlayerData(scene.name));
+		StartCoroutine(SceneLoaded(scene.name));
+	}
+
+	private IEnumerator SceneLoaded(string scene)
+	{
+		bool isLoaded = TryLoadPlayerData(scene);
+		if (LevelLoaded != null)
+		{
+			foreach (System.Func<IEnumerator> hand in LevelLoaded.GetInvocationList())
+			{
+				yield return hand.Invoke();
+			}
 		}
+		if (isLoaded) {
+			yield break;
+		}
+		StartCoroutine(SavePlayerData(scene));
 	}
 
 	private IEnumerator SavePlayerData(string scene)
 	{
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
 		var pd = new PlayerData();
 		pd.lastLevel = scene;
 		pd.location = LocationData.FromTransform(_playerTr);
 		pd.inventory = _player.weaponController.GetInventory();
 		GameController.instance.pd = pd;
+		yield break;
 	}
 
-	private void LoadPlayerData(string scene)
+	private bool TryLoadPlayerData(string scene)
 	{
 		var pd = GameController.instance.pd;
+		if (scene != pd.lastLevel) {
+			return false;
+		}
 		pd.location.ToTransform(ref _playerTr);
 		_player.weaponController.SetInventory(pd.inventory);
+		return true;
 	}
 }
