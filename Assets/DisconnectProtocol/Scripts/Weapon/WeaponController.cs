@@ -4,51 +4,80 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    private List<Weapon> weapons = new List<Weapon>();
+    public Inventory inventory;
+    public Transform weaponHolder;
+
     private Weapon currentWeapon;
+    private Weapon newWeapon;
+    private List<Weapon> weaponInstances = new List<Weapon>();
     public event Action OnReload;
     public event Action OnShoot;
     public event Action OnReloadComplete;
-    public delegate void WeaponChangedHandler(Weapon newWeapon);
-    public event WeaponChangedHandler OnChangeWeapon;
-    private int index = 0;
-
-    public Inventory _inventory;
+    public event Action<Weapon> OnChangeWeapon;
+    private int index;
 
 
     private void Start()
     {
-        // Получить все уже существующие оружия
-        GetComponentsInChildren(true, weapons);
-
-        // Если оружия уже есть, установить первое как активное
-        if (weapons.Count > 0)
+        inventory.OnWeaponPicked += HandleWeaponPicked;
+        foreach (Transform child in weaponHolder)
         {
-            SetActiveWeapon();
+            Weapon weapon = child.GetComponent<Weapon>();
+            if (weapon != null)
+            {
+                weaponInstances.Add(weapon);
+                weapon.gameObject.SetActive(false);
+            }
+        }
+
+        if (weaponInstances.Count > 0)
+            SetActiveWeapon(weaponInstances[0]);
+    }
+
+    private void OnDisable()
+    {
+        if (currentWeapon != null)
+        {
+            UnsubscribeFromWeaponEvents();
+        }
+        if (inventory != null)
+        {
+            inventory.OnWeaponPicked -= HandleWeaponPicked;
         }
     }
 
-    public void SetActiveWeapon()
+    private void SetActiveWeapon(Weapon weapon)
     {
-        if (index >= weapons.Count) return;
-
-        index++;
-        index = index % weapons.Count;
+        if (currentWeapon == weapon) return;
+        
         if (currentWeapon != null)
         {
-            currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
-            currentWeapon.OnShootWeapon -= HandleShootWeapon;
-            currentWeapon.OnReloadCompleteWeapon -= HandleReloadCompleteWeapon;
+            UnsubscribeFromWeaponEvents();
             currentWeapon.gameObject.SetActive(false);
         }
 
-        currentWeapon = weapons[index];
+        currentWeapon = weapon;
+        currentWeapon.transform.localPosition = Vector3.zero;
+        currentWeapon.transform.localRotation = Quaternion.identity;
         currentWeapon.gameObject.SetActive(true);
-        
-        currentWeapon.OnReloadWeapon += HandleReloadWeapon;
-        currentWeapon.OnShootWeapon += HandleShootWeapon;
-        currentWeapon.OnReloadCompleteWeapon += HandleReloadCompleteWeapon;
+        SubscribeToWeaponEvents();
         OnChangeWeapon?.Invoke(currentWeapon);
+    }
+
+    public void ChangeWeapon()
+    {
+        if (weaponInstances.Count == 0)
+            return;
+        index = (index + 1) % weaponInstances.Count;
+        SetActiveWeapon(weaponInstances[index]);
+    }
+
+    public void HandleWeaponPicked(WeaponData weaponData)
+    {
+        newWeapon = Instantiate(weaponData.prefab, weaponHolder).GetComponent<Weapon>();
+        weaponInstances.Add(newWeapon);
+        SetActiveWeapon(newWeapon);
+        index = weaponInstances.Count - 1;
     }
 
     public Weapon GetCurrentWeapon()
@@ -57,19 +86,19 @@ public class WeaponController : MonoBehaviour
     }
 
     public bool CanFire()
-	{
-		return currentWeapon != null && _inventory.HasAmmo(currentWeapon);
-	}
+    {
+        return currentWeapon != null && inventory.HasAmmo(currentWeapon);
+    }
 
-	public int GetCurrentAmmo()
-	{
-		return currentWeapon != null ? currentWeapon.GetCageAmmo() : 0;
-	}
+    public int GetCurrentAmmo()
+    {
+        return currentWeapon != null ? currentWeapon.GetCageAmmo() : 0;
+    }
 
-	public int GetTotalAmmo()
-	{
-		return currentWeapon != null ? currentWeapon.GetReserveAmmo() : 0;
-	}
+    public int GetTotalAmmo()
+    {
+        return currentWeapon != null ? currentWeapon.GetReserveAmmo() : 0;
+    }
 
     public bool IsCurWeaponReloading()
     {
@@ -86,13 +115,13 @@ public class WeaponController : MonoBehaviour
         currentWeapon?.StopFire();
     }
 
-	public void Shoot()
-	{
-		if (CanFire())
+    public void Shoot()
+    {
+        if (CanFire())
         {
             currentWeapon?.Shoot();
         }
-	}
+    }
 
     public void Reload()
     {
@@ -112,5 +141,19 @@ public class WeaponController : MonoBehaviour
     private void HandleReloadCompleteWeapon()
     {
         OnReloadComplete?.Invoke();
+    }
+
+    private void SubscribeToWeaponEvents()
+    {
+        currentWeapon.OnReloadWeapon += HandleReloadWeapon;
+        currentWeapon.OnShootWeapon += HandleShootWeapon;
+        currentWeapon.OnReloadCompleteWeapon += HandleReloadCompleteWeapon;
+    }
+
+    void UnsubscribeFromWeaponEvents()
+    {
+        currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
+        currentWeapon.OnShootWeapon -= HandleShootWeapon;
+        currentWeapon.OnReloadCompleteWeapon -= HandleReloadCompleteWeapon;
     }
 }

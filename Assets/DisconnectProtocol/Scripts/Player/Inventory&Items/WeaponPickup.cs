@@ -2,12 +2,15 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour, IPickupable
 {
-    public Weapon weapon;
+    public WeaponData weaponData;
 
     public void Pickup(Inventory inventory)
     {
-        inventory.AddWeapon(weapon);
-        Destroy(gameObject);
+        if (!inventory.weaponDataList.Contains(weaponData))
+        {
+            inventory.AddWeapon(weaponData);
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

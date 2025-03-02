@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform _muzzle;
     public bool IsReloading { get; private set; }
 
-    public Inventory inventory;
+    private Inventory inventory;
     private int _cageAmmo;
 
     public event Action OnReloadWeapon;
@@ -22,6 +22,7 @@ public class Weapon : MonoBehaviour
     {
         _weaponFSM = new WeaponFSM(this, inventory);
         _cageAmmo = weaponData.cageSize;
+        inventory = GetComponentInParent<Inventory>();
     }
 
     private void Start()
@@ -73,10 +74,10 @@ public class Weapon : MonoBehaviour
         IsReloading = false;
         Debug.Log("Weapon ReloadComplete");
         int neededAmmo = weaponData.cageSize - _cageAmmo;
-        int ammoToReload = Mathf.Min(neededAmmo, inventory.GetReserveAmmo(this));
+        int ammoToReload = Mathf.Min(neededAmmo, inventory.GetReserveAmmo(weaponData));
 
         _cageAmmo += ammoToReload;
-        inventory.SpendAmmo(this, ammoToReload);
+        inventory.SpendAmmo(weaponData, ammoToReload);
         OnReloadCompleteWeapon?.Invoke();
     }
 
@@ -97,7 +98,7 @@ public class Weapon : MonoBehaviour
 
     public int GetCageAmmo() => _cageAmmo;
 
-    public int GetReserveAmmo() => inventory.GetReserveAmmo(this);
+    public int GetReserveAmmo() => inventory.GetReserveAmmo(weaponData);
 
     public Transform GetMuzzle() => _muzzle;
 }

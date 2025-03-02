@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
     [Header("Inventory Settings")]
-    public List<Weapon> weapons = new List<Weapon>();
+    public List<WeaponData> weaponDataList = new List<WeaponData>();
     public Dictionary<WeaponData, int> reserveAmmoInventory = new Dictionary<WeaponData, int>();
     public Dictionary<WeaponData, int> cageAmmoInventory = new Dictionary<WeaponData, int>();
-    public WeaponController weaponController;
+    public event Action<WeaponData> OnWeaponPicked;
+    public event Action OnAmmoChanged;
 
     private void Start()
     {
@@ -18,46 +20,57 @@ public class Inventory : MonoBehaviour
     // Инициализация инвентаря
     public void InitializeInventory()
     {
+        Weapon[] weapons = GetComponentsInChildren<Weapon>(true); // true - ищет даже отключенные объекты
+
         foreach (Weapon weapon in weapons)
         {
-            // Добавляем оружие в инвентарь, если его ещё нет
+            if (!weaponDataList.Contains(weapon.weaponData))
+            {
+                weaponDataList.Add(weapon.weaponData);
+            }
+
+            // Добавляем начальные патроны, если их ещё нет
             if (!reserveAmmoInventory.ContainsKey(weapon.weaponData))
             {
-                reserveAmmoInventory.Add(weapon.weaponData, Mathf.Min(weapon.weaponData.maxAmmo, weapon.weaponData.cageSize));
+                reserveAmmoInventory.Add(weapon.weaponData, weapon.weaponData.maxAmmo / 4);
             }
         }
     }
 
     // Добавление оружия в инвентарь
-    public void AddWeapon(Weapon weapon)
+    public void AddWeapon(WeaponData weaponData)
     {
-        if (!weapons.Contains(weapon))
+        if (!weaponDataList.Contains(weaponData))
         {
-            weapons.Add(weapon);
-            reserveAmmoInventory[weapon.weaponData] = weapon.weaponData.maxAmmo / 4;
+            weaponDataList.Add(weaponData);
+            reserveAmmoInventory[weaponData] = weaponData.maxAmmo / 4;
+            OnWeaponPicked?.Invoke(weaponData);
         }
     }
 
     // Получение информации о текущем количестве патронов для конкретного оружия
-    public int GetReserveAmmo(Weapon weapon)
+    public int GetReserveAmmo(WeaponData weaponData)
     {
-        return reserveAmmoInventory.ContainsKey(weapon.weaponData) ? reserveAmmoInventory[weapon.weaponData] : 0;
+        return reserveAmmoInventory.ContainsKey(weaponData) ? reserveAmmoInventory[weaponData] : 0;
     }
 
     // Пополнение патронов для оружия
-    public void AddAmmo(Weapon weapon, int amount)
+    public void AddAmmo(WeaponData weaponData, int amount)
     {
-        if (reserveAmmoInventory.ContainsKey(weapon.weaponData))
+        if (reserveAmmoInventory.ContainsKey(weaponData))
         {
-            reserveAmmoInventory[weapon.weaponData] = Mathf.Min(reserveAmmoInventory[weapon.weaponData] + amount, weapon.weaponData.maxAmmo);
+            reserveAmmoInventory[weaponData] = Mathf.Min(reserveAmmoInventory[weaponData] + amount, weaponData.maxAmmo);
+            OnAmmoChanged?.Invoke();
+            Debug.Log($"Было добавлено {amount} патронов для {weaponData.name}");
         }
     }
 
-    public void SpendAmmo(Weapon weapon, int amount)
+    public void SpendAmmo(WeaponData weaponData, int amount)
     {
-        if (reserveAmmoInventory.ContainsKey(weapon.weaponData))
+        if (reserveAmmoInventory.ContainsKey(weaponData))
         {
-            reserveAmmoInventory[weapon.weaponData] = Mathf.Max(reserveAmmoInventory[weapon.weaponData] - amount, 0);
+            OnAmmoChanged?.Invoke();
+            reserveAmmoInventory[weaponData] = Mathf.Max(reserveAmmoInventory[weaponData] - amount, 0);
         }
     }
 
@@ -67,16 +80,25 @@ public class Inventory : MonoBehaviour
         return reserveAmmoInventory.ContainsKey(weapon.weaponData) && reserveAmmoInventory[weapon.weaponData] > 0;
     }
 
+    public bool ReserveAmmoFull(WeaponData weaponData)
+    {
+        if (reserveAmmoInventory[weaponData] < weaponData.maxAmmo)
+            return false;
+        else
+            return true;
+    }
+
     // Сохранение состояния инвентаря
     public InventoryData SaveInventory()
     {
         InventoryData data = new InventoryData();
 
         // Сохраняем оружие
-        foreach (Weapon weapon in weapons)
+        foreach (WeaponData weaponData in weaponDataList)
         {
-            data.weaponList.Add(weapon.weaponData.weaponName);
-            data.cageAmmoInventory.Add(weapon.weaponData.weaponName, weapon.GetCageAmmo());
+            data.weaponList.Add(weaponData.weaponName);
+            if (cageAmmoInventory.ContainsKey(weaponData))
+                data.cageAmmoInventory.Add(weaponData.weaponName, cageAmmoInventory[weaponData]);
         }
 
         // Сохраняем патроны для каждого оружия
@@ -91,18 +113,18 @@ public class Inventory : MonoBehaviour
     // Восстановление состояния инвентаря
     public void LoadInventory(InventoryData data)
     {
+        weaponDataList.Clear();
+        reserveAmmoInventory.Clear();
+        cageAmmoInventory.Clear();
         // Восстанавливаем оружие
         foreach (string weaponName in data.weaponList)
         {
             WeaponData weaponData = FindWeaponData(weaponName);
             if (weaponData != null)
             {
-                Weapon newWeapon = CreateWeapon(weaponData);
-                AddWeapon(newWeapon);
+                AddWeapon(weaponData);
                 if (data.cageAmmoInventory.ContainsKey(weaponName))
-                {
-                    newWeapon.SetCageAmmo(data.cageAmmoInventory[weaponName]);
-                }
+                    cageAmmoInventory[weaponData] = data.cageAmmoInventory[weaponName];
             }
         }
 

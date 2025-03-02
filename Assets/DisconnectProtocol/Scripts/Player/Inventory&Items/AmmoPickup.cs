@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class AmmoPickup : MonoBehaviour, IPickupable
 {
-    public Weapon weapon;
+    public WeaponData weaponData;
 
     public int amount;
 
     public void Pickup(Inventory inventory)
     {
-        inventory.AddAmmo(weapon, amount);
-        Destroy(gameObject);
+        if (inventory.reserveAmmoInventory.ContainsKey(weaponData) && !inventory.ReserveAmmoFull(weaponData))
+        {
+            inventory.AddAmmo(weaponData, amount);
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
