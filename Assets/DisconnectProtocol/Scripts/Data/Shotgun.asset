@@ -21,7 +21,7 @@ MonoBehaviour:
   isAutomatic: 0
   isAutoReload: 0
   cageSize: 5
-  maxAmmo: 90
+  maxAmmo: 20
   recoilKickback: {x: 0, y: 0.1, z: -0.1}
   recoilRecoveryTime: 0.2
   muzzleFlashEffect: {fileID: 0}
