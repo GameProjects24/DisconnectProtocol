@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dae811b980ad354e88d37cce0322b6f, type: 3}
+  m_Name: MechaGun
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8792517589344496789, guid: 1fc3acc2f92809ef8aa47ed6eb0a3bd0, type: 3}
+  weaponName: MechaGun
+  weaponIcon: {fileID: 21300000, guid: e8565075b82c8274b9360ce981535f1f, type: 3}
+  damage: 10
+  fireRate: 1
+  range: 50
+  isAutomatic: 1
+  isAutoReload: 0
+  cageSize: 30
+  maxAmmo: 120
+  recoilKickback: {x: 0, y: 0.1, z: -0.1}
+  recoilRecoveryTime: 0.2
+  muzzleFlashEffect: {fileID: 0}
+  fireSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  reloadAnim: {fileID: 7400000, guid: 07d25d79b0f2fab4c9855f7c81058d2b, type: 2}
+  weaponShoot: {fileID: 11400000, guid: c5b05603d3c42404a97ad54d730e8c05, type: 2}

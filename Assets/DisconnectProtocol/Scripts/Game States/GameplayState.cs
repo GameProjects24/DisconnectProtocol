@@ -61,6 +61,10 @@ public class GameplayState : GameState
 			_player = FindAnyObjectByType<PlayerController>();
 			_playerTr = _player.transform;
 		}
+		var ds = FindAnyObjectByType<DropSettings>();
+		if (ds != null) {
+			DropController.Init(ds.incompatible, ds.other);
+		}
 		StartCoroutine(SceneLoaded(scene.name));
 	}
 
