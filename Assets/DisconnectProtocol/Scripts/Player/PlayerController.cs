@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
 
 		if (_input.changeWeapon)
 		{
-			_weaponController.SetActiveWeapon();
+			_weaponController.ChangeWeapon();
 			_input.changeWeapon = false; // Сброс флага после переключения
 		}
 

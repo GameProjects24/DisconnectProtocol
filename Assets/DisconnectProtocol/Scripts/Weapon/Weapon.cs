@@ -11,8 +11,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform _muzzle;
     public bool IsReloading { get; private set; }
 
-    public Inventory inventory;
-    private int _cageAmmo;
+    public int cageAmmo;
+	public int reserveAmmo;
 
     public event Action OnReloadWeapon;
     public event Action OnShootWeapon;
@@ -20,8 +20,8 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        _weaponFSM = new WeaponFSM(this, inventory);
-        _cageAmmo = weaponData.cageSize;
+        _weaponFSM = new WeaponFSM(this);
+        cageAmmo = weaponData.cageSize;
     }
 
     private void Start()
@@ -48,7 +48,7 @@ public class Weapon : MonoBehaviour
     {
         if (CanFire())
         {
-            _cageAmmo--; // Уменьшаем патроны в магазине
+            cageAmmo--; // Уменьшаем патроны в магазине
             Debug.Log("Weapon shoot");
             weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
             OnShootWeapon?.Invoke();
@@ -57,15 +57,14 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        if (_cageAmmo < weaponData.cageSize && inventory.HasAmmo(this))
+        if (cageAmmo < weaponData.cageSize && reserveAmmo > 0)
         {
             if (!IsReloading)
             {
                 OnReloadWeapon?.Invoke(); // Вызываем событие
+                _weaponFSM.ActivateState(WeaponStateEnum.Reload);
+                IsReloading = true;
             }
-
-            _weaponFSM.ActivateState(WeaponStateEnum.Reload);
-            IsReloading = true;
         }
     }
 
@@ -73,32 +72,26 @@ public class Weapon : MonoBehaviour
     {
         IsReloading = false;
         Debug.Log("Weapon ReloadComplete");
-        int neededAmmo = weaponData.cageSize - _cageAmmo;
-        int ammoToReload = Mathf.Min(neededAmmo, inventory.GetReserveAmmo(this));
-
-        _cageAmmo += ammoToReload;
-        inventory.SpendAmmo(this, ammoToReload);
+		cageAmmo += TrySpendAmmo(weaponData.cageSize - cageAmmo);
         OnReloadCompleteWeapon?.Invoke();
     }
 
+	private int TrySpendAmmo(int needed)
+	{
+		int res = Mathf.Min(needed, reserveAmmo);
+		reserveAmmo -= res;
+		return res;
+	}
+
     public bool CanFire()
     {
-        return _cageAmmo > 0 && IsReloading == false;
+        return cageAmmo > 0 && IsReloading == false;
     }
 
     public bool HasAmmo()
     {
-        return _cageAmmo > 0;
+        return cageAmmo > 0;
     }
-
-    public void SetCageAmmo(int ammo)
-    {
-        _cageAmmo = ammo;
-    }
-
-    public int GetCageAmmo() => _cageAmmo;
-
-    public int GetReserveAmmo() => inventory.GetReserveAmmo(this);
 
     public Transform GetMuzzle() => _muzzle;
 }

@@ -24,7 +24,10 @@ public class WeaponController : MonoBehaviour
 
     private void Start()
     {
-		SetActiveWeapon();
+		if (inventory.TryGetCurWeapon(out var weapon))
+		{
+			SetActiveWeapon(weapon);
+		}
     }
 
 	public Inventory.InventoryData GetInventory()
@@ -37,28 +40,30 @@ public class WeaponController : MonoBehaviour
 		inventory.FromInventoryData(data);
 	}
 
-    public void SetActiveWeapon()
+    public void SetActiveWeapon(Weapon weapon)
     {
-		Weapon nextWeapon;
-        if (!inventory.TryGetNextWeapon(out nextWeapon))
+		if (currentWeapon == weapon)
 		{
 			return;
 		}
         if (currentWeapon != null)
         {
-            currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
-            currentWeapon.OnShootWeapon -= HandleShootWeapon;
-            currentWeapon.OnReloadCompleteWeapon -= HandleReloadCompleteWeapon;
+            UnsubscribeFromWeaponEvents();
             currentWeapon.gameObject.SetActive(false);
         }
 
-        currentWeapon = nextWeapon;
+        currentWeapon = weapon;
+		SubscribeToWeaponEvents();
         currentWeapon.gameObject.SetActive(true);
-        
-        currentWeapon.OnReloadWeapon += HandleReloadWeapon;
-        currentWeapon.OnShootWeapon += HandleShootWeapon;
-        currentWeapon.OnReloadCompleteWeapon += HandleReloadCompleteWeapon;
         OnChangeWeapon?.Invoke(currentWeapon);
+    }
+
+    public void ChangeWeapon()
+    {
+        if (inventory.TryGetNextWeapon(out var weapon))
+		{
+			SetActiveWeapon(weapon);
+		}
     }
 
     public Weapon GetCurrentWeapon()
@@ -73,12 +78,12 @@ public class WeaponController : MonoBehaviour
 
 	public int GetCurrentAmmo()
 	{
-		return currentWeapon != null ? currentWeapon.GetCageAmmo() : 0;
+		return currentWeapon != null ? currentWeapon.cageAmmo : 0;
 	}
 
 	public int GetTotalAmmo()
 	{
-		return currentWeapon != null ? currentWeapon.GetReserveAmmo() : 0;
+		return currentWeapon != null ? currentWeapon.reserveAmmo : 0;
 	}
 
     public bool IsCurWeaponReloading()
@@ -122,5 +127,19 @@ public class WeaponController : MonoBehaviour
     private void HandleReloadCompleteWeapon()
     {
         OnReloadComplete?.Invoke();
+    }
+
+    private void SubscribeToWeaponEvents()
+    {
+        currentWeapon.OnReloadWeapon += HandleReloadWeapon;
+        currentWeapon.OnShootWeapon += HandleShootWeapon;
+        currentWeapon.OnReloadCompleteWeapon += HandleReloadCompleteWeapon;
+    }
+
+    void UnsubscribeFromWeaponEvents()
+    {
+        currentWeapon.OnReloadWeapon -= HandleReloadWeapon;
+        currentWeapon.OnShootWeapon -= HandleShootWeapon;
+        currentWeapon.OnReloadCompleteWeapon -= HandleReloadCompleteWeapon;
     }
 }
