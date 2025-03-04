@@ -987,7 +987,7 @@ MonoBehaviour:
   buttonsGroup: {fileID: 5767208479285464201}
   glitchPanel: {fileID: 0}
   bgPanel: {fileID: 4942588508499148219}
-  initialDelay: 1
+  initialDelay: 0.5
   typeDuration: 0.5
   buttonsFadeDuration: 1
 --- !u!1 &7774846610879739700
