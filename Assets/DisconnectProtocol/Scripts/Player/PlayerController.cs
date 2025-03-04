@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
 	private PlayerInput _playerInput;
 #endif
 	private CharacterController _controller;
-	private PlayerInputs _input;
+	private PlayerControls _controls;
 	private GameObject _mainCamera;
 	private WeaponController _weaponController;
 	private Interactor _interactor;
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
 		_weaponController = GetComponent<WeaponController>();
 		_controller = GetComponent<CharacterController>();
-		_input = GetComponent<PlayerInputs>();
+		_controls = GetComponent<PlayerControls>();
 #if ENABLE_INPUT_SYSTEM
 		_playerInput = GetComponent<PlayerInput>();
 #else
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
 		Move();
 		JumpAndGravity();
 
-		if (_input.fire)
+		if (_controls.fire)
 		{
 			_weaponController.StartFire();
 		}
@@ -124,18 +124,18 @@ public class PlayerController : MonoBehaviour
 		}
 
 
-		if (_input.reload)
+		if (_controls.reload)
 		{
 			_weaponController.Reload();
 		}
 
-		if (_input.changeWeapon)
+		if (_controls.changeWeapon)
 		{
 			_weaponController.ChangeWeapon();
-			_input.changeWeapon = false; // Сброс флага после переключения
+			_controls.changeWeapon = false; // Сброс флага после переключения
 		}
 
-		if (_input.aim && !_weaponController.IsCurWeaponReloading() && isGrounded)
+		if (_controls.aim && !_weaponController.IsCurWeaponReloading() && isGrounded)
 		{
 			OnAim?.Invoke(true);
 		}
@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
 			OnAim?.Invoke(false);
 		}
 
-		if (_input.sprint && !_input.aim && !_weaponController.IsCurWeaponReloading())
+		if (_controls.sprint && !_controls.aim && !_weaponController.IsCurWeaponReloading())
 		{
 			targetSpeed = SprintSpeed;
 			OnSprint?.Invoke(true);
@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
 			OnSprint?.Invoke(false);
 		}
 
-		if (_input.interact)
+		if (_controls.interact)
 		{
 			_interactor.Interact();
 		}
@@ -169,13 +169,13 @@ public class PlayerController : MonoBehaviour
 	private void CameraRotation()
 	{
 		// if there is an input
-		if (_input.look.sqrMagnitude >= _threshold)
+		if (_controls.look.sqrMagnitude >= _threshold)
 		{
 			//Don't multiply mouse input by Time.deltaTime
 			float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-			_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-			_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+			_cinemachineTargetPitch += _controls.look.y * RotationSpeed * deltaTimeMultiplier;
+			_rotationVelocity = _controls.look.x * RotationSpeed * deltaTimeMultiplier;
 
 			// clamp our pitch rotation
 			_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -200,13 +200,13 @@ public class PlayerController : MonoBehaviour
 
 		// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 		// if there is no input, set the target speed to 0
-		if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+		if (_controls.move == Vector2.zero) targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
 		float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
 		float speedOffset = 0.1f;
-		float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+		float inputMagnitude = _controls.analogMovement ? _controls.move.magnitude : 1f;
 
 		// accelerate or decelerate to target speed
 		if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -224,14 +224,14 @@ public class PlayerController : MonoBehaviour
 		}
 
 		// normalise input direction
-		Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+		Vector3 inputDirection = new Vector3(_controls.move.x, 0.0f, _controls.move.y).normalized;
 
 		// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 		// if there is a move input rotate player when the player is moving
-		if (_input.move != Vector2.zero)
+		if (_controls.move != Vector2.zero)
 		{
 			// move
-			inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+			inputDirection = transform.right * _controls.move.x + transform.forward * _controls.move.y;
 		}
 
 		// сохраняем горизонтальное направление при прыжке или падении (эффект импульса)
@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
 			}
 
 			// Jump
-			if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+			if (_controls.jump && _jumpTimeoutDelta <= 0.0f)
 			{
 				// the square root of H * -2 * G = how much velocity needed to reach desired height
 				_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -283,7 +283,7 @@ public class PlayerController : MonoBehaviour
 			}
 
 			// if we are not grounded, do not jump
-			_input.jump = false;
+			_controls.jump = false;
 		}
 
 		// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)

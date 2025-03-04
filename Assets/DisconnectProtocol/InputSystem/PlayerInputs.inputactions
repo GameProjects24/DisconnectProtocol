@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "5270069a-75a8-427f-8c19-c9b8f02a04c7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Aim",
                     "type": "Value",
                     "id": "31e2e536-59ee-4c09-b68f-1455b128107e",
@@ -34,7 +43,7 @@
                 },
                 {
                     "name": "Sprint",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "99e667c7-08de-4130-88f3-92d47a17acd4",
                     "expectedControlType": "",
                     "processors": "",
@@ -43,16 +52,16 @@
                 },
                 {
                     "name": "Fire",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "60491d47-46fc-452d-a945-b59b3b8219fb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Reload",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "d0d47871-115d-488a-afb6-e83d364f90ba",
                     "expectedControlType": "",
                     "processors": "",
@@ -61,7 +70,7 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "12b92f62-8f3d-4cb7-9ad8-88b66bf5a99d",
                     "expectedControlType": "",
                     "processors": "",
@@ -70,7 +79,7 @@
                 },
                 {
                     "name": "ChangeWeapon",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "2307e2a5-04a3-4edf-84d5-cc6360884870",
                     "expectedControlType": "",
                     "processors": "",
@@ -79,7 +88,7 @@
                 },
                 {
                     "name": "Interact",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "49c9ef30-f8e6-45f3-8c31-a4d46a8b50ad",
                     "expectedControlType": "",
                     "processors": "",
@@ -142,6 +151,28 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "15545dc3-333e-4e06-b79e-966fc47fe027",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92c1ed59-1b6a-4de6-bedc-bd220afc56e4",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -252,6 +283,17 @@
                     "name": "",
                     "id": "c683c468-e0d8-4671-a167-16df89d037cf",
                     "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2056d6b7-bba8-4196-86ee-ad6237a7127a",
+                    "path": "<Keyboard>/backquote",
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyboardMouse",

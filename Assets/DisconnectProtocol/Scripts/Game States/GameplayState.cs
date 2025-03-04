@@ -7,14 +7,8 @@ public class GameplayState : GameState
     [Header("State References")]
 
     public GameObject uiPanel;
-    public InputActionAsset inputActions;
-    public InputActionMap inputMap;
-
-    private void Awake()
-    {
-        inputMap = inputActions.FindActionMap("Gameplay");
-        //uiActionMap = inputActions.FindActionMap("UI");
-    }
+    public PlayerControls controls;
+    public string inputMapName = "Gameplay";
 
     public override void OnEnter()
     {
@@ -22,7 +16,7 @@ public class GameplayState : GameState
         Time.timeScale = 1f;
 
         if (uiPanel != null) uiPanel.SetActive(true);
-        if (inputMap != null) inputMap.Enable();
+        if (controls != null) controls.SetInputMapState(inputMapName, true);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -34,7 +28,7 @@ public class GameplayState : GameState
         Cursor.lockState = CursorLockMode.None;
         
         if (uiPanel != null) uiPanel.SetActive(false);
-        if (inputMap != null) inputMap.Disable();
+        if (controls != null) controls.SetInputMapState(inputMapName, false);
 
         base.OnExit();
     }
