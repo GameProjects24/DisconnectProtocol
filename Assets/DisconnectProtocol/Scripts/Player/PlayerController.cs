@@ -68,14 +68,23 @@ public class PlayerController : MonoBehaviour
 	private CharacterController _controller;
 	private PlayerInputs _input;
 	private GameObject _mainCamera;
+	private Interactor _interactor;
+
 	private WeaponController _weaponController;
 	public WeaponController weaponController { get {
 		if (_weaponController == null) {
-			_weaponController = GetComponent<WeaponController>();
+			_weaponController = GetComponentInChildren<WeaponController>();
 		}
 		return _weaponController;
 	}}
-	private Interactor _interactor;
+
+	private Inventory _inventory;
+	public Inventory inventory {get {
+		if (_inventory == null) {
+			_inventory = GetComponentInChildren<Inventory>();
+		}
+		return _inventory;
+	}}
 
 	private const float _threshold = 0.01f;
 
@@ -92,7 +101,6 @@ public class PlayerController : MonoBehaviour
 #endif
 		}
 	}
-
 
 	private void Awake()
 	{
@@ -123,26 +131,26 @@ public class PlayerController : MonoBehaviour
 
 		if (_input.fire)
 		{
-			_weaponController.StartFire();
+			weaponController.StartFire();
 		}
 		else
 		{
-			_weaponController.StopFire();
+			weaponController.StopFire();
 		}
 
 
 		if (_input.reload)
 		{
-			_weaponController.Reload();
+			weaponController.Reload();
 		}
 
 		if (_input.changeWeapon)
 		{
-			_weaponController.ChangeWeapon();
+			weaponController.ChangeWeapon();
 			_input.changeWeapon = false; // Сброс флага после переключения
 		}
 
-		if (_input.aim && !_weaponController.IsCurWeaponReloading() && isGrounded)
+		if (_input.aim && !weaponController.IsCurWeaponReloading() && isGrounded)
 		{
 			OnAim?.Invoke(true);
 		}
@@ -151,7 +159,7 @@ public class PlayerController : MonoBehaviour
 			OnAim?.Invoke(false);
 		}
 
-		if (_input.sprint && !_input.aim && !_weaponController.IsCurWeaponReloading())
+		if (_input.sprint && !_input.aim && !weaponController.IsCurWeaponReloading())
 		{
 			targetSpeed = SprintSpeed;
 			OnSprint?.Invoke(true);

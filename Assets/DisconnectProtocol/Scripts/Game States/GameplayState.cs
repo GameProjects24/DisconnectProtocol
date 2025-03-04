@@ -89,7 +89,7 @@ public class GameplayState : GameState
 		var pd = new PlayerData();
 		pd.lastLevel = scene;
 		pd.location = LocationData.FromTransform(_playerTr);
-		pd.inventory = _player.weaponController.GetInventory();
+		pd.inventory = _player.inventory.ToInventoryData();
 		GameController.instance.pd = pd;
 		yield break;
 	}
@@ -101,7 +101,7 @@ public class GameplayState : GameState
 			return false;
 		}
 		pd.location.ToTransform(ref _playerTr);
-		_player.weaponController.SetInventory(pd.inventory);
+		_player.inventory.FromInventoryData(pd.inventory);
 		return true;
 	}
 }

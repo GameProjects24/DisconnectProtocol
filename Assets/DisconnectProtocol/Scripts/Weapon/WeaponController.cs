@@ -1,43 +1,70 @@
-using System;
+using System.Collections.Generic;
+using DisconnectProtocol;
 using UnityEngine;
 
+
+/// <summary>
+/// Manages weapon arsenal. May work with inventory
+/// and standalone
+/// </summary>
 public class WeaponController : MonoBehaviour
 {
+    public event System.Action OnReload;
+    public event System.Action OnShoot;
+    public event System.Action OnReloadComplete;
+    public event System.Action<Weapon> OnChangeWeapon;
+
+	private List<Weapon> _weapons = new List<Weapon>();
     private Weapon currentWeapon;
-    public event Action OnReload;
-    public event Action OnShoot;
-    public event Action OnReloadComplete;
-    public delegate void WeaponChangedHandler(Weapon newWeapon);
-    public event WeaponChangedHandler OnChangeWeapon;
+	private int _weaponIdx = 0;
 
     [SerializeField] private Inventory _inventory;
-	public Inventory inventory {
-		get {
-			if (_inventory == null) {
-				_inventory = GetComponentInChildren<Inventory>();
-			}
-			return _inventory;
-		}
-		set => _inventory = value;
-	}
-
+	[SerializeField] private Transform _weaponHolder;
 
     private void Start()
     {
-		if (inventory.TryGetCurWeapon(out var weapon))
+		if (_weaponHolder == null)
 		{
-			SetActiveWeapon(weapon);
+			_weaponHolder = transform;
+		}
+
+		GetComponentsInChildren(true, _weapons);
+		if (_inventory == null)
+		{
+			_inventory = gameObject.GetComponentWherever<Inventory>();
+		}
+		if (_inventory != null)
+		{
+			foreach (var w in _weapons)
+			{
+				Destroy(w.gameObject);
+			}
+			_weapons = _inventory.weapons;
+			_inventory.AddedWeapon += OnWeaponAdded;
+			_inventory.Loaded += OnInventoryLoaded;
+		}
+
+		if (_weapons.Count > 0)
+		{
+			OnInventoryLoaded();
+			SetActiveWeapon(_weapons[0]);
 		}
     }
 
-	public Inventory.InventoryData GetInventory()
+	private void OnInventoryLoaded()
 	{
-		return inventory.ToInventoryData();
+		foreach (var w in _weapons)
+		{
+			OnWeaponAdded(w);
+		}
 	}
 
-	public void SetInventory(Inventory.InventoryData data)
+	private void OnWeaponAdded(Weapon weapon)
 	{
-		inventory.FromInventoryData(data);
+		weapon.gameObject.SetActive(false);
+		var wt = weapon.transform;
+		wt.SetParent(_weaponHolder);
+		wt.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 	}
 
     public void SetActiveWeapon(Weapon weapon)
@@ -60,10 +87,8 @@ public class WeaponController : MonoBehaviour
 
     public void ChangeWeapon()
     {
-        if (inventory.TryGetNextWeapon(out var weapon))
-		{
-			SetActiveWeapon(weapon);
-		}
+        _weaponIdx = (_weaponIdx + 1) % _weapons.Count;
+		SetActiveWeapon(_weapons[_weaponIdx]);
     }
 
     public Weapon GetCurrentWeapon()
@@ -73,7 +98,7 @@ public class WeaponController : MonoBehaviour
 
     public bool CanFire()
 	{
-		return currentWeapon != null && inventory.HasAmmo(currentWeapon);
+		return currentWeapon != null && currentWeapon.cageAmmo > 0;
 	}
 
 	public int GetCurrentAmmo()

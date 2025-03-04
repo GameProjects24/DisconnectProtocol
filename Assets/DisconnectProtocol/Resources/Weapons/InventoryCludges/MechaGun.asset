@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dae811b980ad354e88d37cce0322b6f, type: 3}
   m_Name: MechaGun
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8792517589344496789, guid: 1fc3acc2f92809ef8aa47ed6eb0a3bd0, type: 3}
+  prefab: {fileID: 6320094914329260209, guid: 1fc3acc2f92809ef8aa47ed6eb0a3bd0, type: 3}
   weaponName: MechaGun
   weaponIcon: {fileID: 21300000, guid: e8565075b82c8274b9360ce981535f1f, type: 3}
   damage: 10

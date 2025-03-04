@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dae811b980ad354e88d37cce0322b6f, type: 3}
   m_Name: Gun
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4660112240588564902, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
+  prefab: {fileID: 7862224586532894082, guid: 1b3ba74b6b5ba33458948ded71ef7ff6, type: 3}
   weaponName: Gun
   weaponIcon: {fileID: 21300000, guid: e8565075b82c8274b9360ce981535f1f, type: 3}
   damage: 10

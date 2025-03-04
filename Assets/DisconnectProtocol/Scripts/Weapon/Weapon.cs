@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics;
 
 public class Weapon : MonoBehaviour
 {
@@ -11,12 +10,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform _muzzle;
     public bool IsReloading { get; private set; }
 
-    public int cageAmmo;
-	public int reserveAmmo;
+    public int cageAmmo { get; private set; }
+	public int reserveAmmo { get; private set; }
 
     public event Action OnReloadWeapon;
     public event Action OnShootWeapon;
     public event Action OnReloadCompleteWeapon;
+	public event Action OnAmmoChanged;
 
     private void Awake()
     {
@@ -48,7 +48,8 @@ public class Weapon : MonoBehaviour
     {
         if (CanFire())
         {
-            cageAmmo--; // Уменьшаем патроны в магазине
+            --cageAmmo; // Уменьшаем патроны в магазине
+			OnAmmoChanged?.Invoke();
             Debug.Log("Weapon shoot");
             weaponData.weaponShoot.Shoot(_muzzle.position, _muzzle.forward, weaponData.damage);
             OnShootWeapon?.Invoke();
@@ -73,6 +74,7 @@ public class Weapon : MonoBehaviour
         IsReloading = false;
         Debug.Log("Weapon ReloadComplete");
 		cageAmmo += TrySpendAmmo(weaponData.cageSize - cageAmmo);
+		OnAmmoChanged?.Invoke();
         OnReloadCompleteWeapon?.Invoke();
     }
 
@@ -92,6 +94,18 @@ public class Weapon : MonoBehaviour
     {
         return cageAmmo > 0;
     }
+
+	public void SetCageAmmo(int ammo)
+	{
+		cageAmmo = ammo;
+		OnAmmoChanged?.Invoke();
+	}
+
+	public void SetReserveAmmo(int ammo)
+	{
+		reserveAmmo = ammo;
+		OnAmmoChanged?.Invoke();
+	}
 
     public Transform GetMuzzle() => _muzzle;
 }

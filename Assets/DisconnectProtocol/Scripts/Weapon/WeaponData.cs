@@ -5,7 +5,7 @@ public class WeaponData : ScriptableObject
 {
     [Header("Basic Info")]
     
-    public GameObject prefab;
+    public Weapon prefab;
     public string weaponName;
     public Sprite weaponIcon;
 
@@ -39,4 +39,11 @@ public class WeaponData : ScriptableObject
 
     [Header("Shoot Settings")]
     public WeaponShootSO weaponShoot;
+
+	public Weapon CreateWeapon() {
+		Weapon weapon = Instantiate(prefab);
+		weapon.weaponData = this;
+		weapon.SetReserveAmmo(maxAmmo >> 2);
+		return weapon;
+	}
 }
