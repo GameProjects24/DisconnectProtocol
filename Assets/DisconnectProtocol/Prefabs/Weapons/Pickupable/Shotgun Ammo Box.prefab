@@ -81,7 +81,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.64, y: 0.27, z: 0.27}
+  m_Size: {x: 0.8, y: 0.35, z: 0.35}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4911856592544238672
 MonoBehaviour:
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1442a3973a572a45afcd5cf2f03b80f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponData: {fileID: 11400000, guid: 28bd6ff471a9aac428155bddb706cf27, type: 2}
+  weaponData: {fileID: 11400000, guid: cedf1ac087d70d03b98bf4e931193da1, type: 2}
   amount: 5
 --- !u!1 &6025131331140390633
 GameObject:
@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 8850231768211285473}
   - component: {fileID: 3113900348302380055}
   - component: {fileID: 3930037525968458771}
+  - component: {fileID: 5472072786044540588}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -183,3 +184,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5472072786044540588
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6025131331140390633}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.2000003, y: 1.4, z: 1.4}
+  m_Center: {x: 0, y: 0, z: 0}

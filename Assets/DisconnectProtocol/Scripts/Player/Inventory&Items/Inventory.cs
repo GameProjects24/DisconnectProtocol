@@ -6,7 +6,7 @@ using UnityEngine;
 /// Stores and allows to save and load info about items inside.
 /// Also allows pickup items. No more
 /// </summary>
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, IPickuper
 {
 	[System.Serializable]
 	public class WeaponInfo
@@ -29,12 +29,54 @@ public class Inventory : MonoBehaviour
 		public List<WeaponInfo> weapons = new List<WeaponInfo>();
 	}
 
+	[Header("Weapons")]
 	public List<WeaponData> initialWeapons = new List<WeaponData>();
-	public List<Weapon> weapons = new List<Weapon>();
+	[HideInInspector] public List<Weapon> weapons = new List<Weapon>();
 	private WeaponData[] m_weaponRes;
+
+	public bool isAutoPickup = true;
+	private Pickupable m_pickupable;
 
     public event System.Action<Weapon> AddedWeapon;
 	public event System.Action Loaded;
+
+	public void Pickup(Pickupable item = null)
+	{
+		if (item == null)
+		{
+			item = m_pickupable;
+		}
+		if (item != null)
+		{
+			bool used = item switch {
+				AmmoPickup ammo => TryAddAmmo(ammo.weaponData, ammo.amount),
+				WeaponPickup weapon => TryAddWeapon(weapon.weaponData),
+				_ => throw new System.NotImplementedException(),
+			};
+			if (used)
+			{
+				Destroy(item.gameObject);
+			}
+		}
+	}
+
+	public void PickupableFound(Pickupable item)
+	{
+		if (isAutoPickup)
+		{
+			Pickup(item);
+			return;
+		}
+		m_pickupable = item;
+	}
+
+	public void PickupableLost(Pickupable item)
+	{
+		if (m_pickupable == item)
+		{
+			m_pickupable = item;
+		}
+	}
 	
 	private void Awake()
 	{
@@ -46,15 +88,40 @@ public class Inventory : MonoBehaviour
 		}
 	}
 
-	public void AddWeapon(Weapon weapon)
+	public bool TryAddAmmo(WeaponData wd, int count)
+	{
+		// okey since one weapon - one weapon data - one ammo type
+		// should be using static ammo pools otherwise
+		var w = weapons.Find(w => w.weaponData == wd);
+		if (w != null)
+		{
+			return w.TryAddReserveAmmo(count);
+		}
+		return false;
+	}
+
+	public bool TryAddWeapon(WeaponData wd)
+	{
+		if (HasWeapon(wd))
+		{
+			return false;
+		}
+		var w = wd.CreateWeapon();
+		weapons.Add(w);
+		AddedWeapon?.Invoke(w);
+		return true;
+	}
+
+	public bool TryAddWeapon(Weapon weapon)
 	{
 		// how about adding ammos?
 		if (HasWeapon(weapon))
 		{
-			return;
+			return false;
 		}
 		weapons.Add(weapon);
 		AddedWeapon?.Invoke(weapon);
+		return true;
 	}
 
 	private bool HasWeapon(WeaponData wd)

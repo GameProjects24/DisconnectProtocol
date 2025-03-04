@@ -50,7 +50,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 28bd6ff471a9aac428155bddb706cf27, type: 2}
   _muzzle: {fileID: 650971729755209807}
-  inventory: {fileID: 0}
 --- !u!95 &6404644765030413140
 Animator:
   serializedVersion: 7

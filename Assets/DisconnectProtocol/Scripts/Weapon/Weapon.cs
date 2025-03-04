@@ -21,7 +21,6 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         _weaponFSM = new WeaponFSM(this);
-        cageAmmo = weaponData.cageSize;
     }
 
     private void Start()
@@ -97,14 +96,28 @@ public class Weapon : MonoBehaviour
 
 	public void SetCageAmmo(int ammo)
 	{
-		cageAmmo = ammo;
+		cageAmmo = Mathf.Min(ammo, weaponData.cageSize);
 		OnAmmoChanged?.Invoke();
 	}
 
 	public void SetReserveAmmo(int ammo)
 	{
-		reserveAmmo = ammo;
+		reserveAmmo = Mathf.Min(ammo, weaponData.maxAmmo);
 		OnAmmoChanged?.Invoke();
+	}
+
+	/// <summary>
+	/// </summary>
+	/// <param name="ammo"></param>
+	/// <returns>Whether reserve ammo changed</returns>
+	public bool TryAddReserveAmmo(int ammo)
+	{
+		if (reserveAmmo == weaponData.maxAmmo)
+		{
+			return false;
+		}
+		SetReserveAmmo(reserveAmmo + ammo);
+		return true;
 	}
 
     public Transform GetMuzzle() => _muzzle;

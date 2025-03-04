@@ -321,11 +321,29 @@ MonoBehaviour:
   - rid: 8456755680966082639
   - rid: 8456755680966082640
   - rid: 8456755680966082641
+  - rid: 1455156463777874172
+  - rid: 1455156463777874173
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
+    - rid: 1455156463777874172
+      type: {class: 'BlackboardVariable`1[[WeaponController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 7664436661495157629
+          m_Value1: 3093868662591303408
+        Name: Weapon0
+        m_Value: {fileID: 7800869826953310288}
+    - rid: 1455156463777874173
+      type: {class: 'BlackboardVariable`1[[WeaponController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 11307063248118941997
+          m_Value1: 8995811393099748291
+        Name: Weapon1
+        m_Value: {fileID: 9026448950441443416}
     - rid: 8456755680966082639
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -378,10 +396,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MechaBody
       objectReference: {fileID: 0}
+    - target: {fileID: 2062891064971802836, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 2446992749631921869, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: objectToDestroy
       value: 
       objectReference: {fileID: 1972505371879231565}
+    - target: {fileID: 5989223218913195400, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: _weaponHolder
+      value: 
+      objectReference: {fileID: 4599948349244771606}
     - target: {fileID: 6163952445677436522, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: m_Controller
       value: 
@@ -436,6 +462,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8922396423892477103, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
   m_PrefabInstance: {fileID: 5949674206890665734}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &4599948349244771606 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7874316959215823376, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+  m_PrefabInstance: {fileID: 5949674206890665734}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8053753881458588489 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4419670980281408591, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
@@ -455,6 +486,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2695778211152381558}
     m_Modifications:
+    - target: {fileID: 56361043350829700, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+      propertyPath: _weaponHolder
+      value: 
+      objectReference: {fileID: 2722107767134742070}
     - target: {fileID: 271905605404576249, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -499,11 +534,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: DroneBody
       objectReference: {fileID: 0}
+    - target: {fileID: 681597911273096858, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1282996667205241484, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+      propertyPath: _weaponHolder
+      value: 
+      objectReference: {fileID: 6307941137166340840}
+    - target: {fileID: 4318555801717155439, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893197127329586643, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+      propertyPath: isAutoPickup
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8867618639808670447, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+      propertyPath: isAutoPickup
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+--- !u!4 &2722107767134742070 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5281775972681526498, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+  m_PrefabInstance: {fileID: 7821202056102136532}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2879963618884242480 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5439735319704438500, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
@@ -515,11 +575,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25c2a47c2d6963f388e4cc5c5807ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &6307941137166340840 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4251453984924653628, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+  m_PrefabInstance: {fileID: 7821202056102136532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7800869826953310288 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 56361043350829700, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+  m_PrefabInstance: {fileID: 7821202056102136532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c011fa7ed0ce84b8b72088ac3314fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8019922895227978541 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 271905605404576249, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
   m_PrefabInstance: {fileID: 7821202056102136532}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9026448950441443416 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1282996667205241484, guid: af904247ce5b01347993e2bbd5d53eda, type: 3}
+  m_PrefabInstance: {fileID: 7821202056102136532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c011fa7ed0ce84b8b72088ac3314fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8546909923368973935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -536,10 +623,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MechaBody
       objectReference: {fileID: 0}
+    - target: {fileID: 2062891064971802836, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 2446992749631921869, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: objectToDestroy
       value: 
       objectReference: {fileID: 5749173183080044543}
+    - target: {fileID: 5989223218913195400, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+      propertyPath: _weaponHolder
+      value: 
+      objectReference: {fileID: 2007348448399957119}
     - target: {fileID: 6163952445677436522, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
       propertyPath: m_Controller
       value: 
@@ -592,6 +687,11 @@ PrefabInstance:
 --- !u!4 &958704925938324160 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8922396423892477103, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
+  m_PrefabInstance: {fileID: 8546909923368973935}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2007348448399957119 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7874316959215823376, guid: 97ff297adffc42f169661ceafcaddeab, type: 3}
   m_PrefabInstance: {fileID: 8546909923368973935}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &5461012698742237728 stripped

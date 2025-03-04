@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using DS = DisconnectProtocol.DropSettings;
 
@@ -107,20 +106,14 @@ namespace DisconnectProtocol
 			if (drop.mode != DS.Mode.Infinite && drop.maxCount == 0) {
 				return true;
 			}
-			float chance = -1f;
-			switch (drop.mode) {
-				case DS.Mode.Infinite:
-				chance = Random.Range(0f, 1f);
-				break;
-				
-				case DS.Mode.RandomAmongAll:
-				chance = drop.maxCount / dmgCount;
-				break;
 
-				case DS.Mode.DetermAfterLE:
-				chance = dmgCount <= drop.maxCount ? 1f : -1f;
-				break;
-			}
+			float chance = drop.mode switch {
+				DS.Mode.Infinite => Random.Range(0f, 1f),
+				DS.Mode.RandomAmongAll => drop.maxCount / dmgCount,
+				DS.Mode.DetermAfterLE => dmgCount <= drop.maxCount ? 1f : -1f,
+				_ => throw new System.ArgumentException("Unknown DropSettings Mode"),
+			};
+			
 			if (chance >= Random.Range(0f, 1f)) {
 				--drop.maxCount;
 				Drop(drop.prefab, corpse.transform);
