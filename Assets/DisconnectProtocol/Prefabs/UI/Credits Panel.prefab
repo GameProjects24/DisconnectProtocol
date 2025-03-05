@@ -45,6 +45,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1218362408696926233}
+  - component: {fileID: 1279569955325244788}
   m_Layer: 5
   m_Name: Credits Panel
   m_TagString: Untagged
@@ -73,6 +74,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1279569955325244788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573225474012505840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd88537c91fbcc49ae78f57930b8acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstCanvasGroup: {fileID: 2739893865318771453}
+  firstFadeDuration: 2
+  secondCanvasGroup: {fileID: 4822141479416840676}
+  secondFadeDuration: 2
+  creditsText: {fileID: 6173241101850783104}
+  scrollSpeed: 50
+  acceleratedSpeed: 200
+  waitBeforeScroll: 1
+  targetYPosition: 2500
 --- !u!1 &1330940276599478528
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +323,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1330940276599478528}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -454,7 +476,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3082926035087227390}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0

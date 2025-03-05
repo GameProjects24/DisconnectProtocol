@@ -14,6 +14,7 @@ public class PlayerControls : MonoBehaviour
     public bool aim;
     public bool interact;
     public bool pause;
+    public bool speedUpScroll;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -79,6 +80,10 @@ public class PlayerControls : MonoBehaviour
         // Pause
         _inputActions.UI.Pause.performed += context => pause = context.ReadValueAsButton();
         _inputActions.UI.Pause.canceled += context => pause = false;
+
+        // Speed up scroll
+        _inputActions.UI.SpeedUpScroll.performed += context => speedUpScroll = context.ReadValueAsButton();
+        _inputActions.UI.SpeedUpScroll.canceled += context => speedUpScroll = false;
     }
 
     public void SetInputMapState(string mapName, bool enable)

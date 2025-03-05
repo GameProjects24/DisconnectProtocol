@@ -264,6 +264,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""21cb0e89-457d-4728-8c01-23412d9065c0"",
+                    ""path"": ""<Mouse>/backButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardMouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1fadd7be-bf85-4d0a-9841-1fc521f3f6be"",
+                    ""path"": ""<Mouse>/forwardButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardMouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8a9b1bf8-a3eb-4c47-a12d-970f5851b3c2"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
@@ -298,6 +320,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpeedUpScroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""690ba644-0a37-4bfe-b04a-86ef9fc68c55"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -314,12 +345,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2056d6b7-bba8-4196-86ee-ad6237a7127a"",
-                    ""path"": ""<Keyboard>/backquote"",
+                    ""id"": ""b74f0550-4d24-49fa-9b10-87c4818b1040"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";KeyboardMouse"",
-                    ""action"": ""Pause"",
+                    ""action"": ""SpeedUpScroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -360,6 +391,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+        m_UI_SpeedUpScroll = m_UI.FindAction("SpeedUpScroll", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -546,11 +578,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Pause;
+    private readonly InputAction m_UI_SpeedUpScroll;
     public struct UIActions
     {
         private @PlayerInputs m_Wrapper;
         public UIActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_UI_Pause;
+        public InputAction @SpeedUpScroll => m_Wrapper.m_UI_SpeedUpScroll;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -563,6 +597,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @SpeedUpScroll.started += instance.OnSpeedUpScroll;
+            @SpeedUpScroll.performed += instance.OnSpeedUpScroll;
+            @SpeedUpScroll.canceled += instance.OnSpeedUpScroll;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -570,6 +607,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @SpeedUpScroll.started -= instance.OnSpeedUpScroll;
+            @SpeedUpScroll.performed -= instance.OnSpeedUpScroll;
+            @SpeedUpScroll.canceled -= instance.OnSpeedUpScroll;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -612,5 +652,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnPause(InputAction.CallbackContext context);
+        void OnSpeedUpScroll(InputAction.CallbackContext context);
     }
 }

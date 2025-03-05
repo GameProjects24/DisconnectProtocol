@@ -242,6 +242,28 @@
                 },
                 {
                     "name": "",
+                    "id": "21cb0e89-457d-4728-8c01-23412d9065c0",
+                    "path": "<Mouse>/backButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1fadd7be-bf85-4d0a-9841-1fc521f3f6be",
+                    "path": "<Mouse>/forwardButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8a9b1bf8-a3eb-4c47-a12d-970f5851b3c2",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -276,6 +298,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SpeedUpScroll",
+                    "type": "Value",
+                    "id": "690ba644-0a37-4bfe-b04a-86ef9fc68c55",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -292,12 +323,12 @@
                 },
                 {
                     "name": "",
-                    "id": "2056d6b7-bba8-4196-86ee-ad6237a7127a",
-                    "path": "<Keyboard>/backquote",
+                    "id": "b74f0550-4d24-49fa-9b10-87c4818b1040",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyboardMouse",
-                    "action": "Pause",
+                    "action": "SpeedUpScroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
