@@ -646,6 +646,7 @@ GameObject:
   - component: {fileID: 6974193043073999818}
   - component: {fileID: 2274645254240907993}
   - component: {fileID: 797599823575688459}
+  - component: {fileID: 3350486498596807253}
   m_Layer: 0
   m_Name: Toggle
   m_TagString: Untagged
@@ -702,6 +703,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885c4bf05e7a1f40ea7265b88cb506b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3350486498596807253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041699818520926556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4543ad8294d7a0afb85467f14244f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door: {fileID: 4983142334092712054}
+  material: {fileID: 2100000, guid: 92cbdb5efcb70c7a395cb45ec2c859b9, type: 2}
+  activeColor: {r: 0, g: 0.1693005, b: 1.245283, a: 1}
+  nonActiveColor: {r: 1.3773584, g: 0, b: 0.09331469, a: 1}
 --- !u!1 &2432869734999077234
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 462dee82ff56622b08f6d5bd31ff3d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_last: -1
+  currentState: -1
   m_rate: 0.02
 --- !u!1 &4268857155911685930
 GameObject:
@@ -2885,7 +2902,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2511
+  m_VersionIndex: 2514
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

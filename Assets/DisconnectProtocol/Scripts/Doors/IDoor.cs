@@ -9,6 +9,7 @@ namespace DisconnectProtocol
 		}
 
 		public event System.Action<State> StateChanged;
+		public event System.Action<State> StateChanging;
 
 		public void Open(bool isInterrupt = false);
 		public void Close(bool isInterrupt = false);
@@ -17,19 +18,20 @@ namespace DisconnectProtocol
 
 	public abstract class BasicDoor : MonoBehaviour, IDoor {
 		public event System.Action<IDoor.State> StateChanged;
+		public event System.Action<IDoor.State> StateChanging;
 
-		[SerializeField] protected IDoor.State m_last = IDoor.State.Open;
+		public IDoor.State currentState = IDoor.State.Open;
 		protected bool m_isRunning = false;
 		
 		public void Open(bool isInterrupt = false) {
-			if (m_last == IDoor.State.Open) {
+			if (currentState == IDoor.State.Open) {
 				return;
 			}
 			Toggle(isInterrupt);
 		}
 
 		public void Close(bool isInterrupt = false) {
-			if (m_last == IDoor.State.Close) {
+			if (currentState == IDoor.State.Close) {
 				return;
 			}
 			Toggle(isInterrupt);
@@ -40,7 +42,8 @@ namespace DisconnectProtocol
 				return;
 			}
 			m_isRunning = true;
-			m_last = (IDoor.State)(-(int)m_last);
+			currentState = (IDoor.State)(-(int)currentState);
+			StateChanging?.Invoke(currentState);
 			StartCoroutine(ChangeStateCor());
 		}
 

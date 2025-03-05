@@ -25,7 +25,7 @@ namespace DisconnectProtocol
 		}
 
 		protected override IEnumerator ChangeStateCor() {
-			var dest = m_tr.position + ElMul(m_tr.forward * (float)m_last, m_size);
+			var dest = m_tr.position + ElMul(m_tr.forward * (float)currentState, m_size);
 
 			do {
 				yield return null;
@@ -34,7 +34,7 @@ namespace DisconnectProtocol
 			} while (ElEpsGr(dest - m_tr.position, EPS));
 
 			m_isRunning = false;
-			OnStateChanged(m_last);
+			OnStateChanged(currentState);
 			yield break;
 		}
 

@@ -54,10 +54,10 @@ namespace DisconnectProtocol
 			yield return null;
 			var place = GameObject.FindGameObjectWithTag("ElevatorNextLevel");
 			if (place) {
-				place.SetActive(false);
 				var placet = place.transform;
 
 				m_tr.SetPositionAndRotation(placet.position, placet.rotation);
+				place.SetActive(false);
 			}
 
 			m_door?.Open();
@@ -99,6 +99,10 @@ namespace DisconnectProtocol
 					if (pas != null) {
 						pas.SetParent(m_tr, true);
 					}
+				}
+				if (nextLevel == SceneManager.GetActiveScene().name) {
+					m_door?.Open();
+					return;
 				}
 				GameController.instance.ChangeScene(nextLevel);
 			}

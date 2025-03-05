@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,8 +7,11 @@ namespace DisconnectProtocol
 	public class ComplexDoor : IDoor
     {
 		public event System.Action<IDoor.State> StateChanged;
-        private List<IDoor> m_doors;
-		private byte m_count = 0;
+		public event System.Action<IDoor.State> StateChanging;
+
+		private List<IDoor> m_doors;
+		private byte m_countChanged = 0;
+		private byte m_countChanging = 0;
 
 		private ComplexDoor() {}
 		public ComplexDoor(IEnumerable<IDoor> doors) {
@@ -17,13 +19,21 @@ namespace DisconnectProtocol
 			foreach (var d in doors) {
 				m_doors.Add(d);
 				d.StateChanged += OnStateChanged;
+				d.StateChanging += OnStateChanging;
 			}
 		}
 
 		private void OnStateChanged(IDoor.State state) {
-			if (++m_count == m_doors.Count) {
-				m_count = 0;
+			if (++m_countChanged == m_doors.Count) {
+				m_countChanged = 0;
 				StateChanged?.Invoke(state);
+			}
+		}
+
+		private void OnStateChanging(IDoor.State state) {
+			if (++m_countChanging == m_doors.Count) {
+				m_countChanging = 0;
+				StateChanging?.Invoke(state);
 			}
 		}
 
