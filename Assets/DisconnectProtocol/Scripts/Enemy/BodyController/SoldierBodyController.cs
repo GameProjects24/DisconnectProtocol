@@ -23,6 +23,8 @@ namespace DisconnectProtocol
 		[SerializeField] private float m_holdDistance = 10;
 		[Range(0, 1)]
 		[SerializeField] private float m_rotationRate = .5f;
+		[SerializeField] private float m_effectiveDistance = 10f;
+		[SerializeField] private Transform[] m_weaponParts;
 
 		private Aim m_aimAction;
 		private HoldDistance m_hda;
@@ -33,7 +35,7 @@ namespace DisconnectProtocol
 				m_agent = GetComponentInParent<NavMeshAgent>();
 			}
 
-			m_aimAction = new Aim(this, m_rotationRate);
+			m_aimAction = new Aim(this, m_rotationRate, m_effectiveDistance, m_weaponParts);
 			m_aimAction.Stopped += () => OnActionDone(Action.AimStop);
 
 			m_hda = new HoldDistance(this, m_agent, m_holdDistance);
