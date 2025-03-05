@@ -54,6 +54,11 @@ namespace DisconnectProtocol
 			SceneLoader.Load(this, scene);
 		}
 
+		public void ErasePlayerData() {
+			pd = new PlayerData();
+			File.WriteAllText(m_pdPath, string.Empty);
+		}
+
 		public void SavePlayerData() {
 			FileSaver.Save(m_pdPath, pd);
 		}

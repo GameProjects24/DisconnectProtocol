@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System;
 
 public class CreditsController : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class CreditsController : MonoBehaviour
     private Tween scrollTween;
     private bool isAccelerated = false;
     private PlayerControls playerControls;
+
+    public event Action OnCreditsEnd;
 
     private void Start()
     {
@@ -91,7 +94,10 @@ public class CreditsController : MonoBehaviour
         // Получаем текущую позицию и пересчитываем оставшуюся дистанцию и длительность tween'а
         float currentY = creditsText.anchoredPosition.y;
         float distance = targetYPosition - currentY;
-        if (distance <= 0) return; // Если уже достигнута цель
+        if (distance <= 0) {
+			OnCreditsEnd?.Invoke();
+			 return; // Если уже достигнута цель
+		}
         
         float duration = distance / newSpeed;
         scrollTween?.Kill();
@@ -102,6 +108,10 @@ public class CreditsController : MonoBehaviour
             duration
         )
         .SetEase(Ease.Linear)
-        .SetUpdate(true);
+        .SetUpdate(true)
+        .OnComplete(() => 
+        {
+            OnCreditsEnd?.Invoke();
+        });
     }
 }
