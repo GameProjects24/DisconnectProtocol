@@ -17,6 +17,6 @@ MonoBehaviour:
   maxDistance: 50
   hitMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 63
   tracerPrefab: {fileID: 2859782037436083344, guid: c37c14e80aeae8840b3afed39282950d, type: 3}
   hitEffect: {fileID: 7338582107698948803, guid: 6a84a50015526be4dbaa6ac110e4b2e4, type: 3}
