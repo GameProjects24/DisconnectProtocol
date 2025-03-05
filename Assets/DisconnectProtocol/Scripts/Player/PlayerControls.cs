@@ -104,7 +104,12 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    private void OnDisable() => _inputActions.Disable();
+    private void OnDisable()
+	{	
+		if (_inputActions != null) {
+			_inputActions.Disable();
+		}
+	}
 
 #endif
 }

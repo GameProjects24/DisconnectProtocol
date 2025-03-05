@@ -13,7 +13,7 @@ namespace DisconnectProtocol
 				return m_instance;
 			}
 		}
-		public PlayerData pd { get; private set; } = new PlayerData();
+		[HideInInspector] public PlayerData pd = new PlayerData();
 		private string m_pdPath;
 
 		private void Awake() {
@@ -39,21 +39,11 @@ namespace DisconnectProtocol
 		/// </summary>
 		/// <param name="fallbackLevel">Level to load if there's no saved</param>
 		public void LoadLevel(string fallbackLevel) {
-			if (pd.isValid) {
-				SceneLoader.Load(this, pd.lastLevel);
+			if (string.IsNullOrEmpty(pd.lastLevel)) {
+				ChangeScene(fallbackLevel);
 			} else {
-				ChangeLevel(fallbackLevel);
+				SceneLoader.Load(this, pd.lastLevel);
 			}
-		}
-
-		/// <summary>
-		/// Change scene and save as last visited level
-		/// </summary>
-		/// <param name="level"></param>
-		public void ChangeLevel(string level) {
-			pd.lastLevel = level;
-			pd.isValid = true;
-			SceneLoader.Load(this, level);
 		}
 
 		/// <summary>

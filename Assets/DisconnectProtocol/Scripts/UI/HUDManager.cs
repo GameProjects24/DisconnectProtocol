@@ -16,7 +16,6 @@ public class HUDManager : MonoBehaviour
 
     public WeaponController weaponController;
     public Damageable damageable;
-    public Inventory inventory;
 
     private Weapon currWeapon;
 
@@ -30,7 +29,6 @@ public class HUDManager : MonoBehaviour
         weaponController.OnShoot += UpdateAmmoUI;
         weaponController.OnReload += StartReloadIndicator;
         damageable.OnDamage += UpdateHPIndicator;
-        inventory.OnAmmoChanged += UpdateAmmoUI;
 
         UpdateHPIndicator();
         UpdateWeapon(weaponController.GetCurrentWeapon());  // Обновляем UI при старте
@@ -46,31 +44,40 @@ public class HUDManager : MonoBehaviour
         weaponController.OnShoot -= UpdateAmmoUI;
         weaponController.OnReload -= StartReloadIndicator;
         damageable.OnDamage -= UpdateHPIndicator;
-        inventory.OnAmmoChanged -= UpdateAmmoUI;
     }
 
-    private void UpdateWeapon(Weapon newWeapon = null)
+    private void UpdateWeapon(Weapon newWeapon)
     {
+		if (currWeapon == newWeapon)
+		{
+			return;
+		}
+		if (currWeapon != null)
+		{
+			currWeapon.OnAmmoChanged -= UpdateAmmoUI;
+		}
+
         if (newWeapon != null)
         {
             //weaponNameText.text = newWeapon.weaponData.weaponName;
             weaponIcon.sprite = newWeapon.weaponData.weaponIcon;
             reloadIndicator.gameObject.SetActive(false);
             currWeapon = newWeapon;
+			currWeapon.OnAmmoChanged += UpdateAmmoUI;
             UpdateAmmoUI();  // Обновить патроны UI при смене оружия
         }
     }
 
     public void UpdateAmmoUI()
     {
-        if (weaponController == null || cageAmmo == null || reserveAmmo == null || inventory == null) return;
+        if (weaponController == null || cageAmmo == null || reserveAmmo == null) return;
 
         // Обновляем количество патронов в UI с учётом инвентаря
         if (currWeapon != null)
         {
             // Получаем количество патронов в магазине
-            int currentAmmo = currWeapon.GetCageAmmo();
-            int totalAmmo = inventory.GetReserveAmmo(currWeapon.weaponData); // Получаем патроны из инвентаря
+            int currentAmmo = currWeapon.cageAmmo;
+            int totalAmmo = currWeapon.reserveAmmo;
 
             cageAmmo.text = $"{currentAmmo}";  // Патроны в магазине
             reserveAmmo.text = $"{totalAmmo}";  // Общий запас патронов из инвентаря

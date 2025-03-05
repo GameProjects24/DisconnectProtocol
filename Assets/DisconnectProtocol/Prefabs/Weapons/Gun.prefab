@@ -114,7 +114,7 @@ Transform:
   m_GameObject: {fileID: 4660112240588564902}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -136,6 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 4f6f6be2bccc5445a95b5f5bfde88441, type: 2}
   _muzzle: {fileID: 650971729755209807}
+  inventory: {fileID: 0}
 --- !u!95 &6404644765030413140
 Animator:
   serializedVersion: 7

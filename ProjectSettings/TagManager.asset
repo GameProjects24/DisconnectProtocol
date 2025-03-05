@@ -7,10 +7,12 @@ TagManager:
   - CinemachineTarget
   - Door
   - Hide
+  - Enemy
   - EnemyHp
   - EnemyWeaponController
   - EnemyEyes
   - ElevatorNextLevel
+  - EnemyShotgun
   layers:
   - Default
   - TransparentFX

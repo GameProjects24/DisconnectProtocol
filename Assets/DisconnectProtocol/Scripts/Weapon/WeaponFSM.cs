@@ -18,13 +18,11 @@ public class WeaponFSM
     private IWeaponState _currentState;
     private Dictionary<WeaponStateEnum, IWeaponState> _states = new Dictionary<WeaponStateEnum, IWeaponState>();
     private Weapon _context;
-    private Inventory _inventory;
     public bool IsFiring { get; private set; } = false;
 
-    public WeaponFSM(Weapon context, Inventory inventory)
+    public WeaponFSM(Weapon context)
     {
         _context = context;
-        _inventory = inventory;
 
         _states.Add(WeaponStateEnum.Idle, new WeaponStateIdle(this, context));
         _states.Add(WeaponStateEnum.Fire, new WeaponStateFire(this, context));

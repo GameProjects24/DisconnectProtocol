@@ -36,7 +36,9 @@ public class ScreenAnimController : MonoBehaviour
 
     private void OnEnable()
     {
-        fullText = labelText.text;
+		if (labelText != null) {
+			fullText = labelText.text;
+		}
         labelText.text = "";
 
         buttonsCanvasGroup = buttonsGroup.GetComponent<CanvasGroup>();
@@ -120,7 +122,9 @@ public class ScreenAnimController : MonoBehaviour
     {
         _sequence?.Kill();
         StopAllCoroutines();
-        EventSystem.current.SetSelectedGameObject(null);
+		if (EventSystem.current != null) {
+			EventSystem.current.SetSelectedGameObject(null);
+		}
         labelText.text = fullText;
         if (bgImage != null)
             bgImage.color = new Color(bgImage.color.r, bgImage.color.g, bgImage.color.b, bgStartAlpha);

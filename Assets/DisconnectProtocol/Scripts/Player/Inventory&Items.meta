@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/DisconnectProtocol/Resources/Weapons/InventoryCludges/DroneGun.asset.meta
+guid: 7c8865f1495611a52b4daa4ea914a987
+NativeFormatImporter:
+========
 guid: e5e94173efcdcee4fb145423269d8d27
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> origin/inventory_ammo_sounds_2:Assets/DisconnectProtocol/Scripts/Player/Inventory&Items.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

@@ -8,7 +8,7 @@ namespace DisconnectProtocol
 	[RequireComponent(typeof(Collider))]
     public class NextLevelElevator : MonoBehaviour
     {
-		private struct Passenger {
+		private class Passenger {
 			public Transform self;
 			public Transform parent;
 
@@ -18,7 +18,9 @@ namespace DisconnectProtocol
 			}
 
 			public void ToParent() {
-				self.SetParent(parent, true);
+				if (self != null) {
+					self.SetParent(parent, true);
+				}
 			}
 
 			public void Deconstruct(out Transform self, out Transform parent) {
@@ -34,10 +36,18 @@ namespace DisconnectProtocol
 		private Collider m_col;
 		private List<Passenger> m_passengers = new List<Passenger>();
 		private Transform m_tr;
+		private GameplayState m_gameplayState;
 
-
-		private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-			StartCoroutine(ChangePlace());
+		private void Awake() {
+			if (m_tr == null) {
+				m_tr = transform;
+			}
+			if (m_col == null) {
+				m_col = GetComponent<Collider>();
+				m_col.isTrigger = true;
+			}
+			m_gameplayState = GameStateController.Instance.GetState<GameplayState>();
+			m_gameplayState.LevelLoaded += ChangePlace;
 		}
 
 		private IEnumerator ChangePlace() {
@@ -56,16 +66,6 @@ namespace DisconnectProtocol
 			}
 		}
 
-		private void Awake() {
-			if (m_tr == null) {
-				m_tr = transform;
-			}
-			if (m_col == null) {
-				m_col = GetComponent<Collider>();
-				m_col.isTrigger = true;
-			}
-		}
-
 		private void Start() {
 			if (m_toggle == null) {
 				m_toggle = GetComponentInChildren<Interactable>();
@@ -81,14 +81,12 @@ namespace DisconnectProtocol
 			if (m_toggle) {
 				m_toggle.Interacted += OnToggled;
 			}
-			SceneManager.sceneLoaded += OnSceneLoaded;
 		}
 
 		private void OnDisable() {
 			if (m_toggle) {
 				m_toggle.Interacted -= OnToggled;
 			}
-			SceneManager.sceneLoaded -= OnSceneLoaded;
 		}
 
 		private void OnToggled() {
@@ -98,14 +96,25 @@ namespace DisconnectProtocol
 		private void OnDoorStateChanged(IDoor.State state) {
 			if (state == IDoor.State.Close) {
 				foreach ((var pas, _) in m_passengers) {
-					pas.SetParent(m_tr, true);
+					if (pas != null) {
+						pas.SetParent(m_tr, true);
+					}
 				}
-				GameController.instance.ChangeLevel(nextLevel);
+				GameController.instance.ChangeScene(nextLevel);
 			}
 		}
 
 		private void OnTriggerEnter(Collider other) {
-			m_passengers.Add(new Passenger(other.transform));
+			var pas = other.transform;
+			var whole = other.GetComponentInParent<Whole>();
+			if (whole != null) {
+				pas = whole.transform;
+				var tryp = m_passengers.Find(p => p.self == pas);
+				if (tryp != null) {
+					return;
+				}
+			}
+			m_passengers.Add(new Passenger(pas));
 		}
 
 		private void OnTriggerExit(Collider other) {

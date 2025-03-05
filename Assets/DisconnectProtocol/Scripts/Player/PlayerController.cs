@@ -1,5 +1,7 @@
 using UnityEngine;
 using DisconnectProtocol;
+using System.Data.Common;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -66,8 +68,23 @@ public class PlayerController : MonoBehaviour
 	private CharacterController _controller;
 	private PlayerControls _controls;
 	private GameObject _mainCamera;
-	private WeaponController _weaponController;
 	private Interactor _interactor;
+
+	private WeaponController _weaponController;
+	public WeaponController weaponController { get {
+		if (_weaponController == null) {
+			_weaponController = GetComponentInChildren<WeaponController>();
+		}
+		return _weaponController;
+	}}
+
+	private Inventory _inventory;
+	public Inventory inventory {get {
+		if (_inventory == null) {
+			_inventory = GetComponentInChildren<Inventory>();
+		}
+		return _inventory;
+	}}
 
 	private const float _threshold = 0.01f;
 
@@ -98,7 +115,7 @@ public class PlayerController : MonoBehaviour
 	private void Start()
 	{
 
-		_weaponController = GetComponent<WeaponController>();
+		_weaponController = GetComponentInChildren<WeaponController>();
 		_controller = GetComponent<CharacterController>();
 		_controls = GetComponent<PlayerControls>();
 #if ENABLE_INPUT_SYSTEM

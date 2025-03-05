@@ -4,7 +4,6 @@ using UnityEngine;
 public class WeaponData : ScriptableObject
 {
     [Header("Basic Info")]
-    
     public GameObject prefab;
     public string weaponName;
     public Sprite weaponIcon;
@@ -39,4 +38,13 @@ public class WeaponData : ScriptableObject
 
     [Header("Shoot Settings")]
     public WeaponShootSO weaponShoot;
+
+	public Weapon CreateWeapon() {
+		var go = Instantiate(prefab);
+		var weapon = go.GetComponent<Weapon>();
+		weapon.weaponData = this;
+		weapon.SetCageAmmo(cageSize);
+		weapon.SetReserveAmmo(maxAmmo >> 2);
+		return weapon;
+	}
 }

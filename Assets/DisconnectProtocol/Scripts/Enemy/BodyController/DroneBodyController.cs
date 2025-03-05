@@ -1,13 +1,20 @@
+using System.Collections;
 using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
+using DBC = DisconnectProtocol.DroneBodyController;
 
 namespace DisconnectProtocol
 {
-    public class DroneBodyController : MonoBehaviour, IHoldDistance
+    public class DroneBodyController : BodyController<DBC.State, DBC.Action>,
+	IHoldDistance, IBlinkHorizontal, IBlinkVertical
     {
 		public enum State {
-			Following,
+			Idle, Follow, Blink
+		}
+
+		public enum Action {
+			
 		}
 
 		[Header("Control Center")]
@@ -15,26 +22,58 @@ namespace DisconnectProtocol
 		[SerializeField] private NavMeshAgent m_agent;
 		[SerializeField] private Damageable m_dmg;
 
-		[Header("Parameters")]
+		[Header("Hold Distance")]
 		[SerializeField] private float m_holdDistance = 10f;
+
+		[Header("Blink Horizontal")]
+		[SerializeField] private float m_angleMin = 10f;
+		[SerializeField] private float m_angleMax = 90f;
+		[SerializeField] private float m_targetDistMin = 2f;
+		[SerializeField] private float m_targetDistMax = 5f;
+
+		[Header("Blink Vertical")]
+		[SerializeField] private float m_altitudeMin = 0f;
+		[SerializeField] private float m_altitudeMax = 2f;
+		[SerializeField] private float m_desiredTime = 0.2f;
         
 		private Transform m_tr;
-
-		private State m_curState;
-		private IStoppable m_curStoppable;
+		private Vector3 m_hoverPos;
+		private Coroutine m_cor;
 
 		private HoldDistance m_hda;
+		private BlinkHorizontal m_blih;
+		private BlinkVertical m_bliv;
 
 		private void Start() {
-			m_tr = transform;
-
 			m_hda = new HoldDistance(this, m_agent, m_holdDistance);
-			m_hda.Paused += OnHoldDistancePause;
-			m_hda.Resumed += OnHoldDistanceResume;
-			m_hda.Stopped += OnHoldDistanceStop;
+			m_hda.Paused += OnStatePause;
+			m_hda.Resumed += OnStateResume;
+			m_hda.Stopped += OnStateStop;
+			m_states.Add(m_hda, new FlowState(
+				start: State.Follow, stop: State.Idle,
+				resume: State.Follow, pause: State.Idle
+			));
+
+			m_blih = new BlinkHorizontal(
+				this, m_agent, m_angleMin, m_angleMax, m_targetDistMin, m_targetDistMax);
+			m_blih.Stopped += OnStateStop;
+			m_states.Add(m_blih, new FlowState(
+				start: State.Blink, stop: State.Idle
+			));
+
+			m_bliv = new BlinkVertical(
+				this, m_agent.height, m_altitudeMin, m_altitudeMax, m_desiredTime);
+			m_bliv.Stopped += OnStateStop;
+			m_bliv.Stopped += StartHover;
+			m_states.Add(m_bliv, new FlowState(
+				start: State.Blink, stop: State.Idle
+			));
 		}
 
 		private void OnEnable() {
+			if (m_tr == null) {
+				m_tr = transform;
+			}
 			if (m_dmg == null) {
 				m_dmg = gameObject.GetComponentWherever<Damageable>();
 			}
@@ -49,29 +88,32 @@ namespace DisconnectProtocol
 				m_brain = gameObject.GetComponentWherever<BehaviorGraphAgent>();
 			}
 			m_brain.enabled = true;
+			StartHover();
 		}
 
 		private void OnDisable() {
 			m_dmg.OnDie -= OnDie;
-			m_curStoppable?.Stop();
+			ChangeStoppable(null);
 			m_agent.enabled = false;
 			m_brain.enabled = false;
 		}
 
 		private void OnDie() => enabled = false;
 
-		private void LateUpdate() {
-			var ap = m_tr.position;
-			ap.y = 3;
-			m_tr.position = ap;
+		private void StartHover() {
+			m_hoverPos = m_tr.position;
+			m_cor = StartCoroutine(Hover());
 		}
 
-		private void ChangeStoppable(IStoppable stp) {
-			if (m_curStoppable == stp) {
-				return;
+		private void StopHover() {
+			if (m_cor != null) {
+				StopCoroutine(m_cor);
 			}
-			m_curStoppable?.Stop();
-			m_curStoppable = stp;
+		}
+
+		private IEnumerator Hover() {
+			m_tr.position = m_hoverPos;
+			yield return null;
 		}
 
 		void IHoldDistance.Start(Transform target, bool perpetual) {
@@ -83,16 +125,26 @@ namespace DisconnectProtocol
 			m_hda.Stop();
 		}
 
-		private void OnHoldDistanceStop() {
-			Debug.Log("Drone: stopped");
+		bool IBlinkHorizontal.TryStart(Transform target) {
+			ChangeStoppable(m_blih);
+			return m_blih.TryStart(target);
 		}
 
-		private void OnHoldDistancePause() {
-			Debug.Log("Drone: paused");
+		void IBlinkHorizontal.Stop() {
+			m_blih.Stop();
 		}
 
-		private void OnHoldDistanceResume() {
-			Debug.Log("Drone: resumed");
+		bool IBlinkVertical.TryStart() {
+			ChangeStoppable(m_bliv);
+			if (m_bliv.TryStart()) {
+				StopHover();
+				return true;
+			}
+			return false;
+		}
+
+		void IBlinkVertical.Stop() {
+			m_bliv.Stop();
 		}
 	}
 }
