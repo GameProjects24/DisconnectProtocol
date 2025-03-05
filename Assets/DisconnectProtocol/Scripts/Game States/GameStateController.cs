@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GameStateController : MonoBehaviour
 {
     public static GameStateController Instance { get; private set; }
-
+    public PlayerControls controls;
     private Dictionary<System.Type, GameState> states = new Dictionary<System.Type, GameState>();
 
     private GameState currentState;
@@ -55,6 +55,22 @@ public class GameStateController : MonoBehaviour
     private void OnPlayerDie()
     {
         ChangeState<DeathState>();
+    }
+
+    public void Update()
+    {
+        if (controls != null && controls.pause)
+        {
+            if (currentState != GetState<PauseState>())
+            {
+                ChangeState<PauseState>();
+            }
+            else
+            {
+                ChangeState<GameplayState>();
+            }
+            controls.pause = false;
+        }
     }
 
     // Метод для получения состояния по типу

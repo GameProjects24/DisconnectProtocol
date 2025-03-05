@@ -5,7 +5,7 @@ public class WeaponSway : MonoBehaviour
 {
     public event Action<float> OnSwaySpread;
     private WeaponTransformManager positionManager;
-    public PlayerInputs inputs;
+    private PlayerControls controls;
 
     [Header("Sway Settings")]
     public float step = 0.01f;
@@ -28,13 +28,14 @@ public class WeaponSway : MonoBehaviour
 
     private void Start()
     {
+        controls = PlayerControls.Instance;
         weaponAim = GetComponent<WeaponAiming>();
         positionManager = GetComponent<WeaponTransformManager>();
     }
 
     private void Update()
     {
-        ApplySway(inputs.look.normalized);
+        ApplySway(controls.look.normalized);
     }
 
     private void ApplySway(Vector2 lookInput)

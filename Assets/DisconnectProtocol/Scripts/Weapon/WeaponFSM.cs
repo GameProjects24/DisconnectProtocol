@@ -17,9 +17,15 @@ public class WeaponFSM
 {
     private IWeaponState _currentState;
     private Dictionary<WeaponStateEnum, IWeaponState> _states = new Dictionary<WeaponStateEnum, IWeaponState>();
+    private Weapon _context;
+    private Inventory _inventory;
+    public bool IsFiring { get; private set; } = false;
 
-    public WeaponFSM(Weapon context)
+    public WeaponFSM(Weapon context, Inventory inventory)
     {
+        _context = context;
+        _inventory = inventory;
+
         _states.Add(WeaponStateEnum.Idle, new WeaponStateIdle(this, context));
         _states.Add(WeaponStateEnum.Fire, new WeaponStateFire(this, context));
         _states.Add(WeaponStateEnum.Reload, new WeaponStateReload(this, context));
@@ -28,13 +34,13 @@ public class WeaponFSM
 
     public void ActivateState(WeaponStateEnum state)
     {
-        Debug.Log($"FSM > activate: {state}");
         if (_currentState != null)
         {
+            if (_states[state] == _currentState) return;
+
             _currentState.Exit();
             _currentState = null;
         }
-
 
         if (_states.TryGetValue(state, out _currentState))
         {
@@ -44,11 +50,13 @@ public class WeaponFSM
 
     public void StartFire()
     {
+        IsFiring = true;
         _currentState?.StartFire();
     }
 
     public void StopFire()
     {
+        IsFiring = false;
         _currentState?.StopFire();
     }
 
@@ -68,23 +76,15 @@ public abstract class WeaponStateBase : IWeaponState
 {
     public virtual void Enter() { }
 
-    public virtual void Exit()
-    {
-    }
+    public virtual void Exit() { }
 
-    public virtual void Reload()
-    {
-    }
+    public virtual void Reload() { }
 
     public virtual void StartFire() { }
 
-    public virtual void StopFire()
-    {
-    }
+    public virtual void StopFire() { }
 
-    public virtual void Update()
-    {
-    }
+    public virtual void Update() { }
 }
 
 public class WeaponStateIdle : WeaponStateBase
@@ -105,9 +105,13 @@ public class WeaponStateIdle : WeaponStateBase
 
     public override void StartFire()
     {
-        if (_context.CanFire())
+        if (_context.HasAmmo())
         {
             _weaponFSM.ActivateState(WeaponStateEnum.Fire);
+        }
+        else
+        {
+            _weaponFSM.ActivateState(WeaponStateEnum.Empty);
         }
     }
 }
@@ -115,7 +119,6 @@ public class WeaponStateIdle : WeaponStateBase
 public class WeaponStateFire : WeaponStateBase
 {
     private float _timer;
-
     private readonly WeaponFSM _weaponFSM;
     private readonly Weapon _context;
 
@@ -125,7 +128,7 @@ public class WeaponStateFire : WeaponStateBase
         _context = context;
     }
 
-    override public void Enter()
+    public override void Enter()
     {
         _timer = 0f;
         _context.Shoot();
@@ -134,32 +137,44 @@ public class WeaponStateFire : WeaponStateBase
     public override void Update()
     {
         _timer += Time.deltaTime;
+
+        // Ждём окончания задержки перед следующим действием
         if (_timer >= _context.weaponData.fireRate)
         {
-            if (!_context.HasBullet() && _context.weaponData.isAutoReload)
+            if (_context.HasAmmo())
             {
-                _weaponFSM.ActivateState(WeaponStateEnum.Reload);
-            }
-            else if (_context.weaponData.isAutomatic)
-            {
-                if (_context.CanFire())
+                if (_weaponFSM.IsFiring)
                 {
-                    _context.Shoot();
-                    _timer = 0;
+                    if (_context.weaponData.isAutomatic)
+                    {
+                        _context.Shoot();
+                        _timer = 0f; // Сброс таймера, если оружие автоматическое и кнопка зажата
+
+                    }
                 }
                 else
                 {
-                    _weaponFSM.ActivateState(WeaponStateEnum.Empty);
+                    // Если кнопка не нажата, переходим в Idle
+                    _weaponFSM.ActivateState(WeaponStateEnum.Idle);
                 }
+            }
+            else
+            {
+                _weaponFSM.ActivateState(WeaponStateEnum.Empty); // Если нет патронов, уходим в Empty
             }
         }
     }
 
     public override void StopFire()
     {
-        _weaponFSM.ActivateState(WeaponStateEnum.Idle);
+        // Только если задержка прошла, мы выходим в Idle
+        if (_timer >= _context.weaponData.fireRate)
+        {
+            _weaponFSM.ActivateState(WeaponStateEnum.Idle);
+        }
     }
 }
+
 
 public class WeaponStateReload : WeaponStateBase
 {
@@ -177,6 +192,7 @@ public class WeaponStateReload : WeaponStateBase
     override public void Enter()
     {
         _timer = 0f;
+        _context.Reload();
     }
 
     public override void Update()

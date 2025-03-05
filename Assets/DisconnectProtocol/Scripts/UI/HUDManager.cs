@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine; 
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
@@ -16,6 +16,7 @@ public class HUDManager : MonoBehaviour
 
     public WeaponController weaponController;
     public Damageable damageable;
+    public Inventory inventory;
 
     private Weapon currWeapon;
 
@@ -23,23 +24,29 @@ public class HUDManager : MonoBehaviour
     {
         if (weaponController == null || damageable == null) return;
 
+        // Подписываемся на события
         weaponController.OnChangeWeapon += UpdateWeapon;
         weaponController.OnReloadComplete += UpdateAmmoUI;
         weaponController.OnShoot += UpdateAmmoUI;
         weaponController.OnReload += StartReloadIndicator;
         damageable.OnDamage += UpdateHPIndicator;
+        inventory.OnAmmoChanged += UpdateAmmoUI;
+
         UpdateHPIndicator();
+        UpdateWeapon(weaponController.GetCurrentWeapon());  // Обновляем UI при старте
     }
 
     private void OnDestroy()
     {
         if (weaponController == null || damageable == null) return;
 
+        // Отписываемся от событий
         weaponController.OnChangeWeapon -= UpdateWeapon;
         weaponController.OnReloadComplete -= UpdateAmmoUI;
         weaponController.OnShoot -= UpdateAmmoUI;
         weaponController.OnReload -= StartReloadIndicator;
         damageable.OnDamage -= UpdateHPIndicator;
+        inventory.OnAmmoChanged -= UpdateAmmoUI;
     }
 
     private void UpdateWeapon(Weapon newWeapon = null)
@@ -49,19 +56,26 @@ public class HUDManager : MonoBehaviour
             //weaponNameText.text = newWeapon.weaponData.weaponName;
             weaponIcon.sprite = newWeapon.weaponData.weaponIcon;
             reloadIndicator.gameObject.SetActive(false);
-            UpdateAmmoUI();
             currWeapon = newWeapon;
+            UpdateAmmoUI();  // Обновить патроны UI при смене оружия
         }
     }
 
     public void UpdateAmmoUI()
     {
-        if (weaponController == null || cageAmmo == null || reserveAmmo == null) return;
+        if (weaponController == null || cageAmmo == null || reserveAmmo == null || inventory == null) return;
 
-        cageAmmo.text = $"{weaponController.GetCurrentAmmo()}";
-        reserveAmmo.text = $"{weaponController.GetTotalAmmo()}";
+        // Обновляем количество патронов в UI с учётом инвентаря
+        if (currWeapon != null)
+        {
+            // Получаем количество патронов в магазине
+            int currentAmmo = currWeapon.GetCageAmmo();
+            int totalAmmo = inventory.GetReserveAmmo(currWeapon.weaponData); // Получаем патроны из инвентаря
+
+            cageAmmo.text = $"{currentAmmo}";  // Патроны в магазине
+            reserveAmmo.text = $"{totalAmmo}";  // Общий запас патронов из инвентаря
+        }
     }
-
 
     private void StartReloadIndicator()
     {

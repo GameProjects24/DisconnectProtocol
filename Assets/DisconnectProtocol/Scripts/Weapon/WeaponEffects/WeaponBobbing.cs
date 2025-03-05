@@ -6,7 +6,7 @@ public class WeaponBobbing : MonoBehaviour
     public event Action<float> OnBobbingSpread;
     private WeaponTransformManager positionManager;
     public PlayerController playerController;
-    public PlayerInputs inputs;
+    private PlayerControls controls;
 
     [Header("Bobbing Settings")]
     public float bobSpeed = 5f;
@@ -29,6 +29,7 @@ public class WeaponBobbing : MonoBehaviour
 
     private void Start()
     {
+        controls = PlayerControls.Instance;
         weaponAim = GetComponent<WeaponAiming>();
         positionManager = GetComponent<WeaponTransformManager>();
         // сделать через свойство, публичное для чтения
@@ -47,7 +48,7 @@ public class WeaponBobbing : MonoBehaviour
 
     private void Update()
     {
-        ApplyBobbing(inputs.move.normalized);
+        ApplyBobbing(controls.move.normalized);
     }
 
     private void ApplyBobbing(Vector2 walkInput)

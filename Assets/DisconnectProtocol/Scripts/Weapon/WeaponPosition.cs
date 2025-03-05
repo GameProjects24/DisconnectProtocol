@@ -4,7 +4,7 @@ using UnityEngine;
 public class WeaponPosition : MonoBehaviour
 {
     public PlayerController playerController;
-    public PlayerInputs inputs;
+    private PlayerControls controls;
 
     [Header("Sway Settings")]
     public float step = 0.01f;
@@ -47,6 +47,7 @@ public class WeaponPosition : MonoBehaviour
 
     private void Start()
     {
+        controls = PlayerControls.Instance;
         defaultPosition = transform.localPosition;
 
         playerController.OnAim += ToggleAim;
@@ -74,8 +75,8 @@ public class WeaponPosition : MonoBehaviour
 
     private void GetInput()
     {
-        walkInput = inputs.move.normalized;
-        lookInput = inputs.look.normalized;
+        walkInput = controls.move.normalized;
+        lookInput = controls.look.normalized;
     }
 
     private void Sway()

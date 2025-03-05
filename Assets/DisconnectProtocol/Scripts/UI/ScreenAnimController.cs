@@ -3,15 +3,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class ScreenAnimController : MonoBehaviour
 {
     [Header("UI References")]
-    public TextMeshProUGUI gameOverText;
-    public GameObject Button1;
-    public GameObject Button2;
-    private CanvasGroup Button1CanvasGroup;
-    private CanvasGroup Button2CanvasGroup;
+    public TextMeshProUGUI labelText;
+    public GameObject buttonsGroup;
+    private CanvasGroup buttonsCanvasGroup;
 
     [Header("Glitch Panel")]
     public GameObject glitchPanel;
@@ -20,39 +19,37 @@ public class ScreenAnimController : MonoBehaviour
 
     [Header("BG Panel")]
     public GameObject bgPanel;
-    private Material bgMaterial;
     private Image bgImage;
-    private float bgStartAlfa;
-
+    private float bgStartAlpha;
 
     [Header("Timing Settings")]
-    public float initialDelay = 1f;       // Задержка перед анимацией шейдера и печатанием
-    public float typeDuration = 2f;       // Длительность эффекта печатания текста
-    public float buttonsFadeDuration = 1f;// Длительность появления кнопок
+    public float initialDelay = 1f;         // Задержка перед анимацией 
+    public float typeDuration = 2f;         // Длительность эффекта печатания
+    public float buttonsFadeDuration = 1f;  // Длительность появления кнопок
 
     private string fullText;
     private int totalCharacters;
     private float timePerCharacter;
 
+    private Sequence _sequence;
+    private Coroutine typeTextCoroutine;
+
     private void OnEnable()
     {
-        fullText = gameOverText.text;
-        gameOverText.text = "";
+        fullText = labelText.text;
+        labelText.text = "";
 
-        Button1CanvasGroup = Button1.GetComponent<CanvasGroup>();
-        Button2CanvasGroup = Button2.GetComponent<CanvasGroup>();
-        Button1CanvasGroup.alpha = 0f;
-        Button2CanvasGroup.alpha = 0f;
-        Button1.SetActive(false);
-        Button2.SetActive(false);
+        buttonsCanvasGroup = buttonsGroup.GetComponent<CanvasGroup>();
+        if (buttonsCanvasGroup != null)
+            buttonsCanvasGroup.alpha = 0f;
+        buttonsGroup.SetActive(false);
 
         if (bgPanel != null)
         {
             bgImage = bgPanel.GetComponent<Image>();
-            bgMaterial = bgImage.material;
-            bgStartAlfa = bgImage.color.a;
+            bgStartAlpha = bgImage.color.a;
             // Обнуляем прозрачность (alfa)
-            bgImage.color = new Color (bgImage.color.r, bgImage.color.g, bgImage.color.b, 0f);
+            bgImage.color = new Color(bgImage.color.r, bgImage.color.g, bgImage.color.b, 0f);
         }
 
         if (glitchPanel != null)
@@ -66,68 +63,76 @@ public class ScreenAnimController : MonoBehaviour
 
     public void ShowScreen()
     {
-        Sequence sequence = DOTween.Sequence();
+        _sequence?.Kill();
+        _sequence = DOTween.Sequence().SetUpdate(UpdateType.Normal, true);
 
         // Если есть гличи, показываем их анимированно
         if (glitchPanel != null)
         {
-            sequence.AppendCallback(() =>
+            _sequence.AppendCallback(() =>
             {
                 glitchPanel.SetActive(true);
                 glitchMaterial.SetFloat("_DeadZone", 0f);
-            }).SetUpdate(UpdateType.Normal, true);
-
-            sequence.Append(
+            });
+            _sequence.Append(
                 DOTween.To(
                     () => glitchMaterial.GetFloat("_DeadZone"),
                     x => glitchMaterial.SetFloat("_DeadZone", x),
                     1f,
                     initialDelay
-                ).SetUpdate(UpdateType.Normal, true)
+                )
             );
-
-            sequence.AppendCallback(() =>
+            _sequence.AppendCallback(() =>
             {
                 glitchPanel.SetActive(false);
-            }).SetUpdate(UpdateType.Normal, true);
+            });
         }
-
+        
         // Если есть задний фон, показываем его анимированно
-        else if (bgPanel != null)
+        if (bgPanel != null)
         {
-            sequence.Append(
-                bgImage.DOFade(bgStartAlfa, initialDelay)
-                .SetUpdate(UpdateType.Normal, true)
-            );
+            _sequence.Append(bgImage.DOFade(bgStartAlpha, initialDelay));
         }
-
         else
         {
-            sequence.AppendInterval(initialDelay).SetUpdate(UpdateType.Normal, true);
+            _sequence.AppendInterval(initialDelay);
         }
 
         // Эффект печатания текста
-        sequence.AppendCallback(() => StartCoroutine(TypeText()));
-        sequence.AppendInterval(typeDuration);
-
-        // Появление кнопок
-        sequence.AppendCallback(() =>
+        if (gameObject.activeInHierarchy)
         {
-            Button1.SetActive(true);
-            Button2.SetActive(true);
-        });
-        sequence.Append(Button1CanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
-        sequence.Join(Button2CanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
+            _sequence.AppendCallback(() =>
+            {
+                if (typeTextCoroutine != null)
+                {
+                    StopCoroutine(typeTextCoroutine);
+                }
+                typeTextCoroutine = StartCoroutine(TypeText());
+            });
+            _sequence.AppendInterval(typeDuration);
+        }
+
+        _sequence.AppendCallback(() => { buttonsGroup.SetActive(true); });
+        _sequence.Join(buttonsCanvasGroup.DOFade(1f, buttonsFadeDuration).SetUpdate(UpdateType.Normal, true));
+    }
+
+    private void OnDisable()
+    {
+        _sequence?.Kill();
+        StopAllCoroutines();
+        EventSystem.current.SetSelectedGameObject(null);
+        labelText.text = fullText;
+        if (bgImage != null)
+            bgImage.color = new Color(bgImage.color.r, bgImage.color.g, bgImage.color.b, bgStartAlpha);
     }
 
     private IEnumerator TypeText()
     {
         totalCharacters = fullText.Length;
         timePerCharacter = typeDuration / totalCharacters;
-
         for (int i = 0; i <= totalCharacters; i++)
         {
-            gameOverText.text = fullText.Substring(0, i);
+            labelText.text = fullText.Substring(0, i);
             yield return new WaitForSecondsRealtime(timePerCharacter);
         }
     }
