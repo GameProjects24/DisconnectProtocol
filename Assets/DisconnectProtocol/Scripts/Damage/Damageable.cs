@@ -10,6 +10,7 @@ namespace DisconnectProtocol
 		public float hp { get; private set; }
 		[SerializeField] private GameObject objectToDestroy;
 		public event System.Action OnDamage;
+		public event System.Action OnHeal;
 		public event System.Action OnDie;
 		// should consider changing OnDie instead
 		public event System.Action<Damageable> OnDieKnow;
@@ -26,6 +27,11 @@ namespace DisconnectProtocol
 				return;
 			}
 			OnDamage?.Invoke();
+		}
+
+		public void Heal(float amount) {
+			hp = Mathf.Min(amount, maxHp);
+			OnHeal?.Invoke();
 		}
 
 		private IEnumerator Die() {

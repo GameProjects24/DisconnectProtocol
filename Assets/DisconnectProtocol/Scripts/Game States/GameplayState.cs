@@ -54,6 +54,10 @@ public class GameplayState : GameState
 			_player = FindAnyObjectByType<PlayerController>();
 			_playerTr = _player.transform;
 		}
+		var dmg = _player.GetComponent<Damageable>();
+		if (dmg) {
+			dmg.Heal(dmg.maxHp);
+		}
 		var ds = FindAnyObjectByType<DropSettings>();
 		if (ds != null) {
 			DropController.Init(ds.incompatible, ds.other);

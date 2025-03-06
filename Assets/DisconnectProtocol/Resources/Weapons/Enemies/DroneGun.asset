@@ -15,7 +15,7 @@ MonoBehaviour:
   prefab: {fileID: 5403717219646528204, guid: b4c8c3298c6bedb78bc3685188ecbac6, type: 3}
   weaponName: DroneGun
   weaponIcon: {fileID: 21300000, guid: e8565075b82c8274b9360ce981535f1f, type: 3}
-  damage: 5
+  damage: 10
   fireRate: 1
   range: 50
   isAutomatic: 1

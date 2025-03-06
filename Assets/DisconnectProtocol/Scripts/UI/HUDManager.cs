@@ -29,6 +29,7 @@ public class HUDManager : MonoBehaviour
         weaponController.OnShoot += UpdateAmmoUI;
         weaponController.OnReload += StartReloadIndicator;
         damageable.OnDamage += UpdateHPIndicator;
+        damageable.OnHeal += UpdateHPIndicator;
 
         UpdateHPIndicator();
         UpdateWeapon(weaponController.GetCurrentWeapon());  // Обновляем UI при старте
