@@ -29,11 +29,11 @@ namespace DisconnectProtocol
 			bool noObstacles = true;
 			if (Physics.Raycast(m_eyes.position, dir.normalized, out var hit)) {
 				var wh = hit.transform.GetComponentInParent<Whole>();
-				int hitId = hit.transform.GetInstanceID();
+				int hitId = hit.transform.gameObject.GetInstanceID();
 				if (wh != null) {
-					hitId = wh.transform.GetInstanceID();
+					hitId = wh.gameObject.GetInstanceID();
 				}
-				noObstacles = hitId == target.GetInstanceID();
+				noObstacles = hitId == target.gameObject.GetInstanceID();
 			}
 			return noObstacles;
 		}

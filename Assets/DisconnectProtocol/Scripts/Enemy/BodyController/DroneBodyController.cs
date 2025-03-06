@@ -7,14 +7,14 @@ using DBC = DisconnectProtocol.DroneBodyController;
 namespace DisconnectProtocol
 {
     public class DroneBodyController : BodyController<DBC.State, DBC.Action>,
-	IHoldDistance, IBlinkHorizontal, IBlinkVertical
+	IHoldDistance, IBlinkHorizontal, IBlinkVertical, ICanSeeTarget, IAim
     {
 		public enum State {
 			Idle, Follow, Blink
 		}
 
 		public enum Action {
-			
+			AimStart, AimStop
 		}
 
 		[Header("Control Center")]
@@ -35,6 +35,15 @@ namespace DisconnectProtocol
 		[SerializeField] private float m_altitudeMin = 0f;
 		[SerializeField] private float m_altitudeMax = 2f;
 		[SerializeField] private float m_desiredTime = 0.2f;
+
+		[Header("Can See")]
+		[SerializeField] private Transform m_eyes;
+		[SerializeField] private float m_visionAngle = 40f;
+
+		[Header("Aim")]
+		[SerializeField] private float m_rotationRate = .5f;
+		[SerializeField] private float m_effectiveDistance = 20f;
+		[SerializeField] private Transform[] m_weaponParts;
         
 		private Transform m_tr;
 		private Vector3 m_hoverPos;
@@ -43,6 +52,8 @@ namespace DisconnectProtocol
 		private HoldDistance m_hda;
 		private BlinkHorizontal m_blih;
 		private BlinkVertical m_bliv;
+		private CanSeeTarget m_canSee;
+		private Aim m_aim;
 
 		private void Start() {
 			m_hda = new HoldDistance(this, m_agent, m_holdDistance);
@@ -68,6 +79,10 @@ namespace DisconnectProtocol
 			m_states.Add(m_bliv, new FlowState(
 				start: State.Blink, stop: State.Idle
 			));
+
+			m_canSee = new CanSeeTarget(m_eyes == null ? m_tr : m_eyes, m_visionAngle);
+			m_aim = new Aim(this, m_rotationRate, m_effectiveDistance, m_weaponParts);
+			m_aim.Stopped += () => OnActionDone(Action.AimStop);
 		}
 
 		private void OnEnable() {
@@ -114,6 +129,19 @@ namespace DisconnectProtocol
 		private IEnumerator Hover() {
 			m_tr.position = m_hoverPos;
 			yield return null;
+		}
+
+		bool ICanSeeTarget.Eval(Transform target) {
+			return m_canSee.Eval(target);
+		}
+
+		void IAim.Start(Transform target, bool perpetual) {
+			OnActionDone(Action.AimStart);
+			m_aim.Start(target, perpetual);
+		}
+
+		void IAim.Stop() {
+			m_aim.Stop();
 		}
 
 		void IHoldDistance.Start(Transform target, bool perpetual) {

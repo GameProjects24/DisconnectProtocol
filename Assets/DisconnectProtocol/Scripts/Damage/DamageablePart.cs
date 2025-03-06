@@ -16,13 +16,13 @@ namespace DisconnectProtocol
 
 		private void OnCollisionEnter(Collision other) {
 			if (other.gameObject.TryGetComponent<IDamager>(out var d)) {
-				body.TakeDamage(d.Damage());
+				body.TakeDamage(d.Damage() * damageRate);
 			}
 		}
 
 		public void TakeDamage(float damage)
 		{
-			body.TakeDamage(damage);
+			body.TakeDamage(damage * damageRate);
 		}
     }
 }

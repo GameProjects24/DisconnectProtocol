@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 3809056018345318941}
   m_Layer: 0
   m_Name: DroneBody
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681597911273096858}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
   m_Controller: {fileID: 9100000, guid: e00eb86821aec9d1e8ae1c8e245c37c8, type: 2}
   m_CullingMode: 1
@@ -113,6 +113,8 @@ MonoBehaviour:
   m_altitudeMin: 0
   m_altitudeMax: 2
   m_desiredTime: 0.2
+  m_eyes: {fileID: 99485141628638692}
+  m_visionAngle: 40
 --- !u!114 &305165574228925007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +272,7 @@ Transform:
   - {fileID: 8261458466616078269}
   - {fileID: 4263730845916876019}
   - {fileID: 7234062618007185942}
+  - {fileID: 99485141628638692}
   m_Father: {fileID: 7674214509743194000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2293267560129086458
@@ -542,6 +545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventory: {fileID: 0}
+  _weaponHolder: {fileID: 4251453984924653628}
 --- !u!114 &7893197127329586643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,9 +558,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f38b9ba6aca782a45b23e3fdd310c46e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponHolder: {fileID: 4251453984924653628}
   initialWeapons:
   - {fileID: 11400000, guid: d00a362f5ca9f2d8c81803eebcc23379, type: 2}
+  weapons: []
+  isAutoPickup: 0
 --- !u!1 &3426736218430856517
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,6 +593,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3912567391276584638}
   m_LocalEulerAnglesHint: {x: -90, y: -90, z: -90}
+--- !u!1 &3875708158132490657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 99485141628638692}
+  m_Layer: 0
+  m_Name: Eyes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &99485141628638692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875708158132490657}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.01203}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2804871226814983430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4215728374966273148
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,6 +989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventory: {fileID: 0}
+  _weaponHolder: {fileID: 5281775972681526498}
 --- !u!114 &8867618639808670447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,9 +1002,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f38b9ba6aca782a45b23e3fdd310c46e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponHolder: {fileID: 5281775972681526498}
   initialWeapons:
   - {fileID: 11400000, guid: d00a362f5ca9f2d8c81803eebcc23379, type: 2}
+  weapons: []
+  isAutoPickup: 0
 --- !u!1 &7810488177702344696
 GameObject:
   m_ObjectHideFlags: 0
