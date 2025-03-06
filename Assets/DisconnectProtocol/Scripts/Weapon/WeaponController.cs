@@ -65,6 +65,7 @@ public class WeaponController : MonoBehaviour
 		var wt = weapon.transform;
 		wt.SetParent(_weaponHolder);
 		wt.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        SetActiveWeapon(weapon);
 	}
 
     public void SetActiveWeapon(Weapon weapon)
@@ -81,6 +82,7 @@ public class WeaponController : MonoBehaviour
 
         currentWeapon = weapon;
 		SubscribeToWeaponEvents();
+        currentWeapon.transform.localRotation = Quaternion.identity;
         currentWeapon.gameObject.SetActive(true);
         OnChangeWeapon?.Invoke(currentWeapon);
     }

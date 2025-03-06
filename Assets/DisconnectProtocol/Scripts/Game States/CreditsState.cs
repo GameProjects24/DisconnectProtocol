@@ -5,7 +5,7 @@ using UnityEngine;
 public class CreditsState : GameState
 {
     [Header("State References")]
-	public CreditsController creditsController;
+    public CreditsController creditsController;
     public GameObject uiPanel;
     public GameObject blackPanel;
     public AudioClip creditsClip;
@@ -16,11 +16,12 @@ public class CreditsState : GameState
 
     public override void OnEnter()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         base.OnEnter();
         creditsController.OnCreditsEnd += HandlerCreditsEnd;
-		creditsController.gameObject.SetActive(true);
-		uiPanel.SetActive(false);
-		blackPanel.SetActive(false);
+        blackPanel.SetActive(false);
+        CanvasGroup blackPanelGroup = blackPanel.GetComponent<CanvasGroup>();
 
         _sequence?.Kill();
         _sequence = DOTween.Sequence().SetUpdate(UpdateType.Normal, true);
@@ -29,19 +30,16 @@ public class CreditsState : GameState
                 musicManager = MusicManager.Instance;
                 musicManager.ChangeMusic(creditsClip, panelFadeDuration);
                 blackPanel.SetActive(true);
-            });
-
-        CanvasGroup blackPanelGroup = blackPanel.GetComponent<CanvasGroup>();
-        if (blackPanelGroup != null)
-        {
-            _sequence.JoinCallback(() =>
-            {
                 blackPanelGroup.alpha = 0f;
-                _sequence.Join(blackPanelGroup.DOFade(1f, panelFadeDuration).SetUpdate(UpdateType.Normal, true));
             });
-        }
 
-        if (uiPanel != null) uiPanel.SetActive(true);
+        _sequence.Append(blackPanelGroup.DOFade(1f, panelFadeDuration));
+        
+        _sequence.AppendCallback(() =>
+        {
+            blackPanel.SetActive(false);
+            uiPanel.SetActive(true);
+        });
     }
 
     private void HandlerCreditsEnd()
@@ -52,9 +50,9 @@ public class CreditsState : GameState
     public override void OnExit()
     {
         musicManager.FadeOut(panelFadeDuration);
-		Destroy(transform.root.gameObject, panelFadeDuration);
-		GameController.instance.ErasePlayerData();
-		GameController.instance.ChangeScene("MainMenu");
+        Destroy(transform.root.gameObject, panelFadeDuration);
+        GameController.instance.ErasePlayerData();
+        GameController.instance.ChangeScene("MainMenu");
 
         base.OnExit();
     }
